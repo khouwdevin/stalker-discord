@@ -30,7 +30,7 @@ const event: BotEvent = {
         else if (temp[0] === "$hi"){
             sendTimedMessage(`hello, ${message.author}`, message.channel as TextChannel, 2000)
         }
-        else if (temp[0] === "$set"){
+        else if (temp[0] === "$set" || temp[0] === "$s"){
     
         } 
     }
