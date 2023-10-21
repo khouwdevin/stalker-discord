@@ -36,6 +36,10 @@ export const sendTimedMessage = (message: string, channel: TextChannel, duration
     return
 }
 
+export const sentMessage = (message: string, channel: TextChannel) => {
+    channel.send(message)
+}
+
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
     if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
     let foundGuild = await GuildDB.findOne({ guildID: guild.id })

@@ -1,10 +1,13 @@
 {
-    "name": "discordjs-v14-template-ts",
+    "name": "stalker-bot",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
+        "watch": "tsc -w",
         "start": "cls && node build/index.js",
+        "dev": "nodemon build/index.js",
+        "dev-all": "start tsc -w && start nodemon build/index.js",
         "build": "tsc"
     },
     "keywords": [],
@@ -19,7 +22,8 @@
         "mongoose": "^6.5.4"
     },
     "devDependencies": {
-        "typescript": "^4.8.2"
+        "nodemon": "^3.0.1",
+        "typescript": "^4.9.5"
     },
     "overrides": {
         "discord-api-types": "0.37.20"
