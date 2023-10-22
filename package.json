@@ -1,13 +1,12 @@
 {
     "name": "stalker-bot",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "",
     "main": "index.js",
     "scripts": {
         "watch": "tsc -w",
-        "start": "cls && node build/index.js",
-        "dev": "nodemon build/index.js",
-        "dev-all": "start tsc -w && start nodemon build/index.js",
+        "start": "cls && node build/index.js --env=production",
+        "dev": "start tsc -w && start nodemon build/index.js",
         "build": "tsc"
     },
     "keywords": [],
@@ -17,11 +16,13 @@
         "@discordjs/rest": "^1.1.0",
         "@types/node": "^18.7.14",
         "chalk": "^4.1.2",
+        "command-line-args": "^5.2.1",
         "discord.js": "14.3.0",
         "dotenv": "^16.0.2",
         "mongoose": "^6.5.4"
     },
     "devDependencies": {
+        "@types/command-line-args": "^5.2.2",
         "nodemon": "^3.0.1",
         "typescript": "^4.9.5"
     },

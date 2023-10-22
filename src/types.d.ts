@@ -40,7 +40,8 @@ declare global {
             CLIENT_ID: string,
             PREFIX: string,
             MONGO_URI: string,
-            MONGO_DATABASE_NAME: string
+            MONGO_DATABASE_NAME: string,
+            STALKER_CHANNEL: string
         }
     }
 }

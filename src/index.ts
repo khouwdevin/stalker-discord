@@ -1,11 +1,29 @@
-import { Client, GatewayIntentBits, Collection, PermissionFlagsBits, TextChannel, ApplicationCommandOptionType, ActivityType } from "discord.js";
+import { Client, GatewayIntentBits, Collection } from "discord.js";
 import { Command, SlashCommand } from "./types";
-import { config } from "dotenv";
+import dotenv from "dotenv";
 import { readdirSync } from "fs";
-import { join } from "path";
-import { sendTimedMessage } from "./functions";
+import path, { join } from "path";
+import commandLineArgs from "command-line-args";
 
-config()
+const options = commandLineArgs([
+    {
+      name: 'env',
+      alias: 'e',
+      defaultValue: 'development',
+      type: String,
+    },
+])
+
+const result = dotenv.config({
+  path: path.join(__dirname, `../${String(options.env)}.env`),
+})
+
+if (result.error) {
+  console.log("hello")
+  dotenv.config({
+    path: path.join(__dirname, "../production.env"),
+  });
+}
 
 const { Guilds, MessageContent, GuildMessages, GuildMembers, GuildVoiceStates } = GatewayIntentBits
 const client = new Client({intents:[Guilds, MessageContent, GuildMessages, GuildMembers, GuildVoiceStates]})
