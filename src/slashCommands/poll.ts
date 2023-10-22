@@ -5,26 +5,30 @@ const command : SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("poll")
     .setDescription("To create polling")
-    .addStringOption(option => option
+    .addStringOption(option => { 
+        return option
         .setName("title")
         .setDescription("Add title")
         .setMaxLength(50)
-    )
-    .addStringOption(option => option
+    })
+    .addStringOption(option => {
+        return option
         .setName("option1")
         .setDescription("Add option 1 of 3")
         .setMaxLength(150)
-    )
-    .addStringOption(option => option
+    })
+    .addStringOption(option => {
+        return option
         .setName("option2")
         .setDescription("Add option 2 of 3")
         .setMaxLength(150)
-    )
-    .addStringOption(option => option
+    })
+    .addStringOption(option => {
+        return option
         .setName("option3")
         .setDescription("Add option 3 of 3")
         .setMaxLength(150)
-    )
+    })
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
     execute: async interaction => {
         await interaction.deferReply({ ephemeral: true })

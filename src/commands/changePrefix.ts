@@ -2,7 +2,7 @@ import { setGuildOption } from "../functions";
 import { Command } from "../types";
 
 const command: Command = {
-    name: "changePrefix",
+    name: "changeprefix",
     execute: (message, args) => {
         let prefix = args[1]
         if (!prefix) return message.channel.send("No prefix provided")

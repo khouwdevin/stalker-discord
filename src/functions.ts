@@ -1,5 +1,5 @@
 import chalk from "chalk"
-import { ChannelManager, Guild, GuildMember, PermissionFlagsBits, PermissionResolvable, PermissionsBitField, TextChannel } from "discord.js"
+import { ChannelManager, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, PermissionsBitField, TextChannel } from "discord.js"
 import GuildDB from "./schemas/Guild"
 import { GuildOption } from "./types"
 import mongoose from "mongoose";
@@ -38,6 +38,12 @@ export const sendTimedMessage = (message: string, channel: TextChannel, duration
 
 export const sendMessage = (message: string, channel: TextChannel) => {
     channel.send(message)
+}
+
+export const deleteTimedMessage = (message: Message<true> | Message<false>, channel: TextChannel, duration: number) => {
+    setTimeout(
+        async () => (await channel.messages.fetch(message)).delete(), duration
+    )
 }
 
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
