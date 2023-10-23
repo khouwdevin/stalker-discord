@@ -13,6 +13,7 @@ const commandslist =
 const slashcommandslist = 
     `
     **/poll**: to create poll\r
+    **/afk**: to announce your afk\r
     **/decode**: to decode your secret code\r
     **/embed**: to create embed message\r
     **/ping**: to test bot ping\r

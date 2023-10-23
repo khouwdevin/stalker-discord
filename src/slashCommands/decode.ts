@@ -23,7 +23,6 @@ const command : SlashCommand = {
         const options = interaction.options.data
         const decode = options[0].value as string
         const decodestring: string[] = []
-        const { channel } = interaction
 
         let result = ""
 
