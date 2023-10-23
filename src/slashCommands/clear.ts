@@ -21,7 +21,7 @@ const ClearCommand : SlashCommand = {
             const deletedMessages = await interaction.channel?.bulkDelete(msgs,true)   
             if (deletedMessages?.size === 0) interaction.reply("No messages were deleted.")       
             else interaction.reply(`Successfully deleted ${deletedMessages?.size} message(s)`)
-            setTimeout(() => interaction.deleteReply(), 5000)
+            setTimeout(async () => await interaction.deleteReply(), 5000)
         })
     },
     cooldown: 10

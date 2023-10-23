@@ -19,7 +19,6 @@ const result = dotenv.config({
 })
 
 if (result.error) {
-  console.log("hello")
   dotenv.config({
     path: path.join(__dirname, "../production.env"),
   });

@@ -32,6 +32,7 @@ const command : SlashCommand = {
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
     execute: async interaction => {
         await interaction.deferReply({ ephemeral: true })
+
         const { channel } = interaction
         const options = interaction.options.data
         const emojies = ["1️⃣", "2️⃣", "3️⃣"]
@@ -50,7 +51,7 @@ const command : SlashCommand = {
         for (let i = 1; i < options.length; i++)
             message?.react(emojies[i-1])
 
-        await interaction.editReply("Poll sent successfully!")
+        await interaction.reply("Poll sent successfully!")
     },
     cooldown: 2
 }

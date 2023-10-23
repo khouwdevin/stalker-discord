@@ -1,14 +1,14 @@
-import { TextChannel, VoiceState } from "discord.js";
+import { VoiceState } from "discord.js";
 import { BotEvent } from "../types";
-import { getChannelIdbyName, sendMessage } from "../functions";
+import { sendMessageToSpesificChannel } from "../functions";
 
 const event: BotEvent = {
     name: "voiceStateUpdate",
     execute: async (oldstate: VoiceState, newstate: VoiceState) => {
         if (newstate.channelId === null) 
-            sendMessage(`<@${newstate.member?.user.id}> left channel!`, (await newstate.client.channels.fetch(getChannelIdbyName(newstate.client.channels, process.env.STALKER_CHANNEL))) as TextChannel)
+            sendMessageToSpesificChannel(`<@${newstate.member?.user.id}> left channel!`, process.env.STALKER_CHANNEL, newstate.client.channels)
         else if (oldstate.channelId === null)
-            sendMessage(`<@${oldstate.member?.user.id}> joined channel!`, (await oldstate.client.channels.fetch(getChannelIdbyName(newstate.client.channels, process.env.STALKER_CHANNEL))) as TextChannel)
+            sendMessageToSpesificChannel(`<@${oldstate.member?.user.id}> joined channel!`, process.env.STALKER_CHANNEL, oldstate.client.channels)
     }
 }
 
