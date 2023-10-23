@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-       "start-production": "node index.js --env=production",
+       "start-production": "node build/index.js --env=production",
         "start": "cls && node build/index.js --env=production",
         "dev": "start tsc -w && start nodemon build/index.js",
         "watch": "tsc -w",
