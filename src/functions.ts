@@ -121,10 +121,10 @@ export const getCurrentGuildbySendMessage = async (channels: ChannelManager): Pr
         let channelGuild = channels.cache.at(i)
 
         if (channelGuild?.type === ChannelType.GuildText) {
-            const channel = channelGuild
+            const channel = channelGuild.guild.systemChannel
             const guild = channelGuild.guild
 
-            channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
+            channel?.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
             return Promise.resolve(guild)
         }       
     }
