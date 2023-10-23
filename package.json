@@ -4,9 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "watch": "tsc -w",
+       "start-production": "node index.js --env=production",
         "start": "cls && node build/index.js --env=production",
         "dev": "start tsc -w && start nodemon build/index.js",
+        "watch": "tsc -w",
         "build": "tsc"
     },
     "keywords": [],
