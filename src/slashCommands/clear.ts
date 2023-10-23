@@ -13,7 +13,7 @@ const ClearCommand : SlashCommand = {
         .setDescription("Message amount to be cleared")
     })
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
-    execute: interaction => {
+    execute: (interaction) => {
         let messageCount = Number(interaction.options.get("messagecount")?.value)
         interaction.channel?.messages.fetch({limit: messageCount})
         .then(async msgs => {

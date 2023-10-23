@@ -30,7 +30,7 @@ const command : SlashCommand = {
         .setMaxLength(150)
     })
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
-    execute: async interaction => {
+    execute: async (interaction) => {
         await interaction.deferReply({ ephemeral: true })
 
         const { channel } = interaction

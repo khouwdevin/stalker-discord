@@ -17,7 +17,7 @@ const command : SlashCommand = {
     })
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     ,
-    execute: async interaction => {
+    execute: async (interaction) => {
         await interaction.deferReply({ ephemeral: true })
 
         const options = interaction.options.data

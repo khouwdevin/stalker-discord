@@ -7,7 +7,7 @@ const command : SlashCommand = {
     .setName("ping")
     .setDescription("Shows the bot's ping")
     ,
-    execute: interaction => {
+    execute: (interaction) => {
         interaction.reply({
             embeds: [
                 new EmbedBuilder()
