@@ -1,28 +1,34 @@
 import { EmbedBuilder, TextChannel } from "discord.js";
 import { Command } from "../types";
-import { deleteTimedMessage } from "../functions";
-
-const commandslist = 
-    `
-    **$greet**: Stalker will greet you!\r
-    example => **'$greet'**\r
-    **$changeprefix**: If you want to change the prefix for commands.
-    example => **'$changeprefix #'**
-    `
-
-const slashcommandslist = 
-    `
-    **/poll**: to create poll\r
-    **/afk**: to announce your afk\r
-    **/decode**: to decode your secret code\r
-    **/embed**: to create embed message\r
-    **/ping**: to test bot ping\r
-    **/clear**: to clear messages
-    `
+import { deleteTimedMessage, getGuildOption } from "../functions";
 
 const command : Command = {
     name: "help",
-    execute: (message, args) => {
+    execute: async (message, args) => {
+        let prefix = process.env.PREFIX_COMMAND
+
+        if (message.guild){
+            const guildprefix = await getGuildOption(message.guild, "prefix")
+            if (guildprefix) prefix = guildprefix
+        }
+
+        const commandslist = 
+            `
+            **${prefix}greet**: Stalker will greet you!\r
+            example => **'${prefix}greet'**\r
+            **${prefix}changeprefix**: If you want to change the prefix for commands.
+            example => **'${prefix}changeprefix #'**
+            `
+        const slashcommandslist = 
+            `
+            **/poll**: to create poll\r
+            **/afk**: to announce your afk\r
+            **/decode**: to decode your secret code\r
+            **/embed**: to create embed message\r
+            **/ping**: to test bot ping\r
+            **/clear**: to clear messages
+            `
+
         const embed = new EmbedBuilder()
             .setTitle("Here's the instruction")
             .setColor("White")

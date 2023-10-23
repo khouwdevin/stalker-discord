@@ -7,7 +7,9 @@ const event: BotEvent = {
     execute: (guild : Guild) => {
         let newGuild = new GuildModel({
             guildID: guild.id,
-            options: {},
+            options: {
+                prefix: process.env.PREFIX_COMMAND
+            },
             joinedAt: Date.now()
         })
         newGuild.save()

@@ -1,5 +1,5 @@
 import chalk from "chalk"
-import { ChannelManager, ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, PermissionsBitField, TextChannel } from "discord.js"
+import { Channel, ChannelManager, ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, TextChannel } from "discord.js"
 import GuildDB from "./schemas/Guild"
 import { GuildOption } from "./types"
 import mongoose from "mongoose";
@@ -106,12 +106,26 @@ export const setGuildOption = async (guild: Guild, option: GuildOption, value: a
     foundGuild.save()
 }
 
-export const getChannelIdbyName = (channels: ChannelManager, name: string): string => {
+export const getChannelIdbyName = (channels: ChannelManager, name: string): Promise<string> => {
     let id = ""
     channels.cache.forEach((channel) => {
         if ((channel as TextChannel).name === name)
             id = channel.id
     })
 
-    return id
+    return Promise.resolve(id)
+}
+
+export const getCurrentGuildbySendMessage = async (channels: ChannelManager): Promise<Guild | null | undefined> => {
+    for (let i = 0; i < channels.cache.size; i++) {
+        let channelGuild = channels.cache.at(i)
+
+        if (channelGuild?.type === ChannelType.GuildText) {
+            const channel = channelGuild
+            const guild = channelGuild.guild
+
+            channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
+            return Promise.resolve(guild)
+        }       
+    }
 }

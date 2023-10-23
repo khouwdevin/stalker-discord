@@ -1,15 +1,18 @@
-import { ActivityType, Client } from "discord.js";
+import { ActivityType, Client, Guild } from "discord.js";
 import { BotEvent } from "../types";
-import { color } from "../functions";
+import { color, getCurrentGuildbySendMessage, getGuildOption } from "../functions";
 
 const event : BotEvent = {
     name: "ready",
     once: true,
-    execute: (client : Client) => {
+    execute: async (client: Client) => {
+        const guild = await getCurrentGuildbySendMessage(client.channels)
+        const prefix = await getGuildOption(guild as Guild, "prefix")
+
         client.user?.setPresence({
             status: 'online',
             activities: [{
-                name: '$help',
+                name: `${prefix}help`,
                 type: ActivityType.Listening
             }]
         })
