@@ -52,10 +52,10 @@ export const sendMessageToSpesificChannel = async (message: string, channelname:
         (await channels.fetch(channelid) as TextChannel).send(message)
     }
     else {
-        channels.cache.forEach((channel) => {
-            if (channel.type === ChannelType.GuildText) {
+        channels.cache.forEach((channelGuild) => {
+            if (channelGuild.type === ChannelType.GuildText) {
+                const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
                 channel.send(`${process.env.STALKER_CHANNEL} channel isn't found! Please create one!`)
-                    .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete(), 4000))
             }
         })
     }
@@ -76,8 +76,9 @@ export const sendTimedMessageToSpesificChannel = async (message: string, channel
             .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete(), duration))
     }
     else {
-        channels.cache.forEach((channel) => {
-            if (channel.type === ChannelType.GuildText) {
+        channels.cache.forEach((channelGuild) => {
+            if (channelGuild.type === ChannelType.GuildText) {
+                const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
                 channel.send(`${process.env.STALKER_CHANNEL} channel isn't found! Please create one!`)
                     .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete(), 4000))
             }
@@ -116,15 +117,15 @@ export const getChannelIdbyName = (channels: ChannelManager, name: string): Prom
     return Promise.resolve(id)
 }
 
-export const getCurrentGuildbySendMessage = async (channels: ChannelManager): Promise<Guild | null | undefined> => {
+export const getCurrentGuild = async (channels: ChannelManager): Promise<Guild | null | undefined> => {
     for (let i = 0; i < channels.cache.size; i++) {
         let channelGuild = channels.cache.at(i)
 
         if (channelGuild?.type === ChannelType.GuildText) {
-            const channel = channelGuild.guild.systemChannel
+            // const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
             const guild = channelGuild.guild
 
-            channel?.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
+            // channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
             return Promise.resolve(guild)
         }       
     }
