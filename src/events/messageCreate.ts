@@ -8,7 +8,7 @@ const event: BotEvent = {
     execute: async (message: Message) => {
         if (!message.member || message.member.user.bot) return;
         if (!message.guild) return;
-        let prefix = process.env.PREFIX
+        let prefix = process.env.PREFIX_COMMAND
         if (mongoose.connection.readyState === 1) {
             let guildPrefix = await getGuildOption(message.guild, "prefix") 
                 if (guildPrefix) prefix = guildPrefix;

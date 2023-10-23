@@ -38,7 +38,7 @@ declare global {
         interface ProcessEnv {
             TOKEN: string,
             CLIENT_ID: string,
-            PREFIX: string,
+            PREFIX_COMMAND: string,
             MONGO_URI: string,
             MONGO_DATABASE_NAME: string,
             STALKER_CHANNEL: string
