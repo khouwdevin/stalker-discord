@@ -11,8 +11,8 @@
         "build": "tsc"
     },
     "keywords": [],
-    "author": "MericcaN41",
-    "license": "ISC",
+    "author": "khouwdevin",
+    "license": "MIT",
     "dependencies": {
         "@discordjs/rest": "^1.1.0",
         "@types/node": "^18.7.14",
