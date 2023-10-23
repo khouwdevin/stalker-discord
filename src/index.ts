@@ -14,12 +14,18 @@ const options = commandLineArgs([
     },
 ])
 
-const result = dotenv.config({
-  path: path.join(__dirname, `../${String(options.env)}.env`),
-})
-
-if (result.error) {
-  throw result.error
+try {
+  if (options.env === "production") {
+    dotenv.config()
+  }
+  else {
+    dotenv.config({
+      path: path.join(__dirname, `../development.env`),
+    })
+  }
+}
+catch(e) {
+  throw e
 }
 
 const { Guilds, MessageContent, GuildMessages, GuildMembers, GuildVoiceStates } = GatewayIntentBits
