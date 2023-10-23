@@ -55,7 +55,7 @@ export const sendMessageToSpesificChannel = async (message: string, channelname:
         channels.cache.forEach((channelGuild) => {
             if (channelGuild.type === ChannelType.GuildText) {
                 const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
-                channel.send(`${process.env.STALKER_CHANNEL} channel isn't found! Please create one!`)
+                channel.send(`${channelname} channel isn't found! Please create one!`)
             }
         })
     }
@@ -79,7 +79,7 @@ export const sendTimedMessageToSpesificChannel = async (message: string, channel
         channels.cache.forEach((channelGuild) => {
             if (channelGuild.type === ChannelType.GuildText) {
                 const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
-                channel.send(`${process.env.STALKER_CHANNEL} channel isn't found! Please create one!`)
+                channel.send(`${channelname} channel isn't found! Please create one!`)
                     .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete(), 4000))
             }
         })
