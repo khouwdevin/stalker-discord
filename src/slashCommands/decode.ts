@@ -8,14 +8,13 @@ const formula = "°¶§×¬¦÷¡¿™®©¢¥€£?><\":|}{/.,';\\][+_)(*&^%$#@
 const command : SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("decode")
-    .setDescription("Decode your secret message here!")
     .addStringOption(option => {
         return option
         .setName("code")
         .setDescription("Put your code here")
         .setMaxLength(5000)
     })
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    .setDescription("Decode your secret message here!")
     ,
     execute: async (interaction) => {
         await interaction.deferReply({ ephemeral: true })

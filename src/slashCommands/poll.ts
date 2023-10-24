@@ -4,7 +4,7 @@ import { SlashCommand } from "../types";
 const command : SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("poll")
-    .setDescription("To create polling")
+    
     .addStringOption(option => { 
         return option
         .setName("title")
@@ -29,7 +29,7 @@ const command : SlashCommand = {
         .setDescription("Add option 3 of 3")
         .setMaxLength(150)
     })
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+    .setDescription("To create polling"),
     execute: async (interaction) => {
         await interaction.deferReply({ ephemeral: true })
 
