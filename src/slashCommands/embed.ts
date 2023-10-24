@@ -8,26 +8,31 @@ const command: SlashCommand = {
       return option
         .setName("title")
         .setDescription("Title of the embed message")
-        .setRequired(true);
+        .setRequired(true)
     })
     .addStringOption(option => {
       return option
         .setName("description")
         .setDescription("Description of the embed message.")
-        .setRequired(true);
+        .setRequired(true)
     })
     .addChannelOption(option => {
       return option
         .setName("channel")
         .setDescription("Text channel where the embed message will be sent.")
-        .setRequired(true);
+        .setRequired(true)
     })
     .addStringOption(option => {
       return option
         .setName("color")
         .setDescription("Select an option or type an hex color, for example: #000000")
         .setRequired(true)
-        .setAutocomplete(true);
+        .setAutocomplete(true)
+    })
+    .addStringOption(option => {
+      return option
+        .setName("thumbnail")
+        .setDescription("URL of the thumbnail.(You can use default 'avatar' or 'botavatar')")
     })
     .setDescription("Create a new embed message.")
   ,
@@ -82,14 +87,15 @@ const command: SlashCommand = {
         const element = interaction.options.data[i];
         if (element.name && element.value) options[element.name] = element.value;
       }
+      if (options.thumbnail === "avatar" || options.thumbnail === "botavatar") options.thumbnail = (options.thumbnail === "avatar" ? interaction.user.avatarURL()?.toString() : interaction.client.user?.avatarURL()?.toString()) || ""
       const embed = new EmbedBuilder()
         .setColor(options.color.toString() as ColorResolvable)
         .setTitle(options.title.toString())
         .setDescription(options.description.toString())
-        .setAuthor({ name: interaction.client.user?.username || 'Default Name', iconURL: interaction.client.user?.avatarURL() || undefined })
-        .setThumbnail(interaction.client.user?.avatarURL() || null)
+        .setAuthor({ name: interaction.user?.tag || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
+        .setThumbnail(options.thumbnail.toString())
         .setTimestamp()
-        .setFooter({ text: "Test embed message", iconURL: interaction.client.user?.avatarURL() || undefined });
+        .setFooter({ text: "Test embed message", iconURL: interaction.user?.avatarURL() || undefined });
       let selectedTextChannel = interaction.channel?.client.channels.cache.get(options.channel.toString()) as TextChannel
       selectedTextChannel.send({ embeds: [embed] });
       return interaction.editReply({ content: "Embed message successfully sent." })
@@ -98,7 +104,7 @@ const command: SlashCommand = {
     }
 
   },
-  cooldown: 10
+  cooldown: 4
 }
 
 export default command

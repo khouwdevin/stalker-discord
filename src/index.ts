@@ -28,8 +28,8 @@ catch(e) {
   throw e
 }
 
-const { Guilds, MessageContent, GuildMessages, GuildMembers, GuildVoiceStates } = GatewayIntentBits
-const client = new Client({intents:[Guilds, MessageContent, GuildMessages, GuildMembers, GuildVoiceStates]})
+const { Guilds, MessageContent, GuildMessages, GuildMessageReactions, GuildMessageTyping, GuildMembers, GuildVoiceStates, GuildScheduledEvents } = GatewayIntentBits
+const client = new Client({intents:[Guilds, MessageContent, GuildMessages, GuildMessageReactions, GuildMessageTyping, GuildMembers, GuildVoiceStates, GuildScheduledEvents]})
 
 client.slashCommands = new Collection<string, SlashCommand>()
 client.commands = new Collection<string, Command>()

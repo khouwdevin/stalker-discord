@@ -1,5 +1,5 @@
 import chalk from "chalk"
-import { Channel, ChannelManager, ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, TextChannel } from "discord.js"
+import { ChannelManager, ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, TextChannel } from "discord.js"
 import GuildDB from "./schemas/Guild"
 import { GuildOption } from "./types"
 import mongoose from "mongoose";
@@ -129,4 +129,35 @@ export const getCurrentGuild = async (channels: ChannelManager): Promise<Guild |
             return Promise.resolve(guild)
         }       
     }
+}
+
+export const getDateChoices = (): Array<string> => {
+    const result: Array<string> = []
+
+    for (let i = 0; i < 8; i++) {
+        const date = new Date()
+        date.setDate(date.getDate() + i)
+
+        const thedate = date.toDateString().split(" ")
+        const formateddate = `${thedate[2]} ${thedate[1]} ${thedate[3]}`
+
+        result.push(formateddate)
+    }
+
+    return result
+}
+
+export const getTimeChoices = (): Array<string> => {
+    const result: Array<string> = []
+
+    for (let i = 1; i < 13; i++) {
+        if (i < 10) {
+            result.push(`0${i}:00`)
+        }
+        else {
+            result.push(`${i}:00`)
+        }
+    }
+
+    return result
 }
