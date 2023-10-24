@@ -1,0 +1,39 @@
+import { EmbedBuilder, Message, TextChannel } from "discord.js";
+import { Command } from "../types";
+import { deleteTimedMessage, getAllGuildOption } from "../functions";
+
+const command : Command = {
+    name: "checkstatus",
+    execute: async (message, args) => {
+        let options
+
+        if (message.guild){
+            const guildoptions = await getAllGuildOption(message.guild)
+            if (guildoptions) options = guildoptions
+        }
+
+        const statuslist = 
+            `
+            **prefix**: ${options?.prefix}\r
+            **detect voice**: ${options?.detectvoice}\r
+            **notify**: ${options?.notify}\r
+            `
+
+        const embed = new EmbedBuilder()
+            .setTitle("Here's the list")
+            .setColor("Blurple")
+            .addFields(
+                { name: "Status List", value: " "},
+                { name: " ", value: statuslist }
+            )
+        message.channel.send({ embeds: [embed] }).then(m => {
+            deleteTimedMessage(m, message.channel as TextChannel, 20000)
+            deleteTimedMessage(message as Message<true> | Message<false>, message.channel as TextChannel, 20000)
+        })
+    },
+    cooldown: 1,
+    aliases: ["h"],
+    permissions: []
+}
+
+export default command

@@ -1,4 +1,4 @@
-import { EmbedBuilder, TextChannel } from "discord.js";
+import { EmbedBuilder, Message, TextChannel } from "discord.js";
 import { Command } from "../types";
 import { deleteTimedMessage, getGuildOption } from "../functions";
 
@@ -19,7 +19,11 @@ const command : Command = {
             **${prefix}changeprefix**: If you want to change the prefix for commands.\r
             example => **'${prefix}changeprefix #'**\r
             **${prefix}detectvoice**: If you want to disable or enable detect voice.\r
-            example => **'${prefix}detectvoice false'**
+            example => **'${prefix}detectvoice false'**\r
+            **${prefix}notify**: If you want to disable or enable stalker online notify.\r
+            example => **'${prefix}notify false'**
+            **${prefix}statuslist**: If you want to disable or enable stalker online notify.\r
+            example => **'${prefix}statuslist'**
             `
         const slashcommandslist = 
             `
@@ -39,7 +43,10 @@ const command : Command = {
                 { name: "Slash Commands List", value: slashcommandslist},
                 { name: "Commands List", value: commandslist},   
             )
-        message.channel.send({ embeds: [embed] }).then(m => deleteTimedMessage(m, message.channel as TextChannel, 20000))
+        message.channel.send({ embeds: [embed] }).then(m => {
+            deleteTimedMessage(m, message.channel as TextChannel, 20000)
+            deleteTimedMessage(message as Message<true> | Message<false>, message.channel as TextChannel, 20000)
+        })
     },
     cooldown: 1,
     aliases: ["h"],
