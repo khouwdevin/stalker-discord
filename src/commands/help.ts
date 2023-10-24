@@ -1,6 +1,6 @@
 import { EmbedBuilder, TextChannel } from "discord.js";
 import { Command } from "../types";
-import { deleteTimedMessage, getGuildOption } from "../functions";
+import { deleteTimedMessage } from "../functions";
 
 const command : Command = {
     name: "help",

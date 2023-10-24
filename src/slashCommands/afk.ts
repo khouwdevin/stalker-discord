@@ -23,21 +23,29 @@ const command : SlashCommand = {
     execute: async (interaction) => {
         await interaction.deferReply({ ephemeral: true })
 
-        const user = (interaction.member as GuildMember).user
+        let minutes: number = 0
+        let userminutesafk: string = ""
+
+        const member = (interaction.member as GuildMember)
         const isAFK = interaction.options.data[0].value as boolean
-        const minutes = interaction.options.data[1].value as number ? interaction.options.data[1].value as number : 0
-        const userminutesafk = minutes === 0 ? "" : `for ${minutes} minutes`
+        
+        if (interaction.options.data[1]) {
+            minutes = interaction.options.data[1].value as number ? interaction.options.data[1].value as number : 0
+            userminutesafk = minutes === 0 ? "" : `for ${minutes} minutes`
+        }
 
         if (isAFK){
-            await interaction.channel?.send(`${user} is AFK for ${userminutesafk}`)
+            member.setNickname(`[AFK]${member.nickname}`).catch((e) => console.log(e.message))
+            await interaction.channel?.send(`${member} is AFK for ${userminutesafk}`)
         }
         else{
-            await interaction.channel?.send(`${user} is not AFK`)
+            member.setNickname(member.nickname?.replace("[AFK]", "") || member.nickname).catch((e) => console.log(e.message))
+            await interaction.channel?.send(`${member} is not AFK`)
         }
 
         await interaction.editReply("Your command is successfully ran!")
     },
-    cooldown: 1
+    cooldown: 2
 }
 
 export default command

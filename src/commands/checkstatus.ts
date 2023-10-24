@@ -1,4 +1,4 @@
-import { EmbedBuilder, Message, TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 import { Command } from "../types";
 import { deleteTimedMessage, getAllGuildOption } from "../functions";
 

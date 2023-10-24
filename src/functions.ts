@@ -136,10 +136,16 @@ export const setGuildOption = async (guild: Guild, option: GuildOption, value: a
 
 export const getChannelIdbyName = (channels: ChannelManager, name: string): Promise<string> => {
     let id = ""
-    channels.cache.forEach((channel) => {
-        if ((channel as TextChannel).name === name)
+    const guildChannels = channels.cache
+
+    for (let i = 0; i < guildChannels.size; i++) {
+        const channel = guildChannels.at(i)
+        if (channel && (channel as TextChannel).name === name) {
             id = channel.id
-    })
+
+            break
+        }
+    }
 
     return Promise.resolve(id)
 }
@@ -150,13 +156,15 @@ export const sendNotifyStalkerOnline = async (client: Client) => {
     const guilds = client.guilds.cache
 
     for (let i = 0; i < guilds.size; i++) {
-        if (guildsList.includes(guilds.at(i) as Guild)) {
+        if (!guildsList.includes(guilds.at(i) as Guild)) {
             guildsList.push(guilds.at(i) as Guild)
             const guild = guilds.at(i) as Guild
             const channels =  guild.channels.cache
 
-            for (let j = 0; i < channels.size; i++) {
-                if (channels.at(j)?.type === ChannelType.GuildText) {
+            for (let j = 0; j < channels.size; j++) {
+                const channel = channels.at(j)
+
+                if (channel?.type === ChannelType.GuildText) {
                     channelList.push(channels.at(j) as TextChannel)
 
                     break

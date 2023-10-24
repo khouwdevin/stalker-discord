@@ -1,5 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } from "discord.js"
-import { getThemeColor } from "../functions";
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
 import { SlashCommand } from "../types";
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?£€¥¢©®™¿¡÷¦¬×§¶°"
