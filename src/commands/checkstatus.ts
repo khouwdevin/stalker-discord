@@ -14,7 +14,6 @@ const command : Command = {
 
         const statuslist = 
             `
-            **prefix**: ${options?.prefix}\r
             **detect voice**: ${options?.detectvoice}\r
             **notify**: ${options?.notify}\r
             `

@@ -1,5 +1,5 @@
 import chalk from "chalk"
-import { ChannelManager, ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, TextChannel } from "discord.js"
+import { Channel, ChannelManager, ChannelType, Client, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, TextChannel } from "discord.js"
 import GuildDB from "./schemas/Guild"
 import { GuildOption } from "./types"
 import mongoose from "mongoose";
@@ -42,11 +42,16 @@ export const sendMessage = (message: string, channel: TextChannel) => {
 
 export const sendMessageToSpesificChannel = async (message: string, channelname: string, channels: ChannelManager) => {
     let channelid = ""
-    channels.cache.forEach((channel) => {
+
+    for (let i = 0; i < channels.cache.size; i++) {
+        const channel = channels.cache.at(i) as Channel
+
         if (channel.type === ChannelType.GuildText && (channel as TextChannel).name === channelname) {
             channelid = channel.id
+
+            break
         }   
-    })
+    }
 
     if (channelid.length > 0) {
         (await channels.fetch(channelid) as TextChannel).send(message)
@@ -67,11 +72,16 @@ export const sendMessageToSpesificChannel = async (message: string, channelname:
 
 export const sendTimedMessageToSpesificChannel = async (message: string, channelname: string, duration: number, channels: ChannelManager) => {
     let channelid = ""
-    channels.cache.forEach((channel) => {
+    
+    for (let i = 0; i < channels.cache.size; i++) {
+        const channel = channels.cache.at(i) as Channel
+
         if (channel.type === ChannelType.GuildText && (channel as TextChannel).name === channelname) {
             channelid = channel.id
+
+            break
         }   
-    })
+    }
 
     if (channelid.length > 0) {
         const channel = await channels.fetch(channelid) as TextChannel
@@ -134,39 +144,39 @@ export const getChannelIdbyName = (channels: ChannelManager, name: string): Prom
     return Promise.resolve(id)
 }
 
-export const sendNotifyStalkerOnline = async (guild: Guild, channelGuild?: TextChannel) => {
-    const notify = await getGuildOption(guild, "notify")
+export const sendNotifyStalkerOnline = async (client: Client) => {
+    const guildsList: Guild[] = []
+    const channelList: TextChannel[] = []
+    const guilds = client.guilds.cache
 
-    if (notify) {
-        if (channelGuild) {
-            const channel = guild.systemChannel ? guild.systemChannel : channelGuild
-            channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete().catch((e) => {console.log(e.message)}), 5000))
-        }
-        else {
-            const channels = guild.channels
-            for (let i = 0; i < channels.cache.size; i++){
-                const channelGuild = channels.cache.at(i)
-    
-                if (channelGuild?.type === ChannelType.GuildText) {
-                    const channel = guild.systemChannel ? guild.systemChannel : channelGuild
-                    channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete().catch((e) => {console.log(e.message)}), 5000))
-    
+    for (let i = 0; i < guilds.size; i++) {
+        if (guildsList.includes(guilds.at(i) as Guild)) {
+            guildsList.push(guilds.at(i) as Guild)
+            const guild = guilds.at(i) as Guild
+            const channels =  guild.channels.cache
+
+            for (let j = 0; i < channels.size; i++) {
+                if (channels.at(j)?.type === ChannelType.GuildText) {
+                    channelList.push(channels.at(j) as TextChannel)
+
                     break
                 }
             }
-        }
+        }        
     }
-}
+    
+    for (let i = 0; i < guildsList.length; i++) {
+        const guild = guildsList.at(i) as Guild
+        const channelGuild = channelList.at(i)
 
-export const getCurrentGuild = async (channels: ChannelManager): Promise<Guild | null | undefined> => {
-    for (let i = 0; i < channels.cache.size; i++) {
-        let channelGuild = channels.cache.at(i)
+        const notify = await getGuildOption(guild, "notify")
 
-        if (channelGuild?.type === ChannelType.GuildText) {
-            const guild = channelGuild.guild
-
-            return Promise.resolve(guild)
-        }       
+        if (notify) {
+            if (channelGuild) {
+                const channel = guild.systemChannel ? guild.systemChannel : channelGuild
+                channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete().catch((e) => {console.log(e.message)}), 5000))
+            }
+        }
     }
 }
 

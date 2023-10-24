@@ -1,20 +1,17 @@
-import { ActivityType, Client, Guild } from "discord.js";
+import { ActivityType, Client } from "discord.js";
 import { BotEvent } from "../types";
-import { color, getCurrentGuild, getGuildOption, sendNotifyStalkerOnline } from "../functions";
+import { color, sendNotifyStalkerOnline } from "../functions";
 
 const event : BotEvent = {
     name: "ready",
     once: true,
-    execute: async (client: Client) => {
-        const guild = await getCurrentGuild(client.channels)
-        const prefix = await getGuildOption(guild as Guild, "prefix")
-        
-        sendNotifyStalkerOnline(guild as Guild)
+    execute: async (client: Client) => {        
+        sendNotifyStalkerOnline(client)
 
         client.user?.setPresence({
             status: 'online',
             activities: [{
-                name: `${prefix}help`,
+                name: `${process.env.PREFIX_COMMAND}help`,
                 type: ActivityType.Listening
             }]
         })

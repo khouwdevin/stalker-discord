@@ -8,7 +8,6 @@ const event: BotEvent = {
         let newGuild = new GuildModel({
             guildID: guild.id,
             options: {
-                prefix: process.env.PREFIX_COMMAND,
                 detectvoice: false,
                 notify: false
             },

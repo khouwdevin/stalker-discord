@@ -1,4 +1,4 @@
-import { EmbedBuilder, Message, TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 import { Command } from "../types";
 import { deleteTimedMessage, getGuildOption } from "../functions";
 
@@ -7,15 +7,8 @@ const command : Command = {
     execute: async (message, args) => {
         let prefix = process.env.PREFIX_COMMAND
 
-        if (message.guild){
-            const guildprefix = await getGuildOption(message.guild, "prefix")
-            if (guildprefix) prefix = guildprefix as string
-        }
-
         const commandslist = 
             `
-            **${prefix}greet**: Stalker will greet you!\r
-            example => **'${prefix}greet'**\r
             **${prefix}changeprefix**: If you want to change the prefix for commands.\r
             example => **'${prefix}changeprefix #'**\r
             **${prefix}detectvoice**: If you want to disable or enable detect voice.\r
