@@ -9,7 +9,8 @@ const event: BotEvent = {
             guildID: guild.id,
             options: {
                 prefix: process.env.PREFIX_COMMAND,
-                detectvoice: false
+                detectvoice: false,
+                notify: false
             },
             joinedAt: Date.now()
         })

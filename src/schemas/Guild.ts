@@ -5,7 +5,8 @@ const GuildSchema = new Schema<IGuild>({
     guildID: {required:true, type: String},
     options: {
         prefix: {type: String, default: process.env.PREFIX},
-        detectvoice: {type: Boolean, default: true}
+        detectvoice: {type: Boolean, default: false},
+        notify: {type: Boolean, default: false}
     }
 })
 

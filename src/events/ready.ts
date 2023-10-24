@@ -1,6 +1,6 @@
 import { ActivityType, Client, Guild } from "discord.js";
 import { BotEvent } from "../types";
-import { color, getCurrentGuild, getGuildOption } from "../functions";
+import { color, getCurrentGuild, getGuildOption, sendNotifyStalkerOnline } from "../functions";
 
 const event : BotEvent = {
     name: "ready",
@@ -8,6 +8,8 @@ const event : BotEvent = {
     execute: async (client: Client) => {
         const guild = await getCurrentGuild(client.channels)
         const prefix = await getGuildOption(guild as Guild, "prefix")
+        
+        sendNotifyStalkerOnline(guild as Guild)
 
         client.user?.setPresence({
             status: 'online',

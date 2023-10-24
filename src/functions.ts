@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import { ChannelManager, ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, TextChannel } from "discord.js"
 import GuildDB from "./schemas/Guild"
-import { GuildOption, IGuild } from "./types"
+import { GuildOption } from "./types"
 import mongoose from "mongoose";
 
 type colorType = "text" | "variable" | "error"
@@ -116,7 +116,7 @@ export const getAllGuildOption = async (guild: Guild) => {
 
 export const setGuildOption = async (guild: Guild, option: GuildOption, value: any) => {
     if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
-    let foundGuild: IGuild | null = await GuildDB.findOne({ guildID: guild.id })
+    let foundGuild = await GuildDB.findOne({ guildID: guild.id })
     if (!foundGuild) return null;
     foundGuild.options[option] = value
     foundGuild.save()
@@ -132,15 +132,37 @@ export const getChannelIdbyName = (channels: ChannelManager, name: string): Prom
     return Promise.resolve(id)
 }
 
+export const sendNotifyStalkerOnline = async (guild: Guild, channelGuild?: TextChannel) => {
+    const notify = await getGuildOption(guild, "notify")
+
+    if (notify) {
+        if (channelGuild) {
+            const channel = guild.systemChannel ? guild.systemChannel : channelGuild
+            channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
+        }
+        else {
+            const channels = guild.channels
+            for (let i = 0; i < channels.cache.size; i++){
+                const channelGuild = channels.cache.at(i)
+    
+                if (channelGuild?.type === ChannelType.GuildText) {
+                    const channel = guild.systemChannel ? guild.systemChannel : channelGuild
+                    channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
+    
+                    break
+                }
+            }
+        }
+    }
+}
+
 export const getCurrentGuild = async (channels: ChannelManager): Promise<Guild | null | undefined> => {
     for (let i = 0; i < channels.cache.size; i++) {
         let channelGuild = channels.cache.at(i)
 
         if (channelGuild?.type === ChannelType.GuildText) {
-            // const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
             const guild = channelGuild.guild
 
-            // channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
             return Promise.resolve(guild)
         }       
     }

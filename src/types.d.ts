@@ -18,6 +18,7 @@ export interface Command {
 
 interface GuildOptions {
     prefix: string,
+    notify: Boolean,
     detectvoice: Boolean
 }
 
