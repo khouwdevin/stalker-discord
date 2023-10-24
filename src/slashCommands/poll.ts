@@ -41,17 +41,19 @@ const command : SlashCommand = {
             .setTitle(`${options[0].value}`)        
             .setColor("Blue")
 
-        for (let i = 1; i < options.length; i++)
+        for (let i = 1; i < options.length; i++){
             embed.addFields(
                 { name: `${emojies[i-1]} ${options[i].value}`, value: " " }
             )
+        }
 
         const message = await channel?.send({ embeds: [embed] })
 
-        for (let i = 1; i < options.length; i++)
+        for (let i = 1; i < options.length; i++){
             message?.react(emojies[i-1])
+        }
 
-        await interaction.reply("Poll sent successfully!")
+        await interaction.editReply("Poll sent successfully!")
     },
     cooldown: 2
 }
