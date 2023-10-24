@@ -9,8 +9,8 @@ const command : Command = {
 
         const commandslist = 
             `
-            **${prefix}changeprefix**: If you want to change the prefix for commands.\r
-            example => **'${prefix}changeprefix #'**\r
+            **${prefix}greet**: Stalker will greet you!\r
+            example => **'${prefix}greet'**\r
             **${prefix}detectvoice**: If you want to disable or enable detect voice.\r
             example => **'${prefix}detectvoice false'**\r
             **${prefix}notify**: If you want to disable or enable stalker online notify.\r
