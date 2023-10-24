@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import { ChannelManager, ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, TextChannel } from "discord.js"
 import GuildDB from "./schemas/Guild"
-import { GuildOption } from "./types"
+import { GuildOption, IGuild } from "./types"
 import mongoose from "mongoose";
 
 type colorType = "text" | "variable" | "error"
@@ -56,6 +56,7 @@ export const sendMessageToSpesificChannel = async (message: string, channelname:
             if (channelGuild.type === ChannelType.GuildText) {
                 const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
                 channel.send(`${channelname} channel isn't found! Please create one!`)
+                return
             }
         })
     }
@@ -80,7 +81,10 @@ export const sendTimedMessageToSpesificChannel = async (message: string, channel
             if (channelGuild.type === ChannelType.GuildText) {
                 const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
                 channel.send(`${channelname} channel isn't found! Please create one!`)
-                    .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete(), 4000))
+                    .then(m => {
+                        setTimeout(async () => (await channel.messages.fetch(m)).delete(), 4000)
+                        return
+                    })
             }
         })
     }
@@ -99,9 +103,16 @@ export const getGuildOption = async (guild: Guild, option: GuildOption) => {
     return foundGuild.options[option]
 }
 
-export const setGuildOption = async (guild: Guild, option: GuildOption, value: any) => {
+export const getAllGuildOption = async (guild: Guild) => {
     if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
     let foundGuild = await GuildDB.findOne({ guildID: guild.id })
+    if (!foundGuild) return null;
+    return foundGuild.options
+}
+
+export const setGuildOption = async (guild: Guild, option: GuildOption, value: any) => {
+    if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
+    let foundGuild: IGuild | null = await GuildDB.findOne({ guildID: guild.id })
     if (!foundGuild) return null;
     foundGuild.options[option] = value
     foundGuild.save()

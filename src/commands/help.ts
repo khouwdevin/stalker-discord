@@ -9,15 +9,17 @@ const command : Command = {
 
         if (message.guild){
             const guildprefix = await getGuildOption(message.guild, "prefix")
-            if (guildprefix) prefix = guildprefix
+            if (guildprefix) prefix = guildprefix as string
         }
 
         const commandslist = 
             `
             **${prefix}greet**: Stalker will greet you!\r
             example => **'${prefix}greet'**\r
-            **${prefix}changeprefix**: If you want to change the prefix for commands.
-            example => **'${prefix}changeprefix #'**
+            **${prefix}changeprefix**: If you want to change the prefix for commands.\r
+            example => **'${prefix}changeprefix #'**\r
+            **${prefix}detectvoice**: If you want to disable or enable detect voice.\r
+            example => **'${prefix}detectvoice false'**
             `
         const slashcommandslist = 
             `
@@ -26,7 +28,8 @@ const command : Command = {
             **/decode**: to decode your secret code\r
             **/embed**: to create embed message\r
             **/ping**: to test bot ping\r
-            **/clear**: to clear messages
+            **/clear**: to clear messages\r
+            **/event**: to add discord schedule event
             `
 
         const embed = new EmbedBuilder()

@@ -18,6 +18,7 @@ export interface Command {
 
 interface GuildOptions {
     prefix: string,
+    detectvoice: Boolean
 }
 
 export interface IGuild extends mongoose.Document {

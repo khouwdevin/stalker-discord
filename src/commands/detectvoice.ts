@@ -1,35 +1,26 @@
-import { ActivityType } from "discord.js";
 import { Command } from "../types";
 import GuildModel from "../schemas/Guild";
 import { getAllGuildOption } from "../functions";
 
 const command: Command = {
-    name: "changeprefix",
+    name: "detectvoice",
     execute: async (message, args) => {
-        let prefix = args[1]
-
-        if (!prefix) return message.channel.send("No prefix provided")
+        let detectvoice = args[1]
+        
+        if (!detectvoice) return message.channel.send("No boolean provided")
         if (!message.guild) return;
 
         const options = await getAllGuildOption(message.guild)
 
         if (!options) return
 
-        options.prefix = prefix
+        options.detectvoice = detectvoice === "true"
 
         await GuildModel.updateOne({ guildID: message.guild.id }, {
             options: options
         })
 
-        message.channel.send("Prefix successfully changed!")
-        
-        message.client.user?.setPresence({
-            status: 'online',
-            activities: [{
-                name: `${prefix}help`,
-                type: ActivityType.Listening
-            }]
-        })
+        message.channel.send("Detect voice successfully changed!")
     },
     permissions: ["Administrator"],
     aliases: []
