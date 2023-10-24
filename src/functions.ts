@@ -32,7 +32,7 @@ export const checkPermissions = (member: GuildMember, permissions: Array<Permiss
 
 export const sendTimedMessage = (message: string, channel: TextChannel, duration: number) => {
     channel.send(message)
-        .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete(), duration))
+        .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(e.message)}), duration))
     return
 }
 
@@ -77,7 +77,7 @@ export const sendTimedMessageToSpesificChannel = async (message: string, channel
         const channel = await channels.fetch(channelid) as TextChannel
 
         channel.send(message)
-            .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete(), duration))
+            .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(e.message)}), duration))
     }
     else {
         for (let i = 0; i < channels.cache.size; i++){
@@ -86,7 +86,7 @@ export const sendTimedMessageToSpesificChannel = async (message: string, channel
             if (channelGuild?.type === ChannelType.GuildText) {
                 const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
                 channel.send(`${channelname} channel isn't found! Please create one!`)
-                    .then(m => {setTimeout(async () => (await channel.messages.fetch(m)).delete(), 4000)})
+                    .then(m => {setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(e.message)}), 4000)})
 
                 break
             }
@@ -94,10 +94,12 @@ export const sendTimedMessageToSpesificChannel = async (message: string, channel
     }
 }
 
-export const deleteTimedMessage = (message: Message<true> | Message<false>, channel: TextChannel, duration: number) => {
+export const deleteTimedMessage = (message: Message, channel: TextChannel, duration: number) => {
     setTimeout(
-        async () => (await channel.messages.fetch(message)).delete(), duration
-    )
+        async () => {
+            (await channel.messages.fetch(message)).delete().catch((e) => {console.log(e.message)})
+        }
+    , duration)
 }
 
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
@@ -138,7 +140,7 @@ export const sendNotifyStalkerOnline = async (guild: Guild, channelGuild?: TextC
     if (notify) {
         if (channelGuild) {
             const channel = guild.systemChannel ? guild.systemChannel : channelGuild
-            channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
+            channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete().catch((e) => {console.log(e.message)}), 5000))
         }
         else {
             const channels = guild.channels
@@ -147,7 +149,7 @@ export const sendNotifyStalkerOnline = async (guild: Guild, channelGuild?: TextC
     
                 if (channelGuild?.type === ChannelType.GuildText) {
                     const channel = guild.systemChannel ? guild.systemChannel : channelGuild
-                    channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete(), 5000))
+                    channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete().catch((e) => {console.log(e.message)}), 5000))
     
                     break
                 }

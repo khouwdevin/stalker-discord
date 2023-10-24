@@ -45,7 +45,7 @@ const command : Command = {
             )
         message.channel.send({ embeds: [embed] }).then(m => {
             deleteTimedMessage(m, message.channel as TextChannel, 20000)
-            deleteTimedMessage(message as Message<true> | Message<false>, message.channel as TextChannel, 20000)
+            deleteTimedMessage(message, message.channel as TextChannel, 20000)
         })
     },
     cooldown: 1,
