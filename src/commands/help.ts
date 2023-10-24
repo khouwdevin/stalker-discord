@@ -15,7 +15,7 @@ const command : Command = {
             example => **'${prefix}detectvoice false'**\r
             **${prefix}notify**: If you want to disable or enable stalker online notify.\r
             example => **'${prefix}notify false'**
-            **${prefix}checkstatus**: If you want to disable or enable stalker online notify.\r
+            **${prefix}checkstatus**: If you want to check Stalker config.\r
             example => **'${prefix}checkstatus'**
             `
         const slashcommandslist = 
