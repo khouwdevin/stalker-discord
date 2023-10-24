@@ -52,13 +52,16 @@ export const sendMessageToSpesificChannel = async (message: string, channelname:
         (await channels.fetch(channelid) as TextChannel).send(message)
     }
     else {
-        channels.cache.forEach((channelGuild) => {
-            if (channelGuild.type === ChannelType.GuildText) {
+        for (let i = 0; i < channels.cache.size; i++){
+            const channelGuild = channels.cache.at(i)
+
+            if (channelGuild?.type === ChannelType.GuildText) {
                 const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
                 channel.send(`${channelname} channel isn't found! Please create one!`)
-                return
+
+                break
             }
-        })
+        }
     }
 }
 
@@ -77,16 +80,17 @@ export const sendTimedMessageToSpesificChannel = async (message: string, channel
             .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete(), duration))
     }
     else {
-        channels.cache.forEach((channelGuild) => {
-            if (channelGuild.type === ChannelType.GuildText) {
+        for (let i = 0; i < channels.cache.size; i++){
+            const channelGuild = channels.cache.at(i)
+
+            if (channelGuild?.type === ChannelType.GuildText) {
                 const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
                 channel.send(`${channelname} channel isn't found! Please create one!`)
-                    .then(m => {
-                        setTimeout(async () => (await channel.messages.fetch(m)).delete(), 4000)
-                        return
-                    })
+                    .then(m => {setTimeout(async () => (await channel.messages.fetch(m)).delete(), 4000)})
+
+                break
             }
-        })
+        }
     }
 }
 
