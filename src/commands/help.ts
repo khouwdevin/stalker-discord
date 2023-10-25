@@ -9,24 +9,24 @@ const command : Command = {
 
         const commandslist = 
             `
-            **${prefix}greet**: Stalker will greet you!\r
-            example => **'${prefix}greet'**\r
+            **${prefix}checkstatus**: If you want to check Stalker config.\r
+            example => **'${prefix}checkstatus'**\r
             **${prefix}detectvoice**: If you want to disable or enable detect voice.\r
             example => **'${prefix}detectvoice false'**\r
+            **${prefix}greet**: Stalker will greet you!\r
+            example => **'${prefix}greet'**\r
             **${prefix}notify**: If you want to disable or enable stalker online notify.\r
             example => **'${prefix}notify false'**
-            **${prefix}checkstatus**: If you want to check Stalker config.\r
-            example => **'${prefix}checkstatus'**
             `
         const slashcommandslist = 
             `
-            **/poll**: to create poll\r
             **/afk**: to announce your afk\r
+            **/clear**: to clear messages\r
             **/decode**: to decode your secret code\r
             **/embed**: to create embed message\r
+            **/event**: to add discord schedule event\r
             **/ping**: to test bot ping\r
-            **/clear**: to clear messages\r
-            **/event**: to add discord schedule event
+            **/poll**: to create poll\r
             `
 
         const embed = new EmbedBuilder()
