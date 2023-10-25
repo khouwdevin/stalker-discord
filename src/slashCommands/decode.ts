@@ -1,55 +1,35 @@
-import { SlashCommandBuilder, EmbedBuilder } from "discord.js"
+import { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from "discord.js"
 import { SlashCommand } from "../types";
-
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?£€¥¢©®™¿¡÷¦¬×§¶°"
-const formula = "°¶§×¬¦÷¡¿™®©¢¥€£?><\":|}{/.,';\\][+_)(*&^%$#@!~=-0987654321`zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA"
+import { getDecode } from "../functions";
 
 const command : SlashCommand = {
     command: new SlashCommandBuilder()
     .setName("decode")
-    .addStringOption(option => {
-        return option
-        .setName("code")
-        .setDescription("Put your code here")
-        .setMaxLength(5000)
-    })
     .setDescription("Decode your secret message here!")
     ,
     execute: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true })
+        const modal = new ModalBuilder()
+            .setCustomId("decode")
+            .setTitle("Decode")
 
-        const options = interaction.options.data
-        const decode = options[0].value as string
-        const decodestring: string[] = []
+		const hobbiesInput = new TextInputBuilder()
+			.setCustomId('codeInput')
+			.setLabel("Put your code here!")
+			.setStyle(TextInputStyle.Paragraph);
 
-        let result = ""
+		const firstActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(hobbiesInput);
 
-        for(let i = 0; i < decode.length; i++) {
-            if ((/\n/).test(decode[i]) || (/\r/).test(decode[i])) {
-                decodestring.push("\r")
-                continue
-            }
-            else if ((/\s/).test(decode[i])) {
-                decodestring.push(" ")
-                continue
-            }
+		modal.addComponents(firstActionRow);
 
-            for (let j = 0; j < formula.length; j++){
-                if (decode[i] === formula[j]) 
-                    decodestring.push(alphabet[j])
-            }
-        }
+		await interaction.showModal(modal);
+    },
+    modal: async (interaction) => {
+        await interaction.deferReply({ ephemeral: true });
 
-        result = decodestring.join("")
+        const code = interaction.fields.getTextInputValue('codeInput');
+        const result = getDecode(code)
 
-        await interaction?.editReply({
-            embeds: [
-                new EmbedBuilder()
-                .setTitle(" ")
-                .addFields({ name: " ", value: result })
-                .setColor("Green")
-            ]
-        })
+        await interaction.editReply({ content: result })
     },
     cooldown: 2
 }

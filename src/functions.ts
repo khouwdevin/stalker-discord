@@ -218,3 +218,50 @@ export const getTimeChoices = (): Array<string> => {
 
     return result
 }
+
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?£€¥¢©®™¿¡÷¦¬×§¶°"
+const formula = "°¶§×¬¦÷¡¿™®©¢¥€£?><\":|}{/.,';\\][+_)(*&^%$#@!~=-0987654321`zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA"
+
+export const getDecode = (code: string): string => {
+    const decodestring: string[] = []
+    
+    for(let i = 0; i < code.length; i++) {
+        if ((/\n/).test(code[i]) || (/\r/).test(code[i])) {
+            decodestring.push("\r")
+            continue
+        }
+        else if ((/\s/).test(code[i])) {
+            decodestring.push(" ")
+            continue
+        }
+
+        for (let j = 0; j < formula.length; j++){
+            if (code[i] === formula[j]) 
+                decodestring.push(alphabet[j])
+        }
+    }
+
+    return decodestring.join("")
+}
+
+export const getCode = (text: string): string => {
+    const codestring: string[] = []
+    
+    for(let i = 0; i < text.length; i++) {
+        if ((/\n/).test(text[i]) || (/\r/).test(text[i])) {
+            codestring.push("\r")
+            continue
+        }
+        else if ((/\s/).test(text[i])) {
+            codestring.push(" ")
+            continue
+        }
+
+        for (let j = 0; j < alphabet.length; j++){
+            if (text[i] === alphabet[j]) 
+                codestring.push(formula[j])
+        }
+    }
+
+    return codestring.join("")
+}
