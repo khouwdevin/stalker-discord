@@ -15,6 +15,7 @@ const command : SlashCommand = {
 		const decodeInput = new TextInputBuilder()
 			.setCustomId('codeInput')
 			.setLabel("Put your code here!")
+            .setRequired(true)
 			.setStyle(TextInputStyle.Paragraph);
 
 		const firstActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(decodeInput);
