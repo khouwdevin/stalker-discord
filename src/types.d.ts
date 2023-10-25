@@ -4,6 +4,7 @@ import mongoose from "mongoose"
 export interface SlashCommand {
     command: SlashCommandBuilder,
     execute: (interaction : ChatInputCommandInteraction) => void,
+    modal?: (interaction: ModalSubmitInteraction<CacheType>) => void,
     autocomplete?: (interaction: AutocompleteInteraction) => void,
     cooldown?: number // in seconds
 }
