@@ -5,9 +5,7 @@ import { BotEvent } from "../types";
 const event: BotEvent = {
     name: "guildDelete",
     execute: (guild : Guild) => {
-        const guildDoc = GuildModel.findOne({ guildID: guild.id })
-
-        guildDoc.deleteOne()
+        GuildModel.deleteOne({ guildID: guild.id }).then((result) => console.log(result))
     }
 }
 

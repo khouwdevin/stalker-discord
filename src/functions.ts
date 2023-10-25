@@ -37,7 +37,7 @@ export const sendTimedMessage = (message: string, channel: TextChannel, duration
 }
 
 export const sendMessage = (message: string, channel: TextChannel) => {
-    channel.send(message)
+    channel.send(message).catch((e) => {console.log(e.message)})
 }
 
 export const sendMessageToSpesificChannel = async (message: string, channelname: string, channels: ChannelManager) => {
@@ -182,7 +182,7 @@ export const sendNotifyStalkerOnline = async (client: Client) => {
         if (notify) {
             if (channelGuild) {
                 const channel = guild.systemChannel ? guild.systemChannel : channelGuild
-                channel.send("Stalker is back online!").then(m => setTimeout(() => m.delete().catch((e) => {console.log(e.message)}), 5000))
+                sendTimedMessage("Stalker is back online!", channel, 5000)
             }
         }
     }
