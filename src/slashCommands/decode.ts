@@ -12,12 +12,12 @@ const command : SlashCommand = {
             .setCustomId("decode")
             .setTitle("Decode")
 
-		const hobbiesInput = new TextInputBuilder()
+		const decodeInput = new TextInputBuilder()
 			.setCustomId('codeInput')
 			.setLabel("Put your code here!")
 			.setStyle(TextInputStyle.Paragraph);
 
-		const firstActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(hobbiesInput);
+		const firstActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(decodeInput);
 
 		modal.addComponents(firstActionRow);
 
