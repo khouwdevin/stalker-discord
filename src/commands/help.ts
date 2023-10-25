@@ -9,18 +9,18 @@ const command : Command = {
 
         const commandslist = 
             `
-            **${prefix}checkstatus**: If you want to check Stalker config.\r
+            **${prefix}checkstatus**: If you want to check Stalker's config.\r
             example => **'${prefix}checkstatus'**\r
             **${prefix}detectvoice**: If you want to disable or enable detect voice.\r
             example => **'${prefix}detectvoice false'**\r
             **${prefix}greet**: Stalker will greet you!\r
             example => **'${prefix}greet'**\r
-            **${prefix}notify**: If you want to disable or enable stalker online notify.\r
+            **${prefix}notify**: If you want to disable or enable stalker online notif.\r
             example => **'${prefix}notify false'**
             `
         const slashcommandslist = 
             `
-            **/afk**: to announce your afk\r
+            **/afk**: to announce status of your afk\r
             **/clear**: to clear messages\r
             **/decode**: to decode your secret code\r
             **/embed**: to create embed message\r
