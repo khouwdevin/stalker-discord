@@ -30,7 +30,7 @@ const command : Command = {
             deleteTimedMessage(message, message.channel as TextChannel, 20000)
         })
     },
-    cooldown: 1,
+    cooldown: 5,
     aliases: ["h"],
     permissions: []
 }

@@ -22,6 +22,7 @@ const command: Command = {
 
         message.channel.send("Notify successfully changed!")
     },
+    cooldown: 5,
     permissions: ["Administrator"],
     aliases: []
 }

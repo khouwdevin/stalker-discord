@@ -22,6 +22,7 @@ const command: Command = {
 
         message.channel.send("Detect voice successfully changed!")
     },
+    cooldown: 5,
     permissions: ["Administrator"],
     aliases: []
 }

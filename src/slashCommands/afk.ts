@@ -44,8 +44,7 @@ const command : SlashCommand = {
         }
 
         await interaction.editReply("Your command is successfully ran!")
-    },
-    cooldown: 2
+    }
 }
 
 export default command

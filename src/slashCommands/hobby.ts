@@ -28,8 +28,7 @@ const command : SlashCommand = {
         const hobbies = interaction.fields.getTextInputValue('hobbiesInput');
 
         await interaction.editReply({ content: `So, your hobby is ${hobbies}!` });
-    },
-    cooldown: 2
+    }
 }
 
 export default command

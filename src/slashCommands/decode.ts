@@ -30,8 +30,7 @@ const command : SlashCommand = {
         const result = getDecode(code)
 
         await interaction.editReply({ content: result })
-    },
-    cooldown: 2
+    }
 }
 
 export default command
