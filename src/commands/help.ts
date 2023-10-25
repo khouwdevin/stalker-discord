@@ -20,7 +20,7 @@ const command : Command = {
             `
         const slashcommandslist = 
             `
-            **/afk**: to announce status of your afk\r
+            **/afk**: to announce your afk status\r
             **/clear**: to clear messages\r
             **/decode**: to decode your secret code\r
             **/embed**: to create embed message\r
