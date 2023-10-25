@@ -8,8 +8,6 @@ const command : SlashCommand = {
     .setDescription("Decode your secret message here!")
     ,
     execute: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true });
-
         const modal = new ModalBuilder()
             .setCustomId("decode")
             .setTitle("Decode")
@@ -26,6 +24,8 @@ const command : SlashCommand = {
 		await interaction.showModal(modal);
     },
     modal: async (interaction) => {
+        await interaction.deferReply({ ephemeral: true });
+
         const code = interaction.fields.getTextInputValue('codeInput');
         const result = getDecode(code)
 
