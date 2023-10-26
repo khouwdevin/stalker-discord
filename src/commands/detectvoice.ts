@@ -1,5 +1,6 @@
 import { Command } from "../types";
-import { setGuildOption } from "../functions";
+import { sendTimedMessage, setGuildOption } from "../functions";
+import { TextChannel } from "discord.js";
 
 const command: Command = {
     name: "detectvoice",
@@ -15,7 +16,7 @@ const command: Command = {
         setGuildOption(message.guild, "detectvoice", detectvoice === "true")
         
 
-        message.channel.send("Detect voice successfully changed!")
+        sendTimedMessage("Detect voice successfully changed!", message.channel as TextChannel, 5000)
     },
     cooldown: 5,
     permissions: ["Administrator"],

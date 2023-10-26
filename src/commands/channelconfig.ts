@@ -20,8 +20,7 @@ const command: Command = {
 
         setGuildOption(message.guild, "channel", channelid)
 
-        return sendTimedMessage("Channel config successfully changed!", channel as TextChannel, 5000)
-        
+        sendTimedMessage("Channel config successfully changed!", channel as TextChannel, 5000)
     },
     cooldown: 5,
     permissions: ["Administrator"],

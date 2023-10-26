@@ -32,12 +32,12 @@ export const checkPermissions = (member: GuildMember, permissions: Array<Permiss
 
 export const sendTimedMessage = (message: string, channel: TextChannel, duration: number) => {
     channel.send(message)
-        .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(e.message)}), duration))
+        .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(`❌ Failed to delete message : ${e.message}`)}), duration))
     return
 }
 
 export const sendMessage = (message: string, channel: TextChannel) => {
-    channel.send(message).catch((e) => {console.log(e.message)})
+    channel.send(message).catch((e) => {console.log(`❌ Failed to send message : ${e.message}`)})
 }
 
 export const sendMessageByChannelName = async (message: string, channelname: string, channels: ChannelManager) => {
@@ -87,7 +87,7 @@ export const sendTimedMessageByChannelName = async (message: string, channelname
         const channel = await channels.fetch(channelid) as TextChannel
 
         channel.send(message)
-            .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(e.message)}), duration))
+            .then(m => setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(`❌ Failed to delete message : ${e.message}`)}), duration))
     }
     else {
         for (let i = 0; i < channels.cache.size; i++){
@@ -96,7 +96,7 @@ export const sendTimedMessageByChannelName = async (message: string, channelname
             if (channelGuild?.type === ChannelType.GuildText) {
                 const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
                 channel.send(`${channelname} channel isn't found! Please create one!`)
-                    .then(m => {setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(e.message)}), 4000)})
+                    .then(m => {setTimeout(async () => (await channel.messages.fetch(m)).delete().catch((e) => {console.log(`❌ Failed to delete message : ${e.message}`)}), 4000)})
 
                 break
             }
@@ -140,7 +140,7 @@ export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
 export const deleteTimedMessage = (message: Message, channel: TextChannel, duration: number) => {
     setTimeout(
         async () => {
-            (await channel.messages.fetch(message)).delete().catch((e) => {console.log(e.message)})
+            (await channel.messages.fetch(message)).delete().catch((e) => {console.log(`❌ Failed to delete message : ${e.message}`)})
         }
     , duration)
 }

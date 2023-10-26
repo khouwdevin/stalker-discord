@@ -32,11 +32,11 @@ const command : SlashCommand = {
         const isAFK = options[0].value as boolean
 
         if (isAFK){
-            member.setNickname(`[AFK]${member.nickname}`).catch((e) => console.log(e.message))
+            member.setNickname(`[AFK]${member.nickname}`).catch((e) => console.log(`❌ Set nickname in AFK : ${e.message}`))
             await interaction.channel?.send(`${member} is AFK for ${userminutesafk}`)
         }
         else{
-            member.setNickname(member.nickname?.replace("[AFK]", "") || member.nickname).catch((e) => console.log(e.message))
+            member.setNickname(member.nickname?.replace("[AFK]", "") || member.nickname).catch((e) => console.log(`❌ Set nickname in AFK : ${e.message}`))
             await interaction.channel?.send(`${member} is not AFK`)
         }
 

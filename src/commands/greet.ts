@@ -8,7 +8,7 @@ const command : Command = {
         message.channel.send(`Hello there ${toGreet ? toGreet.user.username : message.member?.user.username}!`)
     },
     aliases: ["sayhello"],
-    permissions: ["Administrator", PermissionFlagsBits.ManageEmojisAndStickers] // to test
+    permissions: [] // to test
 }
 
 export default command
