@@ -9,24 +9,39 @@ const command : SlashCommand = {
         return option
         .setName("title")
         .setDescription("Add title")
+        .setRequired(true)
         .setMaxLength(50)
     })
     .addStringOption(option => {
         return option
         .setName("option1")
-        .setDescription("Add option 1 of 3")
+        .setDescription("Add option 1 of 5")
+        .setRequired(true)
         .setMaxLength(150)
     })
     .addStringOption(option => {
         return option
         .setName("option2")
-        .setDescription("Add option 2 of 3")
+        .setDescription("Add option 2 of 5")
+        .setRequired(true)
         .setMaxLength(150)
     })
     .addStringOption(option => {
         return option
         .setName("option3")
-        .setDescription("Add option 3 of 3")
+        .setDescription("Add option 3 of 5")
+        .setMaxLength(150)
+    })
+    .addStringOption(option => {
+        return option
+        .setName("option4")
+        .setDescription("Add option 4 of 5")
+        .setMaxLength(150)
+    })
+    .addStringOption(option => {
+        return option
+        .setName("option3")
+        .setDescription("Add option 5 of 5")
         .setMaxLength(150)
     })
     .setDescription("To create polling"),
@@ -35,7 +50,7 @@ const command : SlashCommand = {
 
         const { channel } = interaction
         const options = interaction.options.data
-        const emojies = ["1️⃣", "2️⃣", "3️⃣"]
+        const emojies = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
 
         let embed = new EmbedBuilder()
             .setTitle(`${options[0].value}`)        

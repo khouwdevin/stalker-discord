@@ -62,17 +62,14 @@ const command : SlashCommand = {
     execute: async (interaction) => {
         await interaction.deferReply({ ephemeral: true })
 
-        if (!interaction.options.data){
-            await interaction.editReply("Something gone wrong!")
-            return
-        }
+        const options = interaction.options.data
 
-        const title = interaction.options.data[0].value
-        const description = interaction.options.data[1].value
-        const channel = interaction.options.data[2].value
-        const date = interaction.options.data[3].value
-        const hour = interaction.options.data[4].value
-        const ampm = interaction.options.data[5].value
+        const title = options[0].value
+        const description = options[1].value
+        const channel = options[2].value
+        const date = options[3].value
+        const hour = options[4].value
+        const ampm = options[5].value
 
         const finalhour = ampm === "AM" ? hour : parseInt(`${hour}`) + 12
 
