@@ -39,7 +39,7 @@ const event: BotEvent = {
 
             if (!channel) return notifyToConfigDefaultTextChannel(newstate.guild.channels)
 
-            sendMessage(`${newstate.member?.user} left ${newstate.channel} channel!`, channel as TextChannel)
+            sendMessage(`${newstate.member?.user} joined ${newstate.channel} channel!`, channel as TextChannel)
         }
     }
 }
