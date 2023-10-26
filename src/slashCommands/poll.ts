@@ -40,7 +40,7 @@ const command : SlashCommand = {
     })
     .addStringOption(option => {
         return option
-        .setName("option3")
+        .setName("option5")
         .setDescription("Add option 5 of 5")
         .setMaxLength(150)
     })
