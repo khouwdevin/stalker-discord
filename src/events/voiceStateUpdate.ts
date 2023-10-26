@@ -1,24 +1,36 @@
-import { VoiceState } from "discord.js";
+import { TextChannel, VoiceState } from "discord.js";
 import { BotEvent } from "../types";
-import { getGuildOption, sendMessageToSpesificChannel } from "../functions";
-import mongoose from "mongoose";
+import { getGuildOption, notifyToConfigDefaultTextChannel, sendMessage, sendMessageByChannelName } from "../functions";
 
 const event: BotEvent = {
     name: "voiceStateUpdate",
     execute: async (oldstate: VoiceState, newstate: VoiceState) => {
-        let detectvoice = true
+        if (newstate.channelId === null) {
+            const detectvoice = await getGuildOption(oldstate.guild, "detectvoice")
 
-        if (mongoose.connection.readyState === 1) {
-            let guildDetectVoice = await getGuildOption(oldstate.guild, "detectvoice") 
-                if (guildDetectVoice !== null) detectvoice = guildDetectVoice as boolean;
+            if (!detectvoice) return
+
+            const channelGuild = await getGuildOption(oldstate.guild, "channel")
+
+            const channel = channelGuild === "stalker" ? oldstate.guild.systemChannel : await oldstate.guild.channels.fetch(channelGuild as string)
+
+            if (!channel) return sendMessageByChannelName(`${oldstate.member?.user} left ${oldstate.channel} channel!`, process.env.STALKER_CHANNEL, oldstate.guild.channels)
+
+            sendMessage(`${oldstate.member?.user} left ${oldstate.channel} channel!`, channel as TextChannel)
         }
+        else if (oldstate.channelId === null){
+            const detectvoice = await getGuildOption(newstate.guild, "detectvoice")
 
-        if (!detectvoice) return
+            if (!detectvoice) return
 
-        if (newstate.channelId === null) 
-            sendMessageToSpesificChannel(`${oldstate.member?.user} left ${oldstate.channel} channel!`, process.env.STALKER_CHANNEL, newstate.guild.channels)
-        else if (oldstate.channelId === null)
-            sendMessageToSpesificChannel(`${newstate.member?.user} joined ${newstate.channel}  channel!`, process.env.STALKER_CHANNEL, oldstate.guild.channels)
+            const channelGuild = await getGuildOption(newstate.guild, "channel")
+
+            const channel = channelGuild === "default" ? newstate.guild.systemChannel : await newstate.guild.channels.fetch(channelGuild as string)
+
+            if (!channel) return notifyToConfigDefaultTextChannel(newstate.guild.channels)
+
+            sendMessage(`${newstate.member?.user} left ${newstate.channel} channel!`, channel as TextChannel)
+        }
     }
 }
 

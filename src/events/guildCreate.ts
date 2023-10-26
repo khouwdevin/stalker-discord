@@ -9,7 +9,8 @@ const event: BotEvent = {
             guildID: guild.id,
             options: {
                 detectvoice: false,
-                notify: false
+                notify: false,
+                channel: "stalker"
             },
             joinedAt: Date.now()
         })

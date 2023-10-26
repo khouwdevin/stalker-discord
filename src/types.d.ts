@@ -19,7 +19,8 @@ export interface Command {
 
 interface GuildOptions {
     notify: Boolean,
-    detectvoice: Boolean
+    detectvoice: Boolean,
+    channel: String
 }
 
 export interface IGuild extends mongoose.Document {

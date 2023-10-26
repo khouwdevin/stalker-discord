@@ -16,6 +16,7 @@ const command : Command = {
             `
             **detect voice**: ${options?.detectvoice}\r
             **notify**: ${options?.notify}\r
+            **channel**: <#${options?.channel}>
             `
 
         const embed = new EmbedBuilder()

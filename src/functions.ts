@@ -40,7 +40,7 @@ export const sendMessage = (message: string, channel: TextChannel) => {
     channel.send(message).catch((e) => {console.log(e.message)})
 }
 
-export const sendMessageToSpesificChannel = async (message: string, channelname: string, channels: ChannelManager) => {
+export const sendMessageByChannelName = async (message: string, channelname: string, channels: ChannelManager) => {
     let channelid = ""
 
     for (let i = 0; i < channels.cache.size; i++) {
@@ -70,7 +70,7 @@ export const sendMessageToSpesificChannel = async (message: string, channelname:
     }
 }
 
-export const sendTimedMessageToSpesificChannel = async (message: string, channelname: string, duration: number, channels: ChannelManager) => {
+export const sendTimedMessageByChannelName = async (message: string, channelname: string, duration: number, channels: ChannelManager) => {
     let channelid = ""
     
     for (let i = 0; i < channels.cache.size; i++) {
@@ -100,6 +100,19 @@ export const sendTimedMessageToSpesificChannel = async (message: string, channel
 
                 break
             }
+        }
+    }
+}
+
+export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
+    for (let i = 0; i < channels.cache.size; i++){
+        const channelGuild = channels.cache.at(i)
+
+        if (channelGuild?.type === ChannelType.GuildText) {
+            const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
+            channel.send("Please add default text channel to Stalker's config!")
+
+            break
         }
     }
 }

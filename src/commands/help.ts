@@ -9,6 +9,8 @@ const command : Command = {
 
         const commandslist = 
             `
+            **${prefix}channelconfig**: If you want to change Stalker's channel (send the channel id).\r
+            example => **'${prefix}channelconfig 12344556677'**\r
             **${prefix}checkstatus**: If you want to check Stalker's config.\r
             example => **'${prefix}checkstatus'**\r
             **${prefix}detectvoice**: If you want to disable or enable detect voice.\r
