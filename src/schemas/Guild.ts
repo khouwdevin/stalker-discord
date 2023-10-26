@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IGuild } from "../types";
 
 const GuildSchema = new Schema<IGuild>({
@@ -9,6 +9,7 @@ const GuildSchema = new Schema<IGuild>({
     }
 })
 
-const GuildModel = model("guild", GuildSchema)
+const db = mongoose.connection.useDb(process.env.STALKER_DATABASE)
+const GuildModel = db.model("guild", GuildSchema, "guilds")
 
 export default GuildModel
