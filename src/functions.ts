@@ -115,13 +115,24 @@ export const sendMessageToExistingChannel = (channels: ChannelManager, message: 
     }
 }
 
+export const sendTimedMessageToExistingChannel = (channels: ChannelManager, message: string, duration: number) => {
+    for (let i = 0; i < channels.cache.size; i++){
+        const channelGuild = channels.cache.at(i)
+
+        if (channelGuild?.type === ChannelType.GuildText) {
+            const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
+            return channel.send(message).then((m) => setTimeout(() => m.delete(), duration))
+        }
+    }
+}
+
 export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
     for (let i = 0; i < channels.cache.size; i++){
         const channelGuild = channels.cache.at(i)
 
         if (channelGuild?.type === ChannelType.GuildText) {
             const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
-            return channel.send("Please add default text channel to Stalker's config!")
+            return channel.send("Please add default text channel to Stalker's config!").then((m) => setTimeout(() => m.delete(), 10000))
         }
     }
 }

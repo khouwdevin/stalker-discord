@@ -1,6 +1,6 @@
 import { TextChannel, VoiceState } from "discord.js";
 import { BotEvent } from "../types";
-import { getGuildOption, notifyToConfigDefaultTextChannel, sendMessage, sendMessageByChannelName, sendMessageToExistingChannel } from "../functions";
+import { getGuildOption, notifyToConfigDefaultTextChannel, sendMessage, sendMessageByChannelName, sendMessageToExistingChannel, sendTimedMessageToExistingChannel } from "../functions";
 
 const event: BotEvent = {
     name: "voiceStateUpdate",
@@ -13,8 +13,7 @@ const event: BotEvent = {
             const channelGuildId = await getGuildOption(oldstate.guild, "channel")
 
             if (!oldstate.guild?.channels.cache.find((c) => c.id === channelGuildId)) {
-                console.log("'channelconfig' channel doesn't exist.")
-                return sendMessageToExistingChannel(oldstate.guild.channels, "Channel has been deleted or doesn't exist, please provide a new one in channelconfig!")
+                return sendTimedMessageToExistingChannel(oldstate.guild.channels, "Channel has been deleted or doesn't exist, please provide a new one in channelconfig!", 10000)
             }
 
             const channel = channelGuildId === "default" ? oldstate.guild.systemChannel : await oldstate.guild.channels.fetch(channelGuildId as string)
@@ -31,8 +30,7 @@ const event: BotEvent = {
             const channelGuildId = await getGuildOption(newstate.guild, "channel")
 
             if (!newstate.guild?.channels.cache.find((c) => c.id === channelGuildId)) {
-                console.log("'channelconfig' channel doesn't exist.")
-                return sendMessageToExistingChannel(newstate.guild.channels, "Channel has been deleted or doesn't exist, please provide a new one in channelconfig!")
+                return sendTimedMessageToExistingChannel(oldstate.guild.channels, "Channel has been deleted or doesn't exist, please provide a new one in channelconfig!", 10000)
             }
 
             const channel = channelGuildId === "default" ? newstate.guild.systemChannel : await newstate.guild.channels.fetch(channelGuildId as string)

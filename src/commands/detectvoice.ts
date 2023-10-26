@@ -9,11 +9,11 @@ const command: Command = {
         if (!detectvoice) return message.channel.send("No status is provided!")
         if (detectvoice !== "true" && detectvoice !== "false") return message.channel.send("Please provide only true or false!")
         if (!message.guild) {
-            console.log("'detectvoice' is missing guild.")
             return message.channel.send("Some error is occured!")
         }
 
         setGuildOption(message.guild, "detectvoice", detectvoice === "true")
+        
 
         message.channel.send("Detect voice successfully changed!")
     },

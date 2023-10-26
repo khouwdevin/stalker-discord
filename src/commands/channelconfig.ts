@@ -1,5 +1,6 @@
 import { Command } from "../types";
-import { setGuildOption } from "../functions";
+import { sendTimedMessage, setGuildOption } from "../functions";
+import { TextChannel } from "discord.js";
 
 const command: Command = {
     name: "channelconfig",
@@ -10,18 +11,16 @@ const command: Command = {
         if (!channelid) return message.channel.send("No channel is provided!")
 
         if (!message.guild?.channels.cache.find((c) => c.id === channelid)) {
-            console.log("'channelconfig' channel doesn't exist.")
-            return channel.send("Channel not found! Please provide an existing text channel!")
+            return sendTimedMessage("Channel not found! Please provide an existing text channel!", channel as TextChannel, 10000)
         }
 
         if (!message.guild) {
-            console.log("'channelconfig' is missing guild.")
-            return message.channel.send("Some error is occured!")
+            return sendTimedMessage("Some error is occured!", channel as TextChannel, 5000)
         }
 
         setGuildOption(message.guild, "channel", channelid)
 
-        message.channel.send("Channel config successfully changed!")
+        return sendTimedMessage("Channel config successfully changed!", channel as TextChannel, 5000)
         
     },
     cooldown: 5,
