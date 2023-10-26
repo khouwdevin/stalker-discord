@@ -5,12 +5,14 @@ import { BotEvent } from "../types";
 const event: BotEvent = {
     name: "guildCreate",
     execute: (guild : Guild) => {
+        const channelid = guild.systemChannel ? guild.systemChannel.id : "default"
+
         const newGuild = new GuildModel({
             guildID: guild.id,
             options: {
                 detectvoice: false,
                 notify: false,
-                channel: "stalker"
+                channel: channelid
             },
             joinedAt: Date.now()
         })

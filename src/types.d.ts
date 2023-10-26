@@ -44,7 +44,6 @@ declare global {
             PREFIX_COMMAND: string,
             MONGO_URI: string,
             MONGO_DATABASE_NAME: string,
-            STALKER_CHANNEL: string,
             STALKER_DATABASE: string
         }
     }

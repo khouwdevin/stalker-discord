@@ -104,15 +104,24 @@ export const sendTimedMessageByChannelName = async (message: string, channelname
     }
 }
 
+export const sendMessageToExistingChannel = (channels: ChannelManager, message: string) => {
+    for (let i = 0; i < channels.cache.size; i++){
+        const channelGuild = channels.cache.at(i)
+
+        if (channelGuild?.type === ChannelType.GuildText) {
+            const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
+            return channel.send(message)
+        }
+    }
+}
+
 export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
     for (let i = 0; i < channels.cache.size; i++){
         const channelGuild = channels.cache.at(i)
 
         if (channelGuild?.type === ChannelType.GuildText) {
             const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
-            channel.send("Please add default text channel to Stalker's config!")
-
-            break
+            return channel.send("Please add default text channel to Stalker's config!")
         }
     }
 }

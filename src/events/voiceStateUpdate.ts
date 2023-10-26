@@ -1,6 +1,6 @@
 import { TextChannel, VoiceState } from "discord.js";
 import { BotEvent } from "../types";
-import { getGuildOption, notifyToConfigDefaultTextChannel, sendMessage, sendMessageByChannelName } from "../functions";
+import { getGuildOption, notifyToConfigDefaultTextChannel, sendMessage, sendMessageByChannelName, sendMessageToExistingChannel } from "../functions";
 
 const event: BotEvent = {
     name: "voiceStateUpdate",
@@ -10,11 +10,16 @@ const event: BotEvent = {
 
             if (!detectvoice) return
 
-            const channelGuild = await getGuildOption(oldstate.guild, "channel")
+            const channelGuildId = await getGuildOption(oldstate.guild, "channel")
 
-            const channel = channelGuild === "stalker" ? oldstate.guild.systemChannel : await oldstate.guild.channels.fetch(channelGuild as string)
+            if (!oldstate.guild?.channels.cache.find((c) => c.id === channelGuildId)) {
+                console.log("'channelconfig' channel doesn't exist.")
+                return sendMessageToExistingChannel(oldstate.guild.channels, "Channel has been deleted or doesn't exist, please provide a new one in channelconfig!")
+            }
 
-            if (!channel) return sendMessageByChannelName(`${oldstate.member?.user} left ${oldstate.channel} channel!`, process.env.STALKER_CHANNEL, oldstate.guild.channels)
+            const channel = channelGuildId === "default" ? oldstate.guild.systemChannel : await oldstate.guild.channels.fetch(channelGuildId as string)
+
+            if (!channel) return notifyToConfigDefaultTextChannel(newstate.guild.channels)
 
             sendMessage(`${oldstate.member?.user} left ${oldstate.channel} channel!`, channel as TextChannel)
         }
@@ -23,9 +28,14 @@ const event: BotEvent = {
 
             if (!detectvoice) return
 
-            const channelGuild = await getGuildOption(newstate.guild, "channel")
+            const channelGuildId = await getGuildOption(newstate.guild, "channel")
 
-            const channel = channelGuild === "default" ? newstate.guild.systemChannel : await newstate.guild.channels.fetch(channelGuild as string)
+            if (!newstate.guild?.channels.cache.find((c) => c.id === channelGuildId)) {
+                console.log("'channelconfig' channel doesn't exist.")
+                return sendMessageToExistingChannel(newstate.guild.channels, "Channel has been deleted or doesn't exist, please provide a new one in channelconfig!")
+            }
+
+            const channel = channelGuildId === "default" ? newstate.guild.systemChannel : await newstate.guild.channels.fetch(channelGuildId as string)
 
             if (!channel) return notifyToConfigDefaultTextChannel(newstate.guild.channels)
 
