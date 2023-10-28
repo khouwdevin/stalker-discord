@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, EmbedFooterData, SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../types";
 import PollModel from "../schemas/Poll";
 
@@ -62,7 +62,8 @@ const command : SlashCommand = {
 
         const date = new Date()
         const minutes = date.getMinutes() + minutesTimeout
-        const currentMinutes = minutes > 60 ? minutes - 60 : minutes
+        const minutesNumber = minutes > 60 ? minutes - 60 : minutes
+        const currentMinutes = minutesNumber >= 10 ? minutesNumber : `0${minutesNumber}`
 
         const newPoll = new PollModel({
             guildID: guildid
@@ -84,6 +85,7 @@ const command : SlashCommand = {
 
         const embed = new EmbedBuilder()
             .setTitle(`Poll for *${options[0].value}*`)        
+            .setAuthor({ name: interaction.user?.tag || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
             .setColor("Blue")
 
         for (let i = 1; i < options.length; i++) {
@@ -92,8 +94,8 @@ const command : SlashCommand = {
             )
         }
 
-        embed.addFields(
-            { name: " ", value: `Poll is still ongoing until minutes ${currentMinutes}!` }
+        embed.setFooter(
+            { text: `Poll is still ongoing until minutes ${currentMinutes}!`, iconURL: undefined }
         )
 
         const message = await channel.send({ embeds: [embed], components: [buttonsRow] })
@@ -102,7 +104,9 @@ const command : SlashCommand = {
 
         const timeout = setTimeout( async () => {
             const embeds = message.embeds[0]
-            embeds.fields[embeds.fields.length - 1].value = "Poll is over!"
+            
+            if (embeds.footer)
+                embeds.footer.text = "Poll is over!"
 
             await message.edit({
                 embeds: [embeds],
@@ -136,7 +140,8 @@ const command : SlashCommand = {
 
         const date = new Date()
         const minutes = date.getMinutes() + minutesTimeout
-        const currentMinutes = minutes > 60 ? minutes - 60 : minutes
+        const minutesNumber = minutes > 60 ? minutes - 60 : minutes
+        const currentMinutes = minutesNumber >= 10 ? minutesNumber : `0${minutesNumber}`
 
         for (let i = 0; i < targetPoll.pollResult.length; i++) {
             if (i === (option - 1)) {
@@ -156,7 +161,8 @@ const command : SlashCommand = {
                         targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
                     }
 
-                    targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `Poll is still ongoing until minutes ${currentMinutes}!`
+                    if (targetMessageEmbed.footer)
+                        targetMessageEmbed.footer.text = `Poll is still ongoing until minutes ${currentMinutes}!`
 
                     await targetMessage.edit({
                         embeds: [targetMessageEmbed],
@@ -167,7 +173,9 @@ const command : SlashCommand = {
 
                     const timeout = setTimeout( async () => {
                         const embeds = targetMessage.embeds[0]
-                        embeds.fields[embeds.fields.length - 1].value = "Poll is over!"
+
+                        if (embeds.footer)
+                            embeds.footer.text = "Poll is over!"
 
                         await targetMessage.edit({
                             embeds: [embeds],
@@ -196,7 +204,8 @@ const command : SlashCommand = {
                     targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
                 }
 
-                targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `Poll is still ongoing until minutes ${currentMinutes}!`
+                if (targetMessageEmbed.footer)
+                    targetMessageEmbed.footer.text = `Poll is still ongoing until minutes ${currentMinutes}!`
 
                 await targetMessage.edit({
                     embeds: [targetMessageEmbed],
@@ -207,7 +216,9 @@ const command : SlashCommand = {
 
                 const timeout = setTimeout( async () => {
                     const embeds = targetMessage.embeds[0]
-                    embeds.fields[embeds.fields.length - 1].value = "Poll is over!"
+
+                    if (embeds.footer)
+                        embeds.footer.text = "Poll is over!"
 
                     await targetMessage.edit({
                         embeds: [embeds],
