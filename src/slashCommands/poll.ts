@@ -61,6 +61,8 @@ const command : SlashCommand = {
         const options = interaction.options.data
 
         const date = new Date()
+        const minutes = date.getMinutes() + minutesTimeout
+        const currentMinutes = minutes > 60 ? minutes - 60 : minutes
 
         const newPoll = new PollModel({
             guildID: guildid
@@ -91,7 +93,7 @@ const command : SlashCommand = {
         }
 
         embed.addFields(
-            { name: " ", value: `Poll is still ongoing until ${date.getHours()}:${date.getMinutes() + minutesTimeout}!` }
+            { name: " ", value: `Poll is still ongoing until minutes ${currentMinutes}!` }
         )
 
         const message = await channel.send({ embeds: [embed], components: [buttonsRow] })
@@ -132,6 +134,10 @@ const command : SlashCommand = {
         const option = parseInt(optionString)
         const userID = `${interaction.user.id}.option${option}`
 
+        const date = new Date()
+        const minutes = date.getMinutes() + minutesTimeout
+        const currentMinutes = minutes > 60 ? minutes - 60 : minutes
+
         for (let i = 0; i < targetPoll.pollResult.length; i++) {
             if (i === (option - 1)) {
                 if (targetPoll.usersID.includes(userID)) {
@@ -150,9 +156,7 @@ const command : SlashCommand = {
                         targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
                     }
 
-                    const date = new Date()
-
-                    targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `Poll is still ongoing until ${date.getHours()}:${date.getMinutes() + minutesTimeout}!`
+                    targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `Poll is still ongoing until minutes ${currentMinutes}!`
 
                     await targetMessage.edit({
                         embeds: [targetMessageEmbed],
@@ -192,9 +196,7 @@ const command : SlashCommand = {
                     targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
                 }
 
-                const date = new Date()
-
-                targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `Poll is still ongoing until ${date.getHours()}:${date.getMinutes() + minutesTimeout}!`
+                targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `Poll is still ongoing until minutes ${currentMinutes}!`
 
                 await targetMessage.edit({
                     embeds: [targetMessageEmbed],
