@@ -3,6 +3,7 @@ import { SlashCommand } from "../types";
 import PollModel from "../schemas/Poll";
 
 const emojies = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
+const minutesTimeout = 2
 
 const command : SlashCommand = {
     command: new SlashCommandBuilder()
@@ -58,7 +59,8 @@ const command : SlashCommand = {
         const guildid = interaction.guildId
         const channel = interaction.channel
         const options = interaction.options.data
-        
+
+        const date = new Date()
 
         const newPoll = new PollModel({
             guildID: guildid
@@ -88,9 +90,28 @@ const command : SlashCommand = {
             )
         }
 
+        embed.addFields(
+            { name: " ", value: `Poll is still ongoing until ${date.getHours()}:${date.getMinutes() + minutesTimeout}!` }
+        )
+
         const message = await channel.send({ embeds: [embed], components: [buttonsRow] })
 
         newPoll.messageID = message.id
+
+        const timeout = setTimeout( async () => {
+            const embeds = message.embeds[0]
+            embeds.fields[embeds.fields.length - 1].value = "Poll is over!"
+
+            await message.edit({
+                embeds: [embeds],
+                components: []
+            })
+
+            await PollModel.deleteOne({ _id: newPoll._id })
+            interaction.client.timeouts.delete(`${newPoll._id}`)
+        }, minutesTimeout * 60 * 1000)
+
+        interaction.client.timeouts.set(`${newPoll._id}`, timeout)
 
         await newPoll.save()
 
@@ -102,8 +123,11 @@ const command : SlashCommand = {
         const [type, pollID, optionString] = interaction.customId.split(".")
         const targetPoll = await PollModel.findOne({ _id: pollID })
 
-        if (!interaction.channel) return
-        if (!targetPoll) return
+        if (!interaction.channel) return await interaction.editReply("Channel has been deleted!")
+        if (!targetPoll) return await interaction.editReply("Poll is over!")
+
+        clearTimeout(interaction.client.timeouts.get(`${pollID}`))
+        interaction.client.timeouts.delete(`${pollID}`)
 
         const option = parseInt(optionString)
         const userID = `${interaction.user.id}.option${option}`
@@ -126,12 +150,31 @@ const command : SlashCommand = {
                         targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
                     }
 
+                    const date = new Date()
+
+                    targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `Poll is still ongoing until ${date.getHours()}:${date.getMinutes() + minutesTimeout}!`
+
                     await targetMessage.edit({
                         embeds: [targetMessageEmbed],
                         components: [targetMessage.components[0]]
                     })
 
                     await targetPoll.save()
+
+                    const timeout = setTimeout( async () => {
+                        const embeds = targetMessage.embeds[0]
+                        embeds.fields[embeds.fields.length - 1].value = "Poll is over!"
+
+                        await targetMessage.edit({
+                            embeds: [embeds],
+                            components: []
+                        })
+            
+                        await PollModel.deleteOne({ _id: pollID })
+                        interaction.client.timeouts.delete(`${pollID}`)
+                    }, minutesTimeout * 60 * 1000)
+
+                    interaction.client.timeouts.set(`${targetPoll._id}`, timeout)
 
                     return await interaction.editReply("Your poll has been removed!")
                 }
@@ -146,10 +189,12 @@ const command : SlashCommand = {
                 for (let i = 0; i < targetPoll.pollResult.length; i++) {
                     const percentage = (targetPoll.pollResult[i] / targetPoll.usersID.length) * 100
 
-                    const value = targetMessageEmbed.fields[i].value.split(" ")[4]
-
-                    targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes for ${value} (${percentage}%)`
+                    targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
                 }
+
+                const date = new Date()
+
+                targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `Poll is still ongoing until ${date.getHours()}:${date.getMinutes() + minutesTimeout}!`
 
                 await targetMessage.edit({
                     embeds: [targetMessageEmbed],
@@ -157,6 +202,21 @@ const command : SlashCommand = {
                 })
 
                 await targetPoll.save()
+
+                const timeout = setTimeout( async () => {
+                    const embeds = targetMessage.embeds[0]
+                    embeds.fields[embeds.fields.length - 1].value = "Poll is over!"
+
+                    await targetMessage.edit({
+                        embeds: [embeds],
+                        components: []
+                    })
+        
+                    await PollModel.deleteOne({ _id: pollID })
+                    interaction.client.timeouts.delete(`${pollID}`)
+                }, minutesTimeout * 60 * 1000)
+
+                interaction.client.timeouts.set(`${targetPoll._id}`, timeout)
 
                 return await interaction.editReply("Poll sent successfully!")
             }

@@ -61,6 +61,7 @@ declare module "discord.js" {
     export interface Client {
         slashCommands: Collection<string, SlashCommand>
         commands: Collection<string, Command>,
-        cooldowns: Collection<string, number>
+        cooldowns: Collection<string, number>,
+        timeouts: Collection<string, NodeJS.Timeout>
     }
 }

@@ -34,6 +34,7 @@ const client = new Client({intents:[Guilds, MessageContent, GuildMessages, Guild
 client.slashCommands = new Collection<string, SlashCommand>()
 client.commands = new Collection<string, Command>()
 client.cooldowns = new Collection<string, number>()
+client.timeouts = new Collection<string, NodeJS.Timeout>()
 
 const handlersDir = join(__dirname, "./handlers")
 readdirSync(handlersDir).forEach(handler => {
