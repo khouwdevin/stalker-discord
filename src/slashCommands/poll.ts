@@ -84,8 +84,8 @@ const command : SlashCommand = {
         const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
 
         const embed = new EmbedBuilder()
-            .setTitle(`Poll for *${options[0].value}*`)        
-            .setAuthor({ name: interaction.user?.tag || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
+            .setTitle(`Poll for *${options[0].value?.toString().toUpperCase()}*`)        
+            .setAuthor({ name: interaction.user.username || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
             .setColor("Blue")
 
         for (let i = 1; i < options.length; i++) {

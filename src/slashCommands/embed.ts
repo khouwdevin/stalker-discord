@@ -92,7 +92,7 @@ const command: SlashCommand = {
         .setColor(options.color.toString() as ColorResolvable)
         .setTitle(options.title.toString())
         .setDescription(options.description.toString())
-        .setAuthor({ name: interaction.user?.tag || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
+        .setAuthor({ name: interaction.user.username || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
         .setThumbnail(options.thumbnail.toString())
         .setTimestamp()
         .setFooter({ text: "Test embed message", iconURL: interaction.user?.avatarURL() || undefined });
