@@ -60,31 +60,33 @@ const command : SlashCommand = {
         .setDescription("Create event using slash command")
     ,
     execute: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true })
+        try {
+            await interaction.deferReply({ ephemeral: true })
 
-        const options = interaction.options.data
+            const options = interaction.options.data
 
-        const title = options[0].value
-        const description = options[1].value
-        const channel = options[2].value
-        const date = options[3].value
-        const hour = options[4].value
-        const ampm = options[5].value
+            const title = options[0].value
+            const description = options[1].value
+            const channel = options[2].value
+            const date = options[3].value
+            const hour = options[4].value
+            const ampm = options[5].value
 
-        const finalhour = ampm === "AM" ? hour : parseInt(`${hour}`) + 12
+            const finalhour = ampm === "AM" ? hour : parseInt(`${hour}`) + 12
 
-        const finaldate = `${date} ${finalhour}:00:00`
+            const finaldate = `${date} ${finalhour}:00:00`
 
-        await interaction.guild?.scheduledEvents.create({
-            name: `${title}`,
-            description: `${description}`,
-            channel: `${channel}`,
-            scheduledStartTime: new Date(`${finaldate}`),
-            privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
-            entityType: GuildScheduledEventEntityType.Voice,
-        })
+            await interaction.guild?.scheduledEvents.create({
+                name: `${title}`,
+                description: `${description}`,
+                channel: `${channel}`,
+                scheduledStartTime: new Date(`${finaldate}`),
+                privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
+                entityType: GuildScheduledEventEntityType.Voice,
+            })
 
-        await interaction.editReply("Your event has been posted!")
+            await interaction.editReply("Your event has been posted!")
+        } catch {}
     },
     cooldown: 5
 }

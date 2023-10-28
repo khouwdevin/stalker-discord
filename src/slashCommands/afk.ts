@@ -21,26 +21,28 @@ const command : SlashCommand = {
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     ,
     execute: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true })
+        try {
+            await interaction.deferReply({ ephemeral: true })
 
-        const options = interaction.options.data
-        const minutes: number = options[1].value as number ? options[1].value as number : 0
+            const options = interaction.options.data
+            const minutes: number = options[1].value as number ? options[1].value as number : 0
 
-        const userminutesafk = minutes === 0 ? "" : `for ${minutes} minutes`
+            const userminutesafk = minutes === 0 ? "" : `for ${minutes} minutes`
 
-        const member = (interaction.member as GuildMember)
-        const isAFK = options[0].value as boolean
+            const member = (interaction.member as GuildMember)
+            const isAFK = options[0].value as boolean
 
-        if (isAFK){
-            member.setNickname(`[AFK]${member.nickname}`).catch((e) => console.log(`❌ Set nickname in AFK : ${e.message}`))
-            await interaction.channel?.send(`${member} is AFK for ${userminutesafk}`)
-        }
-        else{
-            member.setNickname(member.nickname?.replace("[AFK]", "") || member.nickname).catch((e) => console.log(`❌ Set nickname in AFK : ${e.message}`))
-            await interaction.channel?.send(`${member} is not AFK`)
-        }
+            if (isAFK){
+                member.setNickname(`[AFK]${member.nickname}`).catch((e) => console.log(`❌ Set nickname in AFK : ${e.message}`))
+                await interaction.channel?.send(`${member} is AFK for ${userminutesafk}`)
+            }
+            else{
+                member.setNickname(member.nickname?.replace("[AFK]", "") || member.nickname).catch((e) => console.log(`❌ Set nickname in AFK : ${e.message}`))
+                await interaction.channel?.send(`${member} is not AFK`)
+            }
 
-        await interaction.editReply("Your command is successfully ran!")
+            await interaction.editReply("Your command is successfully ran!")
+        } catch {}
     }
 }
 

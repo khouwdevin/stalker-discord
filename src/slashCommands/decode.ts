@@ -8,29 +8,33 @@ const command : SlashCommand = {
     .setDescription("Decode your secret message here!")
     ,
     execute: async (interaction) => {
-        const modal = new ModalBuilder()
-            .setCustomId("decode")
-            .setTitle("Decode")
+        try {
+            const modal = new ModalBuilder()
+                .setCustomId("decode")
+                .setTitle("Decode")
 
-		const decodeInput = new TextInputBuilder()
-			.setCustomId('codeInput')
-			.setLabel("Put your code here!")
-            .setRequired(true)
-			.setStyle(TextInputStyle.Paragraph);
+            const decodeInput = new TextInputBuilder()
+                .setCustomId('codeInput')
+                .setLabel("Put your code here!")
+                .setRequired(true)
+                .setStyle(TextInputStyle.Paragraph);
 
-		const firstActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(decodeInput);
+            const firstActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(decodeInput);
 
-		modal.addComponents(firstActionRow);
+            modal.addComponents(firstActionRow);
 
-		await interaction.showModal(modal);
+            await interaction.showModal(modal);
+        } catch {}
     },
     modal: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true });
+        try {
+            await interaction.deferReply({ ephemeral: true });
 
-        const code = interaction.fields.getTextInputValue('codeInput');
-        const result = getDecode(code)
+            const code = interaction.fields.getTextInputValue('codeInput');
+            const result = getDecode(code)
 
-        await interaction.editReply({ content: result })
+            await interaction.editReply({ content: result })
+        } catch {}
     }
 }
 

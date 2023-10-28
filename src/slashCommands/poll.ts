@@ -50,123 +50,178 @@ const command : SlashCommand = {
     })
     .setDescription("To create polling"),
     execute: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true })
-
-        if (!interaction.channel) return
-
-        const buttons: ButtonBuilder[] = []
-
-        const guildid = interaction.guildId
-        const channel = interaction.channel
-        const options = interaction.options.data
-
-        const date = new Date()
-        const minutes = date.getMinutes() + minutesTimeout
-        const minutesNumber = minutes > 60 ? minutes - 60 : minutes
-        const currentMinutes = minutesNumber >= 10 ? minutesNumber : `0${minutesNumber}`
-
-        const newPoll = new PollModel({
-            guildID: guildid
-        })
-
-        for (let i = 1; i < options.length; i++) {
-            newPoll.pollResult[i - 1] = 0
-
-            buttons.push(
-                new ButtonBuilder()
-                    .setEmoji(emojies[i - 1])
-                    .setLabel(`${options[i].value}`)
-                    .setStyle(ButtonStyle.Primary)
-                    .setCustomId(`poll.${newPoll._id}.${i}`)
-            )
-        }
-
-        const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
-
-        const embed = new EmbedBuilder()
-            .setTitle(`Poll's Subject: ${options[0].value?.toString().toUpperCase()}`)        
-            .setAuthor({ name: `${interaction.user.username}` || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
-            .setFooter(
-                { text: `${interaction.user.username} started a poll`, iconURL: undefined }
-            )
-            .setColor("Blue")
-
-        for (let i = 1; i < options.length; i++) {
-            embed.addFields(
-                { name: `${options[i].value}`, value: `${emojies[i - 1]} 0 votes (0.0%)` }
-            )
-        }
-
-        embed.addFields(
-            { name: " ", value: `**Poll is still ongoing until minutes ${currentMinutes}!**` }
-        )
-
-        const message = await channel.send({ embeds: [embed], components: [buttonsRow] })
-
-        newPoll.messageID = message.id
-
-        const timeout = setTimeout( async () => {
-            await PollModel.deleteOne({ _id: newPoll._id })
-            interaction.client.timeouts.delete(`${newPoll._id}`)
+        try {
+            await interaction.deferReply({ ephemeral: true })
 
             if (!interaction.channel) return
 
-            try {
-                const timeoutMessage = await interaction.channel.messages.fetch(newPoll.messageID)
+            const buttons: ButtonBuilder[] = []
 
-                if (!timeoutMessage) return
+            const guildid = interaction.guildId
+            const channel = interaction.channel
+            const options = interaction.options.data
 
-                const embeds = timeoutMessage.embeds[0]
-                
-                embeds.fields[embeds.fields.length - 1].value = "**POLL IS OVER! NONE IS A WINNER!**"
+            const date = new Date()
+            const minutes = date.getMinutes() + minutesTimeout
+            const minutesNumber = minutes > 60 ? minutes - 60 : minutes
+            const currentMinutes = minutesNumber >= 10 ? minutesNumber : `0${minutesNumber}`
 
-                await timeoutMessage.edit({
-                    embeds: [embeds],
-                    components: []
-                })
-            } catch {}
-        }, minutesTimeout * 60 * 1000)
+            const newPoll = new PollModel({
+                guildID: guildid
+            })
 
-        interaction.client.timeouts.set(`${newPoll._id}`, timeout)
+            for (let i = 1; i < options.length; i++) {
+                newPoll.pollResult[i - 1] = 0
 
-        await newPoll.save()
+                buttons.push(
+                    new ButtonBuilder()
+                        .setEmoji(emojies[i - 1])
+                        .setLabel(`${options[i].value}`)
+                        .setStyle(ButtonStyle.Primary)
+                        .setCustomId(`poll.${newPoll._id}.${i}`)
+                )
+            }
 
-        await interaction.editReply("Poll sent successfully!")
+            const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
+
+            const embed = new EmbedBuilder()
+                .setTitle(`Poll's Subject: ${options[0].value?.toString().toUpperCase()}`)        
+                .setAuthor({ name: `${interaction.user.username}` || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
+                .setFooter(
+                    { text: `${interaction.user.username} started a poll`, iconURL: undefined }
+                )
+                .setColor("Blue")
+
+            for (let i = 1; i < options.length; i++) {
+                embed.addFields(
+                    { name: `${options[i].value}`, value: `${emojies[i - 1]} 0 votes (0.0%)` }
+                )
+            }
+
+            embed.addFields(
+                { name: " ", value: `**Poll is still ongoing until minutes ${currentMinutes}!**` }
+            )
+
+            const message = await channel.send({ embeds: [embed], components: [buttonsRow] })
+
+            newPoll.messageID = message.id
+
+            const timeout = setTimeout( async () => {
+                await PollModel.deleteOne({ _id: newPoll._id })
+                interaction.client.timeouts.delete(`${newPoll._id}`)
+
+                if (!interaction.channel) return
+
+                try {
+                    const timeoutMessage = await interaction.channel.messages.fetch(newPoll.messageID)
+
+                    if (!timeoutMessage) return
+
+                    const embeds = timeoutMessage.embeds[0]
+                    
+                    embeds.fields[embeds.fields.length - 1].value = "**POLL IS OVER! NONE IS A WINNER!**"
+
+                    await timeoutMessage.edit({
+                        embeds: [embeds],
+                        components: []
+                    })
+                } catch {}
+            }, minutesTimeout * 60 * 1000)
+
+            interaction.client.timeouts.set(`${newPoll._id}`, timeout)
+
+            await newPoll.save()
+
+            await interaction.editReply("Poll sent successfully!")
+        } catch {}
     },
     button: async (interaction) => {
-        await interaction.deferReply({ ephemeral: true })
+        try {
+            await interaction.deferReply({ ephemeral: true })
 
-        const [type, pollID, optionString] = interaction.customId.split(".")
-        const targetPoll = await PollModel.findOne({ _id: pollID })
+            const [type, pollID, optionString] = interaction.customId.split(".")
+            const targetPoll = await PollModel.findOne({ _id: pollID })
 
-        if (!interaction.channel) return await interaction.editReply("Channel has been deleted!")
-        if (!targetPoll) return await interaction.editReply("Poll is over!")
+            if (!interaction.channel) return await interaction.editReply("Channel has been deleted!")
+            if (!targetPoll) return await interaction.editReply("Poll is over!")
 
-        clearTimeout(interaction.client.timeouts.get(`${pollID}`))
-        interaction.client.timeouts.delete(`${pollID}`)
+            clearTimeout(interaction.client.timeouts.get(`${pollID}`))
+            interaction.client.timeouts.delete(`${pollID}`)
 
-        const targetMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
-        const targetMessageEmbed = targetMessage.embeds[0]
+            const targetMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
+            const targetMessageEmbed = targetMessage.embeds[0]
 
-        const option = parseInt(optionString)
-        const userID = `${interaction.user.id}.option${option}`
+            const option = parseInt(optionString)
+            const userID = `${interaction.user.id}.option${option}`
 
-        const date = new Date()
-        const minutes = date.getMinutes() + minutesTimeout
-        const minutesNumber = minutes > 60 ? minutes - 60 : minutes
-        const currentMinutes = minutesNumber >= 10 ? minutesNumber : `0${minutesNumber}`
+            const date = new Date()
+            const minutes = date.getMinutes() + minutesTimeout
+            const minutesNumber = minutes > 60 ? minutes - 60 : minutes
+            const currentMinutes = minutesNumber >= 10 ? minutesNumber : `0${minutesNumber}`
 
-        for (let i = 0; i < targetPoll.pollResult.length; i++) {
-            if (i === (option - 1)) {
-                if (targetPoll.usersID.includes(userID)) {
-                    targetPoll.pollResult[option - 1] = targetPoll.pollResult[option - 1] - 1
+            for (let i = 0; i < targetPoll.pollResult.length; i++) {
+                if (i === (option - 1)) {
+                    if (targetPoll.usersID.includes(userID)) {
+                        targetPoll.pollResult[option - 1] = targetPoll.pollResult[option - 1] - 1
 
-                    const index = targetPoll.usersID.indexOf(userID)
-                    targetPoll.usersID.splice(index, 1)
+                        const index = targetPoll.usersID.indexOf(userID)
+                        targetPoll.usersID.splice(index, 1)
+
+                        for (let i = 0; i < targetPoll.pollResult.length; i++) {
+                            const userLength = targetPoll.usersID.length < 1 ? 1 : targetPoll.usersID.length
+                            const percentage = (targetPoll.pollResult[i] / userLength) * 100
+
+                            targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes (${percentage}%)`
+                        }
+
+                        targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `**Poll is still ongoing until minutes ${currentMinutes}!**`
+
+                        await targetMessage.edit({
+                            embeds: [targetMessageEmbed],
+                            components: [targetMessage.components[0]]
+                        })
+
+                        await targetPoll.save()
+
+                        const timeout = setTimeout( async () => {
+                            const poll = await PollModel.findOne({ _id: pollID })
+                
+                            await PollModel.deleteOne({ _id: pollID })
+                            interaction.client.timeouts.delete(`${pollID}`)
+                
+                            if (!interaction.channel || !poll) return
+                
+                            try {
+                                const timeoutMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
+                
+                                if (!timeoutMessage) return
+                
+                                const embeds = timeoutMessage.embeds[0]
+                
+                                const result = poll.pollResult
+                                const winner = result.every((val) => val === result[0]) ? -1 : Math.max(...result)
+                                const winnerResult = winner === -1 ? "THE RESULT IS TIE!" : `${emojies[winner]} ${embeds.fields[winner].name} IS A WINNER!`
+                                
+                                embeds.fields[embeds.fields.length - 1].value = `**POLL IS OVER! ${winnerResult}**`
+                
+                                await timeoutMessage.edit({
+                                    embeds: [embeds],
+                                    components: []
+                                })
+                            } catch {}
+                        }, minutesTimeout * 60 * 1000)
+
+                        interaction.client.timeouts.set(`${targetPoll._id}`, timeout)
+
+                        return await interaction.editReply("Your poll has been removed!")
+                    }
+
+                    targetPoll.pollResult[option - 1] = targetPoll.pollResult[option - 1] + 1
+
+                    targetPoll.usersID = [...targetPoll.usersID, userID]
 
                     for (let i = 0; i < targetPoll.pollResult.length; i++) {
-                        const userLength = targetPoll.usersID.length < 1 ? 1 : targetPoll.usersID.length
-                        const percentage = (targetPoll.pollResult[i] / userLength) * 100
+                        const percentage = (targetPoll.pollResult[i] / targetPoll.usersID.length) * 100
 
                         targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes (${percentage}%)`
                     }
@@ -210,63 +265,12 @@ const command : SlashCommand = {
 
                     interaction.client.timeouts.set(`${targetPoll._id}`, timeout)
 
-                    return await interaction.editReply("Your poll has been removed!")
+                    return await interaction.editReply("Poll sent successfully!")
                 }
-
-                targetPoll.pollResult[option - 1] = targetPoll.pollResult[option - 1] + 1
-
-                targetPoll.usersID = [...targetPoll.usersID, userID]
-
-                for (let i = 0; i < targetPoll.pollResult.length; i++) {
-                    const percentage = (targetPoll.pollResult[i] / targetPoll.usersID.length) * 100
-
-                    targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes (${percentage}%)`
-                }
-
-                targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `**Poll is still ongoing until minutes ${currentMinutes}!**`
-
-                await targetMessage.edit({
-                    embeds: [targetMessageEmbed],
-                    components: [targetMessage.components[0]]
-                })
-
-                await targetPoll.save()
-
-                const timeout = setTimeout( async () => {
-                    const poll = await PollModel.findOne({ _id: pollID })
-        
-                    await PollModel.deleteOne({ _id: pollID })
-                    interaction.client.timeouts.delete(`${pollID}`)
-        
-                    if (!interaction.channel || !poll) return
-        
-                    try {
-                        const timeoutMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
-        
-                        if (!timeoutMessage) return
-        
-                        const embeds = timeoutMessage.embeds[0]
-        
-                        const result = poll.pollResult
-                        const winner = result.every((val) => val === result[0]) ? -1 : Math.max(...result)
-                        const winnerResult = winner === -1 ? "THE RESULT IS TIE!" : `${emojies[winner]} ${embeds.fields[winner].name} IS A WINNER!`
-                        
-                        embeds.fields[embeds.fields.length - 1].value = `**POLL IS OVER! ${winnerResult}**`
-        
-                        await timeoutMessage.edit({
-                            embeds: [embeds],
-                            components: []
-                        })
-                    } catch {}
-                }, minutesTimeout * 60 * 1000)
-
-                interaction.client.timeouts.set(`${targetPoll._id}`, timeout)
-
-                return await interaction.editReply("Poll sent successfully!")
             }
-        }
 
-        await interaction.editReply("Some error occured!")
+            await interaction.editReply("Some error occured!")
+        } catch {}
     },
     cooldown: 2
 }
