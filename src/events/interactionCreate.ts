@@ -23,7 +23,8 @@ const event : BotEvent = {
             }
             command.execute(interaction)
         } else if (interaction.isAutocomplete()) {
-            const command = interaction.client.slashCommands.get(interaction.commandName);
+            const command = interaction.client.slashCommands.get(interaction.commandName)
+
             if (!command) {
                 console.error(`No command matching ${interaction.commandName} was found.`);
                 return;
@@ -43,6 +44,20 @@ const event : BotEvent = {
             try {
                 if(!command.modal) return;
                 command.modal(interaction);
+            } catch (error) {
+                console.error(error);
+            }
+        } else if (interaction.isButton()) {
+            const commandString = interaction.customId.split(".")[0]
+            const command = interaction.client.slashCommands.get(commandString)
+
+            if (!command) {
+                console.error(`No command matching ${interaction.customId} was found.`);
+                return;
+            }
+            try {
+                if(!command.button) return;
+                command.button(interaction);
             } catch (error) {
                 console.error(error);
             }

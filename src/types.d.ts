@@ -1,10 +1,11 @@
-import { SlashCommandBuilder, CommandInteraction, Collection, PermissionResolvable, Message, AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js"
+import { SlashCommandBuilder, CommandInteraction, Collection, PermissionResolvable, Message, AutocompleteInteraction, ChatInputCommandInteraction, ButtonInteraction, ModalSubmitInteraction } from "discord.js"
 import mongoose from "mongoose"
 
 export interface SlashCommand {
     command: SlashCommandBuilder,
     execute: (interaction : ChatInputCommandInteraction) => void,
-    modal?: (interaction: ModalSubmitInteraction<CacheType>) => void,
+    modal?: (interaction: ModalSubmitInteraction) => void,
+    button?: (interaction: ButtonInteraction) => void,
     autocomplete?: (interaction: AutocompleteInteraction) => void,
     cooldown?: number // in seconds
 }
@@ -27,6 +28,13 @@ export interface IGuild extends mongoose.Document {
     guildID: string,
     options: GuildOptions
     joinedAt: Date
+}
+
+export interface IPoll extends mongoose.Document {
+    guildID: string,
+    messageID: string,
+    pollResult: number[],
+    usersID: string[]
 }
 
 export type GuildOption = keyof GuildOptions
