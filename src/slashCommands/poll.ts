@@ -86,17 +86,16 @@ const command : SlashCommand = {
         const embed = new EmbedBuilder()
             .setTitle(`Poll for *${options[0].value?.toString().toUpperCase()}*`)        
             .setAuthor({ name: `${interaction.user.username} started a poll` || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
+            .setFooter(
+                { text: `Poll is still ongoing until minutes ${currentMinutes}!`, iconURL: undefined }
+            )
             .setColor("Blue")
 
         for (let i = 1; i < options.length; i++) {
             embed.addFields(
-                { name: `${options[i].value}`, value: `${emojies[i - 1]} 0 (0.0%)` }
+                { name: `${options[i].value}`, value: `${emojies[i - 1]} 0 votes (0.0%)` }
             )
         }
-
-        embed.setFooter(
-            { text: `Poll is still ongoing until minutes ${currentMinutes}!`, iconURL: undefined }
-        )
 
         const message = await channel.send({ embeds: [embed], components: [buttonsRow] })
 
@@ -159,7 +158,7 @@ const command : SlashCommand = {
                         const userLength = targetPoll.usersID.length < 1 ? 1 : targetPoll.usersID.length
                         const percentage = (targetPoll.pollResult[i] / userLength) * 100
 
-                        targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
+                        targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes (${percentage}%)`
                     }
 
                     if (targetMessageEmbed.footer) {
@@ -204,7 +203,7 @@ const command : SlashCommand = {
                 for (let i = 0; i < targetPoll.pollResult.length; i++) {
                     const percentage = (targetPoll.pollResult[i] / targetPoll.usersID.length) * 100
 
-                    targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
+                    targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes (${percentage}%)`
                 }
 
                 if (targetMessageEmbed.footer) {
