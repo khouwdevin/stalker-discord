@@ -70,7 +70,7 @@ const command : SlashCommand = {
             buttons.push(
                 new ButtonBuilder()
                     .setEmoji(emojies[i - 1])
-                    .setLabel(`Option ${i}`)
+                    .setLabel(`${options[i].value}`)
                     .setStyle(ButtonStyle.Primary)
                     .setCustomId(`poll.${newPoll._id}.${i}`)
             )
@@ -84,7 +84,7 @@ const command : SlashCommand = {
 
         for (let i = 1; i < options.length; i++) {
             embed.addFields(
-                { name: `${options[i].value}`, value: `${emojies[i - 1]} 0 votes for ${options[i].value} (0.0%)` }
+                { name: `${options[i].value}`, value: `${emojies[i - 1]} 0 (0.0%)` }
             )
         }
 
@@ -123,9 +123,7 @@ const command : SlashCommand = {
                         const userLength = targetPoll.usersID.length < 1 ? 1 : targetPoll.usersID.length
                         const percentage = (targetPoll.pollResult[i] / userLength) * 100
 
-                        const value = targetMessageEmbed.fields[i].name
-
-                        targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes for ${value} (${percentage}%)`
+                        targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} (${percentage}%)`
                     }
 
                     await targetMessage.edit({
