@@ -167,6 +167,12 @@ export const setGuildOption = async (guild: Guild, option: GuildOption, value: a
     foundGuild.save()
 }
 
+export const getAllGuild = async () => {
+    if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
+    const guilds = await GuildDB.find()
+    return guilds
+}
+
 export const getChannelIdbyName = (channels: ChannelManager, name: string): Promise<string> => {
     let id = ""
     const guildChannels = channels.cache

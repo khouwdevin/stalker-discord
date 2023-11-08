@@ -5,19 +5,23 @@ import { color, sendNotifyStalkerOnline } from "../functions";
 const event : BotEvent = {
     name: "ready",
     once: true,
-    execute: async (client: Client) => {        
+    execute: async (client: Client) => {  
         sendNotifyStalkerOnline(client)
 
-        client.user?.setPresence({
+        if (!client.user) return
+
+        client.user.setPresence({
             status: 'online',
             activities: [{
                 name: `${process.env.PREFIX_COMMAND}help`,
                 type: ActivityType.Listening
             }]
         })
+
+        // client.moon.init(client.user.id)
             
         console.log(
-            color("text", `💪 Logged in as ${color("variable", client.user?.tag)}`)
+            color("text", `💪 Logged in as ${color("variable", client.user.tag)}`)
         )
     }
 }

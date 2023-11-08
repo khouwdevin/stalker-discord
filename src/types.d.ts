@@ -1,4 +1,5 @@
 import { SlashCommandBuilder, CommandInteraction, Collection, PermissionResolvable, Message, AutocompleteInteraction, ChatInputCommandInteraction, ButtonInteraction, ModalSubmitInteraction } from "discord.js"
+import { MoonlinkManager, MoonlinkPlayer, MoonlinkEvents } from "moonlink.js"
 import mongoose from "mongoose"
 
 export interface SlashCommand {
@@ -44,6 +45,11 @@ export interface BotEvent {
     execute: (...args?) => void
 }
 
+export interface MoonEvent {
+    name: keyof MoonlinkEvents,
+    execute: (...args?) => void
+}
+
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
@@ -52,7 +58,10 @@ declare global {
             PREFIX_COMMAND: string,
             MONGO_URI: string,
             MONGO_DATABASE_NAME: string,
-            STALKER_DATABASE: string
+            STALKER_DATABASE: string,
+            MOONLINK_PASSWORD: string,
+            MOONLINK_PORT: string,
+            MOONLINK_HOST: string
         }
     }
 }
@@ -62,6 +71,8 @@ declare module "discord.js" {
         slashCommands: Collection<string, SlashCommand>
         commands: Collection<string, Command>,
         cooldowns: Collection<string, number>,
-        timeouts: Collection<string, NodeJS.Timeout>
+        timeouts: Collection<string, NodeJS.Timeout>,
+        player: Collection<string, MoonlinkPlayer>,
+        moon: MoonlinkManager
     }
 }
