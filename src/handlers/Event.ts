@@ -11,10 +11,16 @@ module.exports = (client: Client) => {
     readdirSync(eventsDir).forEach(file => {
         if (!file.endsWith(".js")) return;
         let event: BotEvent = require(`${eventsDir}/${file}`).default
+
+        if (event.name === "raw") {
+            client.on(event.name, (...args) => event.execute(client, ...args))
+            return console.log(color("text", `🌠 Successfully loaded event ${color("variable", event.name)}`))
+        }
+        
         event.once ?
-            client.once(event.name, (...args) => event.execute(...args))
-            :
-            client.on(event.name, (...args) => event.execute(...args))
+        client.once(event.name, (...args) => event.execute(...args))
+        :
+        client.on(event.name, (...args) => event.execute(...args))
         console.log(color("text", `🌠 Successfully loaded event ${color("variable", event.name)}`))
     })
 
