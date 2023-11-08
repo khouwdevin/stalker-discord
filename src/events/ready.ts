@@ -18,7 +18,7 @@ const event : BotEvent = {
             }]
         })
 
-        // client.moon.init(client.user.id)
+        client.moon.init(client.user.id)
             
         console.log(
             color("text", `💪 Logged in as ${color("variable", client.user.tag)}`)

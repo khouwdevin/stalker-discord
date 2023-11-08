@@ -15,19 +15,21 @@ client.player = new Collection<string, MoonlinkPlayer>()
 
 client.moon = new MoonlinkManager(
 	[{
-		host: process.env.MOONLINK_HOST,
-		port: parseInt(process.env.MOONLINK_PORT),
+		host: `${process.env.LAVALINK_HOST}`,
+		port: parseInt(process.env.LAVALINK_PORT),
 		secure: true,
-		password: process.env.MOONLINK_PASSWORD
+		password: `${process.env.LAVALINK_PASSWORD}`,
+    identifier: `${process.env.LAVALINK_IDENTIFIER}`
 	}],
 	{ 
-    clientName: "Stalker",
+    clientName: "stalkerbot",
     reconnectAtattemps: 5,
     retryTime: 3000,
     retryAmount: 3,
     sortNode: "memory"
   },
 	(guildId: string, sPayload: string) => {
+    console.log(guildId)
 		if (!guildId || !client.guilds || !client.guilds.cache) return
 
 		const guild = client.guilds.cache.get(guildId)

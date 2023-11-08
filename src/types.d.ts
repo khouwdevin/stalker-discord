@@ -59,9 +59,10 @@ declare global {
             MONGO_URI: string,
             MONGO_DATABASE_NAME: string,
             STALKER_DATABASE: string,
-            MOONLINK_PASSWORD: string,
-            MOONLINK_PORT: string,
-            MOONLINK_HOST: string
+            LAVALINK_PASSWORD: string,
+            LAVALINK_PORT: string,
+            LAVALINK_HOST: string,
+            LAVALINK_IDENTIFIER: string
         }
     }
 }
