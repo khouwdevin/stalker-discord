@@ -29,12 +29,9 @@ module.exports = (client: Client) => {
         if (!file.endsWith(".js")) return;
         let event: MoonEvent = require(`${eventsMoonDir}/${file}`).default
 
-        if (event.name.includes("node")) {
-            client.moon.on(event.name, (node: MoonlinkNode) => event.execute(node))
-        }
-        else if (event.name.includes("track")) {
-            client.moon.on(event.name, (client: Client, player: MoonlinkPlayer, track: any) =>  event.execute(client, player, track))
-        }
+        if (event.name === "nodeCreate" || event.name === "nodeClose") client.moon.on(event.name, (node: MoonlinkNode) => event.execute(node))
+        else if (event.name === "trackStart") client.moon.on("trackStart", (player, track) => event.execute(client, player, track))
+        else if (event.name === "queueEnd") client.moon.on("queueEnd", (player, track) => event.execute(client, player, track))
         
         console.log(color("text", `🌠 Successfully loaded moon event ${color("variable", event.name)}`))
     })

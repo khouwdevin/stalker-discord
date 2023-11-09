@@ -6,7 +6,6 @@ const command: Command = {
     name: "disconnect",
     execute: async (message, args) => {
         try {
-
             if (!message.guildId || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
             if (!message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
@@ -14,6 +13,7 @@ const command: Command = {
             const player = client.moon.players.get(message.guildId)
 
             if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, message.channel as TextChannel, 5000)
+            if (client.timeouts.has(`player-${player.guildId}`)) client.timeouts.delete(`player-${player.guildId}`)
             
             player.disconnect()
             sendMessage(`${message.member} Stalker is disconnected!`, message.channel as TextChannel)

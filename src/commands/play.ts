@@ -13,18 +13,25 @@ const command: Command = {
             if (!message.member.voice.channel || !message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
             const client = message.client
+            const playerStatus = client.moon.players.get(message.guild.id)
 
-            const player = client.moon.players.create({
-                guildId: message.guild.id,
-                voiceChannel: message.member.voice.channel.id,
-                textChannel: message.channel.id
-            })
+            const player = playerStatus !== null ? playerStatus :
+                client.moon.players.create({
+                    guildId: message.guild.id,
+                    voiceChannel: message.member.voice.channel.id,
+                    textChannel: message.channel.id
+                })
 
             if (!player.connected) {
                 player.connect({
                     setDeaf: true,
                     setMute: false
                 })
+            }
+
+            if (playerStatus && client.timeouts.has(`player-${player.guildId}`)) {
+                clearTimeout(client.timeouts.get(`player-${player.guildId}`))
+                client.timeouts.delete(`player-${player.guildId}`)
             }
 
             const res = await client.moon.search(title)
@@ -57,7 +64,7 @@ const command: Command = {
             if (!player.playing) player.play()
         } catch {}
     },
-    cooldown: 5,
+    cooldown: 1,
     permissions: [],
     aliases: ["p"]
 }

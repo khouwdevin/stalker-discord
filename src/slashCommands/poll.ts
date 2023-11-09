@@ -108,7 +108,7 @@ const command : SlashCommand = {
 
             const timeout = setTimeout( async () => {
                 await PollModel.deleteOne({ _id: newPoll._id })
-                interaction.client.timeouts.delete(`${newPoll._id}`)
+                interaction.client.timeouts.delete(`poll-${newPoll._id}`)
 
                 if (!interaction.channel) return
 
@@ -128,7 +128,7 @@ const command : SlashCommand = {
                 } catch {}
             }, minutesTimeout * 60 * 1000)
 
-            interaction.client.timeouts.set(`${newPoll._id}`, timeout)
+            interaction.client.timeouts.set(`poll-${newPoll._id}`, timeout)
 
             await newPoll.save()
 
@@ -145,8 +145,8 @@ const command : SlashCommand = {
             if (!interaction.channel) return await interaction.editReply("Channel has been deleted!")
             if (!targetPoll) return await interaction.editReply("Poll is over!")
 
-            clearTimeout(interaction.client.timeouts.get(`${pollID}`))
-            interaction.client.timeouts.delete(`${pollID}`)
+            clearTimeout(interaction.client.timeouts.get(`poll-${pollID}`))
+            interaction.client.timeouts.delete(`poll-${pollID}`)
 
             const targetMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
             const targetMessageEmbed = targetMessage.embeds[0]
@@ -187,7 +187,7 @@ const command : SlashCommand = {
                             const poll = await PollModel.findOne({ _id: pollID })
                 
                             await PollModel.deleteOne({ _id: pollID })
-                            interaction.client.timeouts.delete(`${pollID}`)
+                            interaction.client.timeouts.delete(`poll-${pollID}`)
                 
                             if (!interaction.channel || !poll) return
                 
@@ -211,7 +211,7 @@ const command : SlashCommand = {
                             } catch {}
                         }, minutesTimeout * 60 * 1000)
 
-                        interaction.client.timeouts.set(`${targetPoll._id}`, timeout)
+                        interaction.client.timeouts.set(`poll-${targetPoll._id}`, timeout)
 
                         return await interaction.editReply("Your poll has been removed!")
                     }
@@ -239,7 +239,7 @@ const command : SlashCommand = {
                         const poll = await PollModel.findOne({ _id: pollID })
             
                         await PollModel.deleteOne({ _id: pollID })
-                        interaction.client.timeouts.delete(`${pollID}`)
+                        interaction.client.timeouts.delete(`poll-${pollID}`)
             
                         if (!interaction.channel || !poll) return
             
@@ -263,7 +263,7 @@ const command : SlashCommand = {
                         } catch {}
                     }, minutesTimeout * 60 * 1000)
 
-                    interaction.client.timeouts.set(`${targetPoll._id}`, timeout)
+                    interaction.client.timeouts.set(`poll-${targetPoll._id}`, timeout)
 
                     return await interaction.editReply("Poll sent successfully!")
                 }
