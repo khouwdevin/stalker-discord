@@ -26,6 +26,10 @@ client.moon = new MoonlinkManager(
 		reconnectAtattemps: 5,
 		retryTime: 3000,
 		retryAmount: 3,
+		spotify: {
+			clientId: process.env.SPOTIFY_CLIENTID,
+			clientSecret: process.env.SPOTIFY_CLIENT_SECRET
+		},
 		sortNode: "memory"
   	},
 	(guildId: string, sPayload: string) => {

@@ -62,7 +62,9 @@ declare global {
             LAVALINK_PASSWORD: string,
             LAVALINK_PORT: string,
             LAVALINK_HOST: string,
-            LAVALINK_IDENTIFIER: string
+            LAVALINK_IDENTIFIER: string,
+            SPOTIFY_CLIENTID: string,
+            SPOTIFY_CLIENT_SECRET: string
         }
     }
 }

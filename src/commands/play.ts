@@ -1,6 +1,6 @@
 import { sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
-import { EmbedBuilder, TextChannel } from "discord.js";
+import { Colors, EmbedBuilder, TextChannel, resolveColor } from "discord.js";
 
 const command: Command = {
     name: "play",
@@ -34,6 +34,8 @@ const command: Command = {
                 client.timeouts.delete(`player-${player.guildId}`)
             }
 
+            const processMessage = await message.channel.send("Processing...")
+
             const res = await client.moon.search(title)
 
             switch (res.loadType) {
@@ -42,8 +44,22 @@ const command: Command = {
                 case "empty":
                     return sendMessage(`${message.member} no title matches!`, message.channel as TextChannel)
                 case "playlist":
+                    let imageUrl = null
+                    let color = resolveColor(Colors.Red)
+                    if (title.includes("spotify")) {
+                        const resThumbnail = await fetch(`https://open.spotify.com/oembed?url=${title}`)
+                        const data = await resThumbnail.json()
+                        imageUrl = data.thumbnail_url
+                        color = resolveColor(Colors.Green)
+                    }
                     const embedPlaylist  = new EmbedBuilder()
-                        .setAuthor({ name: `${res.playlistInfo?.name} - This playlist has been added to the waiting list`, iconURL: message.member.user.avatarURL() || undefined })
+                        .setFields(
+                            { name: `Added Playlist`, value: " " },
+                            { name: "Playlist", value: `${res.playlistInfo?.name || "No title"}` },
+                            { name: "Playlist duration", value: `${res.playlistInfo?.duration || "-"}` }
+                        )
+                        .setColor(color)
+                        .setImage(imageUrl)
                     message.channel.send({ embeds: [embedPlaylist] })
 
                     for (const track of res.tracks) {
@@ -55,11 +71,13 @@ const command: Command = {
                     player.queue.add(res.tracks[0])
 
                     const embedSong  = new EmbedBuilder()
-                        .setAuthor({ name: `${res.tracks[0].title} was added to the waiting list!`, iconURL: message.member.user.avatarURL() || undefined })
+                        .setAuthor({ name: `[${res.tracks[0].title}] was added to the waiting list!`, iconURL: message.client.user.avatarURL() || undefined })
                     message.channel.send({ embeds: [embedSong] })
 
                     break
             }
+
+            processMessage.delete()
 
             if (!player.playing) player.play()
             

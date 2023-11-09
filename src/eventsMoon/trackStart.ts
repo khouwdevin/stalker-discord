@@ -11,7 +11,7 @@ const event: MoonEvent = {
         if (!channel || channel.type !== ChannelType.GuildText) return
 
         const embed  = new EmbedBuilder()
-            .setAuthor({ name: `Now playing ${track.title}` })
+            .setAuthor({ name: `Now playing [${track.title}]`, iconURL: client.user?.avatarURL() || undefined })
 
         channel.send({ embeds: [embed] })
     }

@@ -32,6 +32,8 @@ const command : Command = {
                 example => **'${prefix}resume'** or **'${prefix}rsm'**\r
                 **${prefix}skip**: to skip song.\r
                 example => **'${prefix}skip'** or **'${prefix}s'**\r
+                **${prefix}stop**: to stop player.\r
+                example => **'${prefix}stop'** or **'${prefix}stp'**\r
                 **${prefix}disconnect**: to disconnect player.\r
                 example => **'${prefix}disconnect'** or **'${prefix}dc'**\r
                 `
