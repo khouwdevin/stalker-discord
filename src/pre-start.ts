@@ -18,21 +18,20 @@ client.moon = new MoonlinkManager(
 		port: parseInt(process.env.LAVALINK_PORT),
 		secure: true,
 		password: `${process.env.LAVALINK_PASSWORD}`,
-    identifier: `${process.env.LAVALINK_IDENTIFIER}`
+		identifier: `${process.env.LAVALINK_IDENTIFIER}`
 	}],
 	{ 
-    clientName: "stalkerbot",
-    reconnectAtattemps: 5,
-    retryTime: 3000,
-    retryAmount: 3,
-    sortNode: "memory"
-  },
+		clientName: "stalkerbot",
+		reconnectAtattemps: 5,
+		retryTime: 3000,
+		retryAmount: 3,
+		sortNode: "memory"
+  	},
 	(guildId: string, sPayload: string) => {
 		if (!guildId || !client.guilds || !client.guilds.cache) return
 
 		const guild = client.guilds.cache.get(guildId)
-
-    if (guild) guild.shard.send(JSON.parse(sPayload))
+    	if (guild) guild.shard.send(JSON.parse(sPayload))
 	}
 )
 

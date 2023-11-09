@@ -55,7 +55,7 @@ const command: Command = {
             }
 
             if (!player.playing) player.play()
-        } catch(e) {console.log(e)}
+        } catch {}
     },
     cooldown: 5,
     permissions: [],

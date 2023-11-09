@@ -15,7 +15,10 @@ const command: Command = {
 
             if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, message.channel as TextChannel, 5000)
 
-            if (!player.paused) player.pause()
+            if (!player.paused) {
+                sendTimedMessage(`${message.member} music is paused!`, message.channel as TextChannel, 5000)
+                player.pause()
+            }
         } catch {}
     },
     cooldown: 1,

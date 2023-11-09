@@ -1,4 +1,4 @@
-import { sendTimedMessage } from "../functions";
+import { sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { TextChannel } from "discord.js";
 
@@ -16,6 +16,7 @@ const command: Command = {
             if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, message.channel as TextChannel, 5000)
             
             player.disconnect()
+            sendMessage(`${message.member} Stalker is disconnected!`, message.channel as TextChannel)
         } catch {}
     },
     cooldown: 1,
