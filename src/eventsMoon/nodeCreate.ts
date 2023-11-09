@@ -6,7 +6,7 @@ const event: MoonEvent = {
     name: "nodeCreate",
     execute: (node: MoonlinkNode) => {
         console.log(
-            color("text", `💪 ${color("variable", node.host)} was connected!`)
+            color("text", `💪 Connected to ${color("variable", node.host)}`)
         )
     }
 }

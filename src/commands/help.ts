@@ -21,6 +21,19 @@ const command : Command = {
                 **${prefix}notify**: If you want to disable or enable stalker online notif.\r
                 example => **'${prefix}notify false'** or **'${prefix}n false'**
                 `
+
+            const commandsMusicList = 
+                `
+                **${prefix}play**: to play and search song.\r
+                example => **'${prefix}play drown'** or **'${prefix}p drown'**\r
+                **${prefix}pause**: to pause player.\r
+                example => **'${prefix}pause'** or **'${prefix}ps'**\r
+                **${prefix}skip**: to skip song.\r
+                example => **'${prefix}skip'** or **'${prefix}s'**\r
+                **${prefix}disconnect**: to disconnect player.\r
+                example => **'${prefix}disconnect'** or **'${prefix}dc'**\r
+                `
+
             const slashcommandslist = 
                 `
                 **/afk**: to announce your afk status\r
@@ -38,12 +51,13 @@ const command : Command = {
                 .addFields(
                     { name: "Slash Commands List", value: slashcommandslist},
                     { name: "Commands List", value: commandslist},   
+                    { name: "Music Commands List", value: commandsMusicList},   
                 )
             message.channel.send({ embeds: [embed] }).then(m => {
                 deleteTimedMessage(m, message.channel as TextChannel, 20000)
                 deleteTimedMessage(message, message.channel as TextChannel, 20000)
             })
-        } catch {}
+        } catch(e) {console.log(e)}
     },
     cooldown: 2,
     aliases: ["h"],

@@ -6,7 +6,7 @@ const event: MoonEvent = {
     name: "nodeClose",
     execute: (node: MoonlinkNode) => {
         console.log(
-            color("text", `❌ ${color("variable", node.host)} was disconnected!`)
+            color("text", `❌ Disconnected from ${color("variable", node.host)}`)
         )
     }
 }

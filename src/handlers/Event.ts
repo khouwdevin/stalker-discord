@@ -38,4 +38,8 @@ module.exports = (client: Client) => {
         
         console.log(color("text", `🌠 Successfully loaded moon event ${color("variable", event.name)}`))
     })
+
+    process.on('unhandledRejection', (error) => {
+        console.log(color("text", `❌ Unhandled promise rejection: ${color("error", error)}`))
+    })
 }

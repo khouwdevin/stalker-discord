@@ -1,6 +1,6 @@
 import { sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
-import { TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 
 const command: Command = {
     name: "play",
@@ -9,16 +9,15 @@ const command: Command = {
             const title = args.slice(1, args.length).join(" ")
 
             if (!title) return sendTimedMessage("Please provide a title!", message.channel as TextChannel, 5000)
-            if (!message.guildId || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
-            if (!message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
+            if (!message.guild || !message.guild.id || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
+            if (!message.member.voice.channel || !message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
             const client = message.client
 
             const player = client.moon.players.create({
-                guildId: message.guildId,
-                voiceChannel: message.member.voice.channelId,
-                textChannel: message.channelId,
-                autoPlay: true
+                guildId: message.guild.id,
+                voiceChannel: message.member.voice.channel.id,
+                textChannel: message.channel.id
             })
 
             if (!player.connected) {
@@ -36,20 +35,26 @@ const command: Command = {
                 case "empty":
                     return sendMessage(`${message.member} no title matches!`, message.channel as TextChannel)
                 case "playlist":
-                    sendMessage(`${message.member} ${res.playlistInfo?.name} - This playlist has been added to the waiting list`, message.channel as TextChannel)
+                    const embedPlaylist  = new EmbedBuilder()
+                        .setAuthor({ name: `${res.playlistInfo?.name} - This playlist has been added to the waiting list`, iconURL: message.member.user.avatarURL() || undefined })
+                    message.channel.send({ embeds: [embedPlaylist] })
+
                     for (const track of res.tracks) {
                         player.queue.add(track)
                     }
+
                     break
                 default:
                     player.queue.add(res.tracks[0])
-                    sendMessage(`${message.member} ${res.tracks[0].title} was added to the waiting list!`, message.channel as TextChannel)
+
+                    const embedSong  = new EmbedBuilder()
+                        .setAuthor({ name: `${res.tracks[0].title} was added to the waiting list!`, iconURL: message.member.user.avatarURL() || undefined })
+                    message.channel.send({ embeds: [embedSong] })
+
                     break
             }
 
             if (!player.playing) player.play()
-
-            console.log("hello")
         } catch(e) {console.log(e)}
     },
     cooldown: 5,

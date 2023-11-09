@@ -1,5 +1,4 @@
-import { Client, Routes, SlashCommandBuilder } from "discord.js";
-import { REST } from "@discordjs/rest"
+import { Client, Routes, SlashCommandBuilder, REST } from "discord.js";
 import { readdirSync } from "fs";
 import { join } from "path";
 import { color } from "../functions";

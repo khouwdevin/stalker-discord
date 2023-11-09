@@ -2,16 +2,15 @@ import { Client, GatewayIntentBits, Collection } from "discord.js";
 import { Command, SlashCommand } from "./types";
 import { readdirSync } from "fs";
 import { join } from "path";
-import { MoonlinkManager, MoonlinkPlayer } from "moonlink.js";
+import { MoonlinkManager } from "moonlink.js";
 
 const { Guilds, MessageContent, GuildMessages, GuildMessageReactions, GuildMessageTyping, GuildMembers, GuildVoiceStates, GuildScheduledEvents } = GatewayIntentBits
-const client = new Client({intents:[Guilds, MessageContent, GuildMessages, GuildMessageReactions, GuildMessageTyping, GuildMembers, GuildVoiceStates, GuildScheduledEvents]})
+const client = new Client({intents:[Guilds, MessageContent, GuildMessages, GuildMessageReactions, GuildMessageTyping, GuildMembers, GuildVoiceStates, GuildScheduledEvents ]})
 
 client.slashCommands = new Collection<string, SlashCommand>()
 client.commands = new Collection<string, Command>()
 client.cooldowns = new Collection<string, number>()
 client.timeouts = new Collection<string, NodeJS.Timeout>()
-client.player = new Collection<string, MoonlinkPlayer>()
 
 client.moon = new MoonlinkManager(
 	[{
@@ -29,16 +28,11 @@ client.moon = new MoonlinkManager(
     sortNode: "memory"
   },
 	(guildId: string, sPayload: string) => {
-    console.log(guildId)
 		if (!guildId || !client.guilds || !client.guilds.cache) return
 
 		const guild = client.guilds.cache.get(guildId)
 
-    if (guild) {
-      return guild.shard.send(JSON.parse(sPayload))
-    }
-
-    console.log("Can't shard guild!")
+    if (guild) guild.shard.send(JSON.parse(sPayload))
 	}
 )
 
@@ -49,13 +43,3 @@ readdirSync(handlersDir).forEach(handler => {
 })
 
 client.login(process.env.TOKEN)
-
-// host: `${process.env.LAVALINK_HOST}`,
-// 		port: parseInt(process.env.LAVALINK_PORT),
-// 		secure: true,
-// 		password: `${process.env.LAVALINK_PASSWORD}`,
-
-// host: "lava1.horizxon.tech",
-// 		port: 443,
-// 		secure: true,
-// 		password: "horizxon.tech",
