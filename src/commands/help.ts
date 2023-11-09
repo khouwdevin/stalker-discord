@@ -26,8 +26,10 @@ const command : Command = {
                 `
                 **${prefix}play**: to play and search song.\r
                 example => **'${prefix}play drown'** or **'${prefix}p drown'**\r
-                **${prefix}pause**: to pause player.\r
+                **${prefix}pause**: to pause song.\r
                 example => **'${prefix}pause'** or **'${prefix}ps'**\r
+                **${prefix}resume**: to resume song.\r
+                example => **'${prefix}resume'** or **'${prefix}rsm'**\r
                 **${prefix}skip**: to skip song.\r
                 example => **'${prefix}skip'** or **'${prefix}s'**\r
                 **${prefix}disconnect**: to disconnect player.\r
