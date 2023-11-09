@@ -62,6 +62,8 @@ const command: Command = {
             }
 
             if (!player.playing) player.play()
+            
+            client.attemps.set(`${player.guildId}`, 3)
         } catch {}
     },
     cooldown: 1,
