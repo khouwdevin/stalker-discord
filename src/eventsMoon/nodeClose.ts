@@ -4,17 +4,19 @@ import { color } from "../functions";
 
 const event: MoonEvent = {
     name: "nodeClose",
-    execute: (node: MoonlinkNode) => {
+    execute: async (node: MoonlinkNode) => {
         console.log(
             color("text", `❌ Disconnected from ${color("variable", node.host)}`)
         )
 
-        node.connect().then(() => {
+        setTimeout( async () => {
+            await node.connect()
             console.log(
                 color("text", `🔃 Try to reconnect with ${color("variable", node.host)}`)
-            ) 
-        })
+            )
+        }, 5000)         
     }
 }
 
 export default event;
+
