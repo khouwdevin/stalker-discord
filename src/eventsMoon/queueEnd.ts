@@ -9,7 +9,7 @@ const event: MoonEvent = {
         const timeout = setTimeout(() => {
             player.disconnect()
             client.timeouts.delete(`player-${player.guildId}`)
-        }, 10000)
+        }, 20000)
 
         client.timeouts.set(`player-${player.guildId}`, timeout)
     }
