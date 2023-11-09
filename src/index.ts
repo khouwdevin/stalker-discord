@@ -34,7 +34,7 @@ const shardingManager = new ShardingManager("./build/pre-start.js", {
 
 shardingManager.on("shardCreate", (shard) => {
     console.log(
-        color("text", `💪 Launched shard ${color("variable", shard.id)}`)
+        color("text", `🤖 Launched sharding manager ${color("variable", shard.id)} shard`)
     )
 })
 

@@ -1,6 +1,6 @@
 {
     "name": "stalker-bot",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -24,7 +24,7 @@
         "dotenv": "^16.0.2",
         "libsodium-wrappers": "^0.7.13",
         "mongoose": "^6.5.4",
-        "moonlink.js": "^2.14.90"
+        "moonlink.js": "^2.11.8"
     },
     "devDependencies": {
         "@types/command-line-args": "^5.2.2",

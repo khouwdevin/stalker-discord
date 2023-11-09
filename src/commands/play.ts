@@ -1,4 +1,4 @@
-import { sendTimedMessage } from "../functions";
+import { sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { TextChannel } from "discord.js";
 
@@ -17,7 +17,8 @@ const command: Command = {
             const player = client.moon.players.create({
                 guildId: message.guildId,
                 voiceChannel: message.member.voice.channelId,
-                textChannel: message.channelId
+                textChannel: message.channelId,
+                autoPlay: true
             })
 
             if (!player.connected) {
@@ -26,7 +27,30 @@ const command: Command = {
                     setMute: false
                 })
             }
-        } catch {}
+
+            const res = await client.moon.search(title)
+
+            switch (res.loadType) {
+                case "error":
+                    return sendMessage(`${message.member} failed to load song!`, message.channel as TextChannel)
+                case "empty":
+                    return sendMessage(`${message.member} no title matches!`, message.channel as TextChannel)
+                case "playlist":
+                    sendMessage(`${message.member} ${res.playlistInfo?.name} - This playlist has been added to the waiting list`, message.channel as TextChannel)
+                    for (const track of res.tracks) {
+                        player.queue.add(track)
+                    }
+                    break
+                default:
+                    player.queue.add(res.tracks[0])
+                    sendMessage(`${message.member} ${res.tracks[0].title} was added to the waiting list!`, message.channel as TextChannel)
+                    break
+            }
+
+            if (!player.playing) player.play()
+
+            console.log("hello")
+        } catch(e) {console.log(e)}
     },
     cooldown: 5,
     permissions: [],

@@ -3,6 +3,7 @@ import { readdirSync } from "fs";
 import { join } from "path";
 import { color } from "../functions";
 import { BotEvent, MoonEvent } from "../types";
+import { MoonlinkNode, MoonlinkPlayer } from "moonlink.js";
 
 module.exports = (client: Client) => {
     let eventsDir = join(__dirname, "../events")
@@ -27,7 +28,14 @@ module.exports = (client: Client) => {
     readdirSync(eventsMoonDir).forEach(file => {
         if (!file.endsWith(".js")) return;
         let event: MoonEvent = require(`${eventsMoonDir}/${file}`).default
-        client.moon.on(event.name, (...args: any) => event.execute(...args))
+
+        if (event.name.includes("node")) {
+            client.moon.on(event.name, (node: MoonlinkNode) => event.execute(node))
+        }
+        else if (event.name.includes("track")) {
+            client.moon.on(event.name, (client: Client, player: MoonlinkPlayer, track: any) =>  event.execute(client, player, track))
+        }
+        
         console.log(color("text", `🌠 Successfully loaded moon event ${color("variable", event.name)}`))
     })
 }

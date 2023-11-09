@@ -49,3 +49,13 @@ readdirSync(handlersDir).forEach(handler => {
 })
 
 client.login(process.env.TOKEN)
+
+// host: `${process.env.LAVALINK_HOST}`,
+// 		port: parseInt(process.env.LAVALINK_PORT),
+// 		secure: true,
+// 		password: `${process.env.LAVALINK_PASSWORD}`,
+
+// host: "lava1.horizxon.tech",
+// 		port: 443,
+// 		secure: true,
+// 		password: "horizxon.tech",
