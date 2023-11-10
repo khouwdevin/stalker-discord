@@ -15,7 +15,7 @@ const command : Command = {
     
             const statuslist = 
                 `
-                **detect voice**: ${options?.detectpresence}\r
+                **detect presence**: ${options?.detectpresence}\r
                 **notify**: ${options?.notify}\r
                 **channel**: <#${options?.channel}>
                 `
