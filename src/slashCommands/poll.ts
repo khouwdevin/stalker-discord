@@ -85,10 +85,10 @@ const command : SlashCommand = {
             const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
 
             const embed = new EmbedBuilder()
-                .setTitle(`Poll's Subject: ${options[0].value?.toString().toUpperCase()}`)        
                 .setAuthor({ name: `${interaction.user.username}` || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
+                .setTitle(`Poll's Subject: ${options[0].value?.toString().toUpperCase()}`)        
                 .setFooter(
-                    { text: `${interaction.user.username} started a poll`, iconURL: undefined }
+                    { text: `poll is still ongoing until minutes ${currentMinutes}!`, iconURL: undefined }
                 )
                 .setColor("Blue")
 
@@ -97,10 +97,6 @@ const command : SlashCommand = {
                     { name: `${options[i].value}`, value: `${emojies[i - 1]} 0 votes (0.0%)` }
                 )
             }
-
-            embed.addFields(
-                { name: " ", value: `**Poll is still ongoing until minutes ${currentMinutes}!**` }
-            )
 
             const message = await channel.send({ embeds: [embed], components: [buttonsRow] })
 
@@ -114,15 +110,27 @@ const command : SlashCommand = {
 
                 try {
                     const timeoutMessage = await interaction.channel.messages.fetch(newPoll.messageID)
-
+            
                     if (!timeoutMessage) return
+    
+                    const embedTimeout = timeoutMessage.embeds[0]
+                    const winnerResult = "**NONE IS A WINNER!**"
 
-                    const embeds = timeoutMessage.embeds[0]
-                    
-                    embeds.fields[embeds.fields.length - 1].value = "**POLL IS OVER! NONE IS A WINNER!**"
+                    const embed = new EmbedBuilder()
+                        .setAuthor(embedTimeout.author)
+                        .setTitle(embedTimeout.title)
+                        .setFields(embedTimeout.fields)        
+                        .setFooter(
+                            { text: "poll is over!", iconURL: undefined }
+                        )
+                        .setColor("Blue")
 
+                    embed.addFields(
+                        { name: " ", value: winnerResult }
+                    )
+    
                     await timeoutMessage.edit({
-                        embeds: [embeds],
+                        embeds: [embed],
                         components: []
                     })
                 } catch {}
@@ -174,10 +182,17 @@ const command : SlashCommand = {
                             targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes (${percentage}%)`
                         }
 
-                        targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `**Poll is still ongoing until minutes ${currentMinutes}!**`
+                        const embed = new EmbedBuilder()
+                            .setAuthor(targetMessageEmbed.author)
+                            .setTitle(targetMessageEmbed.title)
+                            .setFields(targetMessageEmbed.fields)        
+                            .setFooter(
+                                { text: `poll is still ongoing until minutes ${currentMinutes}!`, iconURL: undefined }
+                            )
+                            .setColor("Blue")
 
                         await targetMessage.edit({
-                            embeds: [targetMessageEmbed],
+                            embeds: [embed],
                             components: [targetMessage.components[0]]
                         })
 
@@ -193,19 +208,30 @@ const command : SlashCommand = {
                 
                             try {
                                 const timeoutMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
-                
+            
                                 if (!timeoutMessage) return
                 
-                                const embeds = timeoutMessage.embeds[0]
+                                const embedTimeout = timeoutMessage.embeds[0]
                 
                                 const result = poll.pollResult
                                 const winner = result.every((val) => val === result[0]) ? -1 : Math.max(...result)
-                                const winnerResult = winner === -1 ? "THE RESULT IS TIE!" : `${emojies[winner]} ${embeds.fields[winner].name} IS A WINNER!`
-                                
-                                embeds.fields[embeds.fields.length - 1].value = `**POLL IS OVER! ${winnerResult}**`
+                                const winnerResult = winner === -1 ? "**THE RESULT IS TIE!**" : `**[${emojies[winner]}] ${embedTimeout.fields[winner].name} IS A WINNER!**`
+
+                                const embed = new EmbedBuilder()
+                                    .setAuthor(embedTimeout.author)
+                                    .setTitle(embedTimeout.title)
+                                    .setFields(embedTimeout.fields)        
+                                    .setFooter(
+                                        { text: "poll is over!", iconURL: undefined }
+                                    )
+                                    .setColor("Blue")
+
+                                embed.addFields(
+                                    { name: " ", value: winnerResult }
+                                )
                 
                                 await timeoutMessage.edit({
-                                    embeds: [embeds],
+                                    embeds: [embed],
                                     components: []
                                 })
                             } catch {}
@@ -213,7 +239,7 @@ const command : SlashCommand = {
 
                         interaction.client.timeouts.set(`poll-${targetPoll._id}`, timeout)
 
-                        return await interaction.editReply("Your poll has been removed!")
+                        return await interaction.editReply("Your vote has been removed!")
                     }
 
                     targetPoll.pollResult[option - 1] = targetPoll.pollResult[option - 1] + 1
@@ -226,10 +252,17 @@ const command : SlashCommand = {
                         targetMessageEmbed.fields[i].value = `${emojies[i]} ${targetPoll.pollResult[i]} votes (${percentage}%)`
                     }
 
-                    targetMessageEmbed.fields[targetMessageEmbed.fields.length - 1].value = `**Poll is still ongoing until minutes ${currentMinutes}!**`
+                    const embed = new EmbedBuilder()
+                        .setAuthor(targetMessageEmbed.author)
+                        .setTitle(targetMessageEmbed.title)
+                        .setFields(targetMessageEmbed.fields)        
+                        .setFooter(
+                            { text: `poll is still ongoing until minutes ${currentMinutes}!`, iconURL: undefined }
+                        )
+                        .setColor("Blue")
 
                     await targetMessage.edit({
-                        embeds: [targetMessageEmbed],
+                        embeds: [embed],
                         components: [targetMessage.components[0]]
                     })
 
@@ -248,16 +281,27 @@ const command : SlashCommand = {
             
                             if (!timeoutMessage) return
             
-                            const embeds = timeoutMessage.embeds[0]
+                            const embedTimeout = timeoutMessage.embeds[0]
             
                             const result = poll.pollResult
                             const winner = result.every((val) => val === result[0]) ? -1 : Math.max(...result)
-                            const winnerResult = winner === -1 ? "THE RESULT IS TIE!" : `${emojies[winner]} ${embeds.fields[winner].name} IS A WINNER!`
-                            
-                            embeds.fields[embeds.fields.length - 1].value = `**POLL IS OVER! ${winnerResult}**`
+                            const winnerResult = winner === -1 ? "**THE RESULT IS TIE!**" : `**[${emojies[winner]}] ${embedTimeout.fields[winner].name} IS A WINNER!**`
+
+                            const embed = new EmbedBuilder()
+                                .setAuthor(embedTimeout.author)
+                                .setTitle(embedTimeout.title)
+                                .setFields(embedTimeout.fields)        
+                                .setFooter(
+                                    { text: "poll is over!", iconURL: undefined }
+                                )
+                                .setColor("Blue")
+
+                            embed.addFields(
+                                { name: " ", value: winnerResult }
+                            )
             
                             await timeoutMessage.edit({
-                                embeds: [embeds],
+                                embeds: [embed],
                                 components: []
                             })
                         } catch {}
@@ -265,7 +309,7 @@ const command : SlashCommand = {
 
                     interaction.client.timeouts.set(`poll-${targetPoll._id}`, timeout)
 
-                    return await interaction.editReply("Poll sent successfully!")
+                    return await interaction.editReply("Your vote has been sent!")
                 }
             }
 
