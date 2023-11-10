@@ -59,7 +59,7 @@ const command : Command = {
                 deleteTimedMessage(m, message.channel as TextChannel, 20000)
                 deleteTimedMessage(message, message.channel as TextChannel, 20000)
             })
-        } catch(e) {console.log(e)}
+        } catch {}
     },
     cooldown: 2,
     aliases: ["h"],

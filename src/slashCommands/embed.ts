@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, TextChannel, EmbedBuilder, ColorResolvable } from "discord.js"
 import { SlashCommand } from "../types";
+import { color } from "../functions";
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -74,8 +75,8 @@ const command: SlashCommand = {
       await interaction.respond(
         filtered
       );
-    } catch (error) {
-      console.log(`Error: ${error.message}`)
+    } catch (e) {
+      console.log(color("text", `❌ Embed error : ${color("error", e.message)}`))
     }
   },
   execute: async (interaction) => {

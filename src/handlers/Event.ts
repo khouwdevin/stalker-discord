@@ -3,7 +3,7 @@ import { readdirSync } from "fs";
 import { join } from "path";
 import { color } from "../functions";
 import { BotEvent, MoonEvent } from "../types";
-import { MoonlinkNode, MoonlinkPlayer } from "moonlink.js";
+import { MoonlinkNode } from "moonlink.js";
 
 module.exports = (client: Client) => {
     let eventsDir = join(__dirname, "../events")

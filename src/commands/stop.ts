@@ -1,6 +1,6 @@
 import { sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
-import { EmbedBuilder, TextChannel } from "discord.js";
+import { TextChannel } from "discord.js";
 
 const command: Command = {
     name: "stop",

@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, GuildMember, PermissionFlagsBits } from "discord.js"
 import { SlashCommand } from "../types";
+import { color } from "../functions";
 
 const command : SlashCommand = {
     command: new SlashCommandBuilder()
@@ -33,11 +34,11 @@ const command : SlashCommand = {
             const isAFK = options[0].value as boolean
 
             if (isAFK){
-                member.setNickname(`[AFK]${member.nickname}`).catch((e) => console.log(`❌ Set nickname in AFK : ${e.message}`))
+                member.setNickname(`[AFK]${member.nickname}`).catch((e) => console.log(color("text", `❌ Set nickname in AFK : ${color("error", e.message)}`)))
                 await interaction.channel?.send(`${member} is AFK for ${userminutesafk}`)
             }
             else{
-                member.setNickname(member.nickname?.replace("[AFK]", "") || member.nickname).catch((e) => console.log(`❌ Set nickname in AFK : ${e.message}`))
+                member.setNickname(member.nickname?.replace("[AFK]", "") || member.nickname).catch((e) => console.log(color("text", `❌ Set nickname in AFK : ${color("error", e.message)}`)))
                 await interaction.channel?.send(`${member} is not AFK`)
             }
 
