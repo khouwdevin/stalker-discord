@@ -10,7 +10,7 @@ const event: BotEvent = {
         const newGuild = new GuildModel({
             guildID: guild.id,
             options: {
-                detectvoice: false,
+                detectpresence: false,
                 notify: false,
                 channel: channelid
             },
