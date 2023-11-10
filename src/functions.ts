@@ -146,21 +146,21 @@ export const deleteTimedMessage = (message: Message, channel: TextChannel, durat
 }
 
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
-    if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
+    if (mongoose.connection.readyState === 0) return console.log(color("text", `❌ Database ${color("error", "not connected")}`))
     let foundGuild = await GuildDB.findOne({ guildID: guild.id })
     if (!foundGuild) return null;
     return foundGuild.options[option]
 }
 
 export const getAllGuildOption = async (guild: Guild) => {
-    if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
+    if (mongoose.connection.readyState === 0) return console.log(color("text", `❌ Database ${color("error", "not connected")}`))
     let foundGuild = await GuildDB.findOne({ guildID: guild.id })
     if (!foundGuild) return null;
     return foundGuild.options
 }
 
 export const setGuildOption = async (guild: Guild, option: GuildOption, value: any) => {
-    if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
+    if (mongoose.connection.readyState === 0) return console.log(color("text", `❌ Database ${color("error", "not connected")}`))
     let foundGuild = await GuildDB.findOne({ guildID: guild.id })
     if (!foundGuild) return null;
     foundGuild.options[option] = value
@@ -168,7 +168,7 @@ export const setGuildOption = async (guild: Guild, option: GuildOption, value: a
 }
 
 export const getAllGuild = async () => {
-    if (mongoose.connection.readyState === 0) throw new Error("Database not connected.")
+    if (mongoose.connection.readyState === 0) return console.log(color("text", `❌ Database ${color("error", "not connected")}`))
     const guilds = await GuildDB.find()
     return guilds
 }
