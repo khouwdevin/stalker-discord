@@ -38,7 +38,7 @@ npm run start
 
 > if the host support automatically deploy from github, then just let the provider access your repository then it's done.
 
-> if not then follow this instruction.
+> if they don't have then follow this instruction.
 
 1. Apply this commands.
 ```node
@@ -49,14 +49,10 @@ npm run build
 2. Upload the /dist/ folder.
 3. Set node start to index.js inside host server setting.
 
-#### Set up Lavalink
-
-> use Docker to make easier
-
 #### Set Up Environment Variables
 
 > (local hosting) put the environment variables inside working directory and name the file to .env <br/>
-> (using hosting provider) put the environment variables inside setting for environment variables
+> (using hosting provider) put the environment variables inside host's setting for environment variables
 
 ```env
 TOKEN=(Discord bot token)
@@ -73,8 +69,32 @@ SPOTIFY_CLIENTID=(Spotify client id) #if you don't want to use spotify then let 
 SPOTIFY_CLIENT_SECRET=(Spotify client secret) #if you don't want to use mongo then let it empty
 ```
 
-> you can Spotify client id and client secret from https://developer.spotify.com
+> you can get Spotify client id and client secret from https://developer.spotify.com
 
-### 3. Finishing
+### 4. Set up Lavalink
+
+#### Host Locally
+
+1. clone this repository
+```sh
+git clone https://github.com/khouwdevin/lavalink-template.git
+```
+
+2. change the application.yml
+
+3. run docker
+
+#### Host Remote
+
+1. clone this repository
+```sh
+git clone https://github.com/khouwdevin/lavalink-template.git
+```
+
+2. change the application.yml
+
+3. let the hosting provider clone and buld it for you
+
+### 5. Finishing
 
 > after all done, then Stalker Bot should be appear and can be used!
