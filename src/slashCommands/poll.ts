@@ -215,7 +215,7 @@ const command : SlashCommand = {
                 
                                 const result = poll.pollResult
                                 const winner = result.every((val) => val === result[0]) ? -1 : Math.max(...result)
-                                const winnerResult = winner === -1 ? "**THE RESULT IS TIE!**" : `**[${emojies[winner]}] ${embedTimeout.fields[winner].name} IS A WINNER!**`
+                                const winnerResult = winner === -1 ? "**THE RESULT IS TIE!**" : `**[${emojies[winner]}] ${embedTimeout.fields[winner].name} IS THE WINNER!**`
 
                                 const embed = new EmbedBuilder()
                                     .setAuthor(embedTimeout.author)
@@ -285,7 +285,7 @@ const command : SlashCommand = {
             
                             const result = poll.pollResult
                             const winner = result.every((val) => val === result[0]) ? -1 : Math.max(...result)
-                            const winnerResult = winner === -1 ? "**THE RESULT IS TIE!**" : `**[${emojies[winner]}] ${embedTimeout.fields[winner].name} IS A WINNER!**`
+                            const winnerResult = winner === -1 ? "**THE RESULT IS TIE!**" : `**[${emojies[winner]}] ${embedTimeout.fields[winner].name} IS THE WINNER!**`
 
                             const embed = new EmbedBuilder()
                                 .setAuthor(embedTimeout.author)
