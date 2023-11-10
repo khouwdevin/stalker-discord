@@ -1,6 +1,6 @@
 # Stalker Bot
 
-> Bot for who need save log, server management and a music bot.
+> This is Stalker Bot.
 
 ## Stalker
 
