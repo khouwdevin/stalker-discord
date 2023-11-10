@@ -14,7 +14,7 @@ const event: MoonEvent = {
             console.log(
                 color("text", `🔃 Try to reconnect with ${color("variable", node.host)}`)
             )
-        }, 5000)         
+        }, 10000)         
     }
 }
 
