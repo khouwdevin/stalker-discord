@@ -1,6 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../types";
 import PollModel from "../schemas/Poll";
+import { color } from "../functions";
 
 const emojies = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
 const minutesTimeout = 2
@@ -109,7 +110,9 @@ const command : SlashCommand = {
                 if (!interaction.channel) return
 
                 try {
-                    const timeoutMessage = await interaction.channel.messages.fetch(newPoll.messageID)
+                    const timeoutMessage = await interaction.channel.messages
+                        .fetch(newPoll.messageID)
+                        .catch((e) => console.log(color("text", `❌ Failed to fetch message : ${color("error", e.message)}`)))
             
                     if (!timeoutMessage) return
     
@@ -156,7 +159,12 @@ const command : SlashCommand = {
             clearTimeout(interaction.client.timeouts.get(`poll-${pollID}`))
             interaction.client.timeouts.delete(`poll-${pollID}`)
 
-            const targetMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
+            const targetMessage = await interaction.channel.messages
+                .fetch(targetPoll.messageID)
+                .catch((e) => console.log(color("text", `❌ Failed to fetch message : ${color("error", e.message)}`)))
+
+            if (!targetMessage) return
+
             const targetMessageEmbed = targetMessage.embeds[0]
 
             const option = parseInt(optionString)
@@ -207,7 +215,9 @@ const command : SlashCommand = {
                             if (!interaction.channel || !poll) return
                 
                             try {
-                                const timeoutMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
+                                const timeoutMessage = await interaction.channel.messages
+                                    .fetch(targetPoll.messageID)
+                                    .catch((e) => console.log(color("text", `❌ Failed to delete message : ${color("error", e.message)}`)))
             
                                 if (!timeoutMessage) return
                 
@@ -277,7 +287,9 @@ const command : SlashCommand = {
                         if (!interaction.channel || !poll) return
             
                         try {
-                            const timeoutMessage = await interaction.channel.messages.fetch(targetPoll.messageID)
+                            const timeoutMessage = await interaction.channel.messages
+                                .fetch(targetPoll.messageID)
+                                .catch((e) => console.log(color("text", `❌ Failed to delete message : ${color("error", e.message)}`)))
             
                             if (!timeoutMessage) return
             
