@@ -18,6 +18,7 @@ const command: Command = {
 
             sendMessage(`${message.member} player stopped!`, message.channel as TextChannel)
             await player.stop()
+            player.disconnect()
         } catch(e) {console.log(color("text", `❌ Failed to stop music : ${color("error", e.message)}`))}
     },
     cooldown: 1,
