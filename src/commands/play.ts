@@ -17,20 +17,9 @@ const command: Command = {
             const player = client.moon.players.create({
                 guildId: message.guild.id,
                 voiceChannel: message.member.voice.channel.id,
-                textChannel: message.channel.id
+                textChannel: message.channel.id,
+                autoPlay: false
             })
-
-            if (!player.connected) {
-                player.connect({
-                    setDeaf: true,
-                    setMute: false
-                })
-            }
-
-            if (client.timeouts.has(`player-${player.guildId}`)) {
-                clearTimeout(client.timeouts.get(`player-${player.guildId}`))
-                client.timeouts.delete(`player-${player.guildId}`)
-            }
 
             const processMessage = await message.channel.send("Processing...")
 
@@ -75,7 +64,19 @@ const command: Command = {
                     break
             }
 
-            processMessage.delete()
+            if (client.timeouts.has(`player-${player.guildId}`)) {
+                clearTimeout(client.timeouts.get(`player-${player.guildId}`))
+                client.timeouts.delete(`player-${player.guildId}`)
+            }
+
+            await processMessage.delete()
+
+            if (!player.connected) {
+                player.connect({
+                    setDeaf: true,
+                    setMute: false
+                })
+            }
 
             if (!player.playing) player.play()
             

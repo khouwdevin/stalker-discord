@@ -123,6 +123,8 @@ const commandText: IHelp[] = [
                     example => **'${process.env.PREFIX_COMMAND}skip'** or **'${process.env.PREFIX_COMMAND}s'**\r
                     **${process.env.PREFIX_COMMAND}stop**: to stop player.\r
                     example => **'${process.env.PREFIX_COMMAND}stop'** or **'${process.env.PREFIX_COMMAND}stp'**\r
+                    **${process.env.PREFIX_COMMAND}autoplay**: to set autoplay.\r
+                    example => **'${process.env.PREFIX_COMMAND}autoplay true'** or **'${process.env.PREFIX_COMMAND}ap true'**\r
                     `
             }
         ],
