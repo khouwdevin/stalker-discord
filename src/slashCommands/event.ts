@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType, ChannelType } from "discord.js"
 import { SlashCommand } from "../types";
-import { getDateChoices, getTimeChoices } from "../functions";
+import { color, getDateChoices, getTimeChoices } from "../functions";
 
 const command : SlashCommand = {
     command: new SlashCommandBuilder()
@@ -86,7 +86,7 @@ const command : SlashCommand = {
             })
 
             await interaction.editReply("Your event has been posted!")
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to create event : ${color("error", e.message)}`))}
     },
     cooldown: 5
 }

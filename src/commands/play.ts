@@ -1,4 +1,4 @@
-import { sendMessage, sendTimedMessage } from "../functions";
+import { color, sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { Colors, EmbedBuilder, TextChannel, resolveColor } from "discord.js";
 
@@ -82,7 +82,7 @@ const command: Command = {
             if (!player.playing) player.play()
             
             client.attemps.set(`${player.guildId}`, 3)
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to play music : ${color("error", e.message)}`))}
     },
     cooldown: 1,
     permissions: [],

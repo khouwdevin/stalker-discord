@@ -144,7 +144,7 @@ const command : SlashCommand = {
             await newPoll.save()
 
             await interaction.editReply("Poll sent successfully!")
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to execute poll : ${color("error", e.message)}`))}
     },
     button: async (interaction) => {
         try {
@@ -326,7 +326,7 @@ const command : SlashCommand = {
             }
 
             await interaction.editReply("Some error occured!")
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to vote in poll slash command : ${color("error", e.message)}`))}
     },
     cooldown: 2
 }

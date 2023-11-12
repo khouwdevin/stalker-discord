@@ -1,6 +1,6 @@
 import { EmbedBuilder, TextChannel } from "discord.js";
 import { Command } from "../types";
-import { deleteTimedMessage, getAllGuildOption } from "../functions";
+import { color, deleteTimedMessage, getAllGuildOption } from "../functions";
 
 const command : Command = {
     name: "checkstatus",
@@ -31,7 +31,7 @@ const command : Command = {
                 deleteTimedMessage(m, message.channel as TextChannel, 20000)
                 deleteTimedMessage(message, message.channel as TextChannel, 20000)
             })
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to show check status : ${color("error", e.message)}`))}
     },
     cooldown: 5,
     aliases: ["cs"],

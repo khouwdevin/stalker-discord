@@ -43,7 +43,7 @@ const command : SlashCommand = {
             }
 
             await interaction.editReply("Your command is successfully ran!")
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to execute AFK slash command : ${color("error", e.message)}`))}
     }
 }
 

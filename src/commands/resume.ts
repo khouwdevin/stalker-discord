@@ -1,4 +1,4 @@
-import { sendTimedMessage } from "../functions";
+import { color, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { TextChannel } from "discord.js";
 
@@ -20,7 +20,7 @@ const command: Command = {
                 sendTimedMessage(`${message.member} music is resumed!`, message.channel as TextChannel, 5000)
                 player.resume()
             }
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to resume music : ${color("error", e.message)}`))}
     },
     cooldown: 1,
     permissions: [],

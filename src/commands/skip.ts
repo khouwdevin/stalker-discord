@@ -1,4 +1,4 @@
-import { sendMessage, sendTimedMessage } from "../functions";
+import { color, sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { TextChannel } from "discord.js";
 
@@ -19,7 +19,7 @@ const command: Command = {
 
             sendMessage(`${message.member} song skipped!`, message.channel as TextChannel)
             player.skip()
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to skip music : ${color("error", e.message)}`))}
     },
     cooldown: 1,
     permissions: [],

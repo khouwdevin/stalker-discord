@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from "discord.js"
 import { SlashCommand } from "../types";
-import { getDecode } from "../functions";
+import { color, getDecode } from "../functions";
 
 const command : SlashCommand = {
     command: new SlashCommandBuilder()
@@ -24,7 +24,7 @@ const command : SlashCommand = {
             modal.addComponents(firstActionRow);
 
             await interaction.showModal(modal);
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to launch decode modal : ${color("error", e.message)}`))}
     },
     modal: async (interaction) => {
         try {
@@ -34,7 +34,7 @@ const command : SlashCommand = {
             const result = getDecode(code)
 
             await interaction.editReply({ content: result })
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to decode : ${color("error", e.message)}`))}
     }
 }
 

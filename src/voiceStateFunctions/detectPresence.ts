@@ -1,5 +1,5 @@
 import { TextChannel, VoiceState } from "discord.js";
-import { getGuildOption, notifyToConfigDefaultTextChannel, sendMessage } from "../functions";
+import { color, getGuildOption, notifyToConfigDefaultTextChannel, sendMessage } from "../functions";
 
 const DetectPresence = async (voiceState: VoiceState, option: number) => {
     try {
@@ -15,7 +15,7 @@ const DetectPresence = async (voiceState: VoiceState, option: number) => {
 
         if (option === 0) sendMessage(`${voiceState.member?.user} left ${voiceState.channel} channel!`, channel as TextChannel)
         else sendMessage(`${voiceState.member.user} joined ${voiceState.channel} channel!`, channel as TextChannel)
-    } catch {}
+    } catch(e) {console.log(color("text", `❌ Failed to detect presence : ${color("error", e.message)}`))}
 }
 
 export default DetectPresence

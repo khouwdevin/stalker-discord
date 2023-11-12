@@ -1,4 +1,5 @@
 import { VoiceState } from "discord.js";
+import { color } from "../functions";
 
 const DetectUser = (voiceState: VoiceState, option: number) => {
     try {
@@ -28,7 +29,7 @@ const DetectUser = (voiceState: VoiceState, option: number) => {
             clearTimeout(client.timeouts.get(`player-${voiceState.guild.id}`))
             client.timeouts.delete(voiceState.guild.id)
         }
-    } catch {}
+    } catch(e) {console.log(color("text", `❌ Failed to detect user : ${color("error", e.message)}`))}
 }
 
 export default DetectUser

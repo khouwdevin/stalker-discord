@@ -36,7 +36,7 @@ const command : Command = {
             }, 20000)
 
             client.timeouts.set(`help-${currentMessage.id}`, timeout)
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to show help : ${color("error", e.message)}`))}
     },
     button: async (interaction) => {
         try {
@@ -76,7 +76,7 @@ const command : Command = {
             client.timeouts.set(`help-${currentMessage.id}`, timeout)
 
             interaction.deferUpdate()
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to process interact button help : ${color("error", e.message)}`))}
     },
     cooldown: 2,
     aliases: ["h"],

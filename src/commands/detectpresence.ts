@@ -1,5 +1,5 @@
 import { Command } from "../types";
-import { sendTimedMessage, setGuildOption } from "../functions";
+import { color, sendTimedMessage, setGuildOption } from "../functions";
 import { TextChannel } from "discord.js";
 
 const command: Command = {
@@ -18,7 +18,7 @@ const command: Command = {
             
 
             sendTimedMessage("Detect presence successfully changed!", message.channel as TextChannel, 5000)
-        } catch {}
+        } catch(e) {console.log(color("text", `❌ Failed to configure detect presence : ${color("error", e.message)}`))}
     },
     cooldown: 5,
     permissions: ["Administrator"],
