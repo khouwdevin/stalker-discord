@@ -20,7 +20,6 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 embed.setAuthor({ name: "Detect Presence", iconURL: message.client.user.avatarURL() || undefined })
                 embed.setFields({ name: " ", value: `Detect presence successfully changed to **${detectpresence}**!` })
-
             channel.send({ embeds: [embed] })
         } catch(e) {console.log(color("text", `❌ Failed to configure detect presence : ${color("error", e.message)}`))}
     },

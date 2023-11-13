@@ -1,6 +1,6 @@
 import { color, sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
-import { TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 
 const command: Command = {
     name: "skip",
@@ -12,13 +12,17 @@ const command: Command = {
 
             const client = message.client
             const player = client.moon.players.get(message.guildId)
+            const channel = message.channel
 
-            if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, message.channel as TextChannel, 5000)
-            if (message.member.voice.channel.id !== player.voiceChannel) return sendTimedMessage(`${message.member} isn't joining in a same voice channel!`, message.channel as TextChannel, 5000)
-            if (player.queue.size <= 0) return sendMessage(`${message.member} this is the last song, no other song in queue!`, message.channel as TextChannel)
+            if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, channel as TextChannel, 5000)
+            if (message.member.voice.channel.id !== player.voiceChannel) return sendTimedMessage(`${message.member} isn't joining in a same voice channel!`, channel as TextChannel, 5000)
+            if (player.queue.size <= 0) return sendMessage(`${message.member} this is the last song, no other song in queue!`, channel as TextChannel)
 
-            sendMessage(`${message.member} song skipped!`, message.channel as TextChannel)
-            player.skip()
+            const embed = new EmbedBuilder()
+                .setFields({ name: " ", value: `${message.member} song is **skipped**!` })
+            channel.send({ embeds: [embed] })
+
+            await player.skip()
         } catch(e) {console.log(color("text", `❌ Failed to skip music : ${color("error", e.message)}`))}
     },
     cooldown: 1,

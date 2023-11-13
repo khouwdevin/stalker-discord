@@ -23,7 +23,6 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setAuthor({ name: "Channel Config", iconURL: message.client.user.avatarURL() || undefined })
                 .setFields({ name: " ", value: `Channel config successfully changed  to ${channelDefault}!` })
-
             channel.send({ embeds: [embed] })
         } catch(e) {console.log(color("text", `❌ Failed to save channel config : ${color("error", e.message)}`))}
     },

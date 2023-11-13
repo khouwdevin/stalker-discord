@@ -20,7 +20,6 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setAuthor({ name: "Stalker Notify", iconURL: message.client.user.avatarURL() || undefined })
                 .setFields({ name: " ", value: `Channel config successfully changed  to **${notify}**!` })
-
             channel.send({ embeds: [embed] })
         } catch(e) {console.log(color("text", `❌ Failed to configure notify : ${color("error", e.message)}`))}
     },

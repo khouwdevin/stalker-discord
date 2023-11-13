@@ -1,6 +1,6 @@
 import { color, sendTimedMessage } from "../functions";
 import { Command } from "../types";
-import { TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 
 const command: Command = {
     name: "resume",
@@ -12,13 +12,17 @@ const command: Command = {
 
             const client = message.client
             const player = client.moon.players.get(message.guildId)
+            const channel = message.channel
 
-            if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, message.channel as TextChannel, 5000)
-            if (message.member.voice.channel.id !== player.voiceChannel) return sendTimedMessage(`${message.member} isn't joining in a same voice channel!`, message.channel as TextChannel, 5000)
+            if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, channel as TextChannel, 5000)
+            if (message.member.voice.channel.id !== player.voiceChannel) return sendTimedMessage(`${message.member} isn't joining in a same voice channel!`, channel as TextChannel, 5000)
 
             if (player.paused) {
-                sendTimedMessage(`${message.member} music is resumed!`, message.channel as TextChannel, 5000)
-                player.resume()
+                const embed = new EmbedBuilder()
+                    .setFields({ name: " ", value: `${message.member} music is **resumed**!` })
+                channel.send({ embeds: [embed] })
+                
+                await player.resume()
             }
         } catch(e) {console.log(color("text", `❌ Failed to resume music : ${color("error", e.message)}`))}
     },

@@ -1,6 +1,6 @@
 import { color, sendTimedMessage } from "../functions";
 import { Command } from "../types";
-import { TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 
 const command: Command = {
     name: "pause",
@@ -12,12 +12,16 @@ const command: Command = {
 
             const client = message.client
             const player = client.moon.players.get(message.guildId)
+            const channel = message.channel
 
-            if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, message.channel as TextChannel, 5000)
+            if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, channel as TextChannel, 5000)
 
             if (!player.paused) {
-                sendTimedMessage(`${message.member} music is paused!`, message.channel as TextChannel, 5000)
-                player.pause()
+                const embed = new EmbedBuilder()
+                    .setFields({ name: " ", value: `${message.member} music is **paused**!` })
+                channel.send({ embeds: [embed] })
+
+                await player.pause()
             }
         } catch(e) {console.log(color("text", `❌ Failed to pause music : ${color("error", e.message)}`))}
     },
