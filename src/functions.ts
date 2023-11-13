@@ -247,3 +247,13 @@ export const getCode = (text: string): string => {
 
     return codestring.join("")
 }
+
+export const getLoopString = (loopState: number | null) => {
+    let loop = "no loop"
+
+    if(loopState === 0) loop = "no loop"
+    else if(loopState === 1) loop = "loop song"
+    else loop = "loop playlist"
+
+    return loop
+}
