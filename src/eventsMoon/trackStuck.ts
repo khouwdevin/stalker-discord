@@ -10,7 +10,7 @@ const event: MoonEvent = {
         if (!channel || !channel.isTextBased()) return
 
         const embed  = new EmbedBuilder()
-            .setAuthor({ name: `Error occured, restarting ${track.title}` })
+            .setAuthor({ name: `Error occured, restarting ${track.title}`, iconURL: client.user?.avatarURL() || undefined })
 
         channel.send({ embeds: [embed] })
 
@@ -25,7 +25,7 @@ const event: MoonEvent = {
                 await player.stop(true)
 
                 const embed  = new EmbedBuilder()
-                .setAuthor({ name: `Error occured, bot is disconnected!` })
+                .setAuthor({ name: `Error occured, bot is disconnected!`, iconURL: client.user?.avatarURL() || undefined })
     
                 channel.send({ embeds: [embed] })
             }
