@@ -24,7 +24,7 @@ client.moon = new MoonlinkManager(
 	{ 
 		clientName: "stalkerbot",
 		retryTime: 10000,
-		retryAmount: Infinity,
+		retryAmount: 100,
 		spotify: {
 			clientId: process.env.SPOTIFY_CLIENTID,
 			clientSecret: process.env.SPOTIFY_CLIENT_SECRET

@@ -13,8 +13,6 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
 
             const members = oldstate.channel.members
 
-            console.log(members.size)
-
             if (members.size > 1) {
                 if (!client.timeouts.has(`player-${player.guildId}`)) return
 
