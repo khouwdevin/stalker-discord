@@ -1,4 +1,4 @@
-import { color, sendMessage, sendTimedMessage } from "../functions";
+import { color, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { EmbedBuilder, TextChannel } from "discord.js";
 
@@ -18,6 +18,7 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setAuthor({ name:  "Music is stopped!", iconURL: client.user.avatarURL() || undefined })
+                .setColor("Red")
             channel.send({ embeds: [embed] })
 
             await player.stop(true)

@@ -107,7 +107,7 @@ const command : SlashCommand = {
                 await PollModel.deleteOne({ _id: newPoll._id })
                 interaction.client.timeouts.delete(`poll-${newPoll._id}`)
 
-                if (!interaction.channel) return
+                if (!interaction.channel) return console.log(color("text", `❌ Failed to execute poll slash command : ${color("error", "channel unavailable")}`))
 
                 try {
                     const timeoutMessage = await interaction.channel.messages

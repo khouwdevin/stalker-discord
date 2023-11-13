@@ -25,6 +25,8 @@ const command : SlashCommand = {
         try {
             await interaction.deferReply({ ephemeral: true })
 
+            if (!interaction.channel) return console.log(color("text", `❌ Failed to execute AFK slash command : ${color("error", "channel unavailable")}`))
+
             const options = interaction.options.data
             const minutes: number = options[1].value as number ? options[1].value as number : 0
 

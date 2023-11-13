@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
 import { Command, IHelp } from "../types";
 import { color } from "../functions";
 
@@ -10,7 +10,7 @@ const command : Command = {
 
             const embed = new EmbedBuilder()
                 .setTitle(commandText[0].title)
-                .setColor(Colors.Orange)
+                .setColor("Orange")
                 .setFields(commandText[0].field)
                 .setFooter(commandText[0].footer)
 
@@ -58,7 +58,7 @@ const command : Command = {
 
             const embed = new EmbedBuilder()
                 .setTitle(commandText[nextPage].title)
-                .setColor(Colors.Orange)
+                .setColor("Orange")
                 .setFields(commandText[nextPage].field)
                 .setFooter(commandText[nextPage].footer)
 

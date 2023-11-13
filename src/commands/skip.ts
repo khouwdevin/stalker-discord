@@ -19,6 +19,7 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setAuthor({ name:  "Song is skipped!", iconURL: client.user.avatarURL() || undefined })
+                .setColor("Yellow")
             channel.send({ embeds: [embed] })
 
             await player.skip()

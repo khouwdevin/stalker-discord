@@ -1,7 +1,7 @@
 import { MoonlinkPlayer } from "moonlink.js";
 import { MoonEvent } from "../types";
 import { EmbedBuilder } from "@discordjs/builders";
-import { ChannelType, Client } from "discord.js";
+import { ChannelType, Client, Colors } from "discord.js";
 
 const event: MoonEvent = {
     name: "trackStart",
@@ -12,6 +12,7 @@ const event: MoonEvent = {
 
         const embed  = new EmbedBuilder()
             .setAuthor({ name: `Now playing [${track.title}]`, iconURL: client.user?.avatarURL() || undefined })
+            .setColor(Colors.Green)
 
         channel.send({ embeds: [embed] })
     }

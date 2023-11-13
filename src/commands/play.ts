@@ -1,6 +1,6 @@
 import { color, getLoopString, sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
-import { Colors, EmbedBuilder, TextChannel, resolveColor } from "discord.js";
+import { EmbedBuilder, TextChannel, resolveColor } from "discord.js";
 
 const command: Command = {
     name: "play",
@@ -35,7 +35,7 @@ const command: Command = {
                     .setAuthor({ name: "Player Created", iconURL: client.user.avatarURL() || undefined })
                     .setFields({ name: " ", value: playerData })
                     .setFooter({ text: "STALKER MUSIC" })
-                    .setColor(Colors.Purple)
+                    .setColor("Purple")
 
                 message.channel.send({ embeds: [embed] })
             }
@@ -53,12 +53,12 @@ const command: Command = {
                     return sendMessage(`${message.member} no title matches!`, message.channel as TextChannel)
                 case "playlist":
                     let imageUrl = null
-                    let color = resolveColor(Colors.Red)
+                    let color = resolveColor("Red")
                     if (title.includes("spotify")) {
                         const resThumbnail = await fetch(`https://open.spotify.com/oembed?url=${title}`)
                         const data = await resThumbnail.json()
                         imageUrl = data.thumbnail_url
-                        color = resolveColor(Colors.Green)
+                        color = resolveColor("Green")
                     }
                     const embedPlaylist  = new EmbedBuilder()
                         .setFields(
@@ -80,6 +80,7 @@ const command: Command = {
 
                     const embedSong  = new EmbedBuilder()
                         .setAuthor({ name: `[${res.tracks[0].title}] was added to the waiting list!`, iconURL: message.client.user.avatarURL() || undefined })
+                        .setColor("Yellow")
                     message.channel.send({ embeds: [embedSong] })
 
                     break

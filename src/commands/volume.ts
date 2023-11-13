@@ -1,6 +1,6 @@
 import { color, getLoopString, sendTimedMessage } from "../functions";
 import { Command } from "../types";
-import { Colors, EmbedBuilder, TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 
 const command: Command = {
     name: "volume",
@@ -32,7 +32,7 @@ const command: Command = {
                 .setAuthor({ name: "Player Updated", iconURL: client.user.avatarURL() || undefined })
                 .setFields({ name: " ", value: playerData })
                 .setFooter({ text: "STALKER MUSIC" })
-                .setColor(Colors.Purple)
+                .setColor("Purple")
             channel.send({ embeds: [embed] })
         } catch(e) {console.log(color("text", `❌ Failed to configure volume : ${color("error", e.message)}`))}
     },

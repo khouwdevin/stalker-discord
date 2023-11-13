@@ -63,6 +63,8 @@ const command : SlashCommand = {
         try {
             await interaction.deferReply({ ephemeral: true })
 
+            if (!interaction.guild) return console.log(color("text", `❌ Failed to execute event slash command : ${color("error", "guild unavailable")}`))
+
             const options = interaction.options.data
 
             const title = options[0].value
@@ -76,7 +78,7 @@ const command : SlashCommand = {
 
             const finaldate = `${date} ${finalhour}:00:00`
 
-            await interaction.guild?.scheduledEvents.create({
+            await interaction.guild.scheduledEvents.create({
                 name: `${title}`,
                 description: `${description}`,
                 channel: `${channel}`,
