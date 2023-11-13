@@ -46,7 +46,7 @@ npm install
 npm run build
 ```
 
-2. Upload the /dist/ folder.
+2. Upload the /dist/ and the /node_modules/ folders.
 3. Set node start to index.js inside host server setting.
 
 #### Set Up Environment Variables
