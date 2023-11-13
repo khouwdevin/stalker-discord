@@ -7,7 +7,7 @@ const event: MoonEvent = {
     execute: async (client: Client, player: MoonlinkPlayer, track: any) => {
         const channel = await client.channels.fetch(player.textChannel).catch(() => {return null})
 
-        if (!channel || channel.type !== ChannelType.GuildText) return
+        if (!channel || !channel.isTextBased()) return
 
         const embed  = new EmbedBuilder()
             .setAuthor({ name: `Error occured, restarting ${track.title}` })

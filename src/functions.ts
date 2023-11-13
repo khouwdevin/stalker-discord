@@ -49,7 +49,7 @@ export const sendMessageToExistingChannel = (channels: ChannelManager, message: 
         const channelGuild = channels.cache.at(i)
 
         if (!channelGuild) continue
-        if (channelGuild.type !== ChannelType.GuildText) continue
+        if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue
 
         const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
         return channel.send(message).catch((e) => console.log(color("text", `❌ Failed to send message : ${color("error", e.message)}`)))
@@ -61,7 +61,7 @@ export const sendTimedMessageToExistingChannel = (channels: ChannelManager, mess
         const channelGuild = channels.cache.at(i)
 
         if (!channelGuild) continue
-        if (channelGuild.type !== ChannelType.GuildText) continue
+        if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue
 
         const channel = channelGuild.guild.systemChannel ? channelGuild.guild.systemChannel : channelGuild
         return channel.send(message).then((m) => setTimeout(() => m.delete(), duration)).catch((e) => console.log(color("text", `❌ Failed to send message : ${color("error", e.message)}`)))
@@ -101,7 +101,7 @@ export const sendNotifyStalkerOnline = async (client: Client) => {
                 continue
             }
 
-            sendTimedMessage("Stalker is back online!", channel, 5000)
+            sendTimedMessage("Stalker is back online!", channel as TextChannel, 5000)
 
             continue
         }
@@ -114,7 +114,7 @@ export const sendNotifyStalkerOnline = async (client: Client) => {
             if (!channel) continue
             if (channel.type !== ChannelType.GuildText) continue
             
-            sendTimedMessage("Stalker is back online!", channel, 5000)
+            sendTimedMessage("Stalker is back online!", channel as TextChannel, 5000)
 
             break
         }
@@ -126,7 +126,7 @@ export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
         const channelGuild = channels.cache.at(i)
 
         if (!channelGuild) continue
-        if (channelGuild.type !== ChannelType.GuildText) continue
+        if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue
         if (!channelGuild.guild.systemChannel) return sendTimedMessageToExistingChannel(channels, "Please add or update default text channel to Stalker's config!", 10000)
             
         const channel = channelGuild.guild.systemChannel
