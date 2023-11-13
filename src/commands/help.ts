@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, TextChannel } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from "discord.js";
 import { Command, IHelp } from "../types";
 import { color } from "../functions";
 
@@ -10,7 +10,7 @@ const command : Command = {
 
             const embed = new EmbedBuilder()
                 .setTitle(commandText[0].title)
-                .setColor("White")
+                .setColor(Colors.Orange)
                 .setFields(commandText[0].field)
                 .setFooter(commandText[0].footer)
 
@@ -51,15 +51,14 @@ const command : Command = {
             if (!currentMessage) return
             if (!currentMessage.embeds[0].footer) return
 
-
             const components = currentMessage.components[0]
             const currentPage = parseInt(currentMessage.embeds[0].footer.text.split("/")[0]) - 1
             const index = command === "next" ? 1 : -1
-            const nextPage = Math.max(0, Math.min(currentPage + index, 2));
+            const nextPage = Math.max(0, Math.min(currentPage + index, 3));
 
             const embed = new EmbedBuilder()
                 .setTitle(commandText[nextPage].title)
-                .setColor("White")
+                .setColor(Colors.Orange)
                 .setFields(commandText[nextPage].field)
                 .setFooter(commandText[nextPage].footer)
 
@@ -88,47 +87,131 @@ const commandText: IHelp[] = [
         title: "Command List",
         field: [
             {
-                name: " ",
+                name: `${process.env.PREFIX_COMMAND}channelconfig`,
                 value: 
                     `
-                    **${process.env.PREFIX_COMMAND}channelconfig**: If you want to change Stalker's channel (send the channel id).\r
+                    If you want to change Stalker's channel (send the channel id).\r
                     example => **'${process.env.PREFIX_COMMAND}channelconfig 12344556677'** or **'${process.env.PREFIX_COMMAND}cfg 12344556677'**\r
-                    **${process.env.PREFIX_COMMAND}checkstatus**: If you want to check Stalker's config.\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}checkstatus`,
+                value: 
+                    `
+                    If you want to check Stalker's config.\r
                     example => **'${process.env.PREFIX_COMMAND}checkstatus'** or **'${process.env.PREFIX_COMMAND}cs'**\r
-                    **${process.env.PREFIX_COMMAND}detectpresence**: If you want to disable or enable detect presence.\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}detectpresence`,
+                value: 
+                    `
+                    If you want to disable or enable detect presence.\r
                     example => **'${process.env.PREFIX_COMMAND}detectpresence false'** or **'${process.env.PREFIX_COMMAND}dp false'**\r
-                    **${process.env.PREFIX_COMMAND}greet**: Stalker will greet you!\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}greet`,
+                value: 
+                    `
+                    Stalker will greet you!\r
                     example => **'${process.env.PREFIX_COMMAND}greet'** or **'${process.env.PREFIX_COMMAND}g'**\r
-                    **${process.env.PREFIX_COMMAND}notify**: If you want to disable or enable stalker online notif.\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}notify`,
+                value: 
+                    `
+                    If you want to disable or enable stalker online notif.\r
                     example => **'${process.env.PREFIX_COMMAND}notify false'** or **'${process.env.PREFIX_COMMAND}n false'**
                     `
             }
         ],
-        footer: { text: "1/3" }
+        footer: { text: "1/4" }
     },
     {
         title: "Music Command List", 
         field: [
             {
-                name: " ",
+                name: `${process.env.PREFIX_COMMAND}play`,
                 value: 
                     `
-                    **${process.env.PREFIX_COMMAND}play**: to play and search song.\r
+                    to play and search song.\r
                     example => **'${process.env.PREFIX_COMMAND}play drown'** or **'${process.env.PREFIX_COMMAND}p drown'**\r
-                    **${process.env.PREFIX_COMMAND}pause**: to pause song.\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}pause`,
+                value: 
+                    `
+                    to pause song.\r
                     example => **'${process.env.PREFIX_COMMAND}pause'** or **'${process.env.PREFIX_COMMAND}ps'**\r
-                    **${process.env.PREFIX_COMMAND}resume**: to resume song.\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}resume`,
+                value: 
+                    `
+                    to resume song.\r
                     example => **'${process.env.PREFIX_COMMAND}resume'** or **'${process.env.PREFIX_COMMAND}rsm'**\r
-                    **${process.env.PREFIX_COMMAND}skip**: to skip song.\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}skip`,
+                value: 
+                    `
+                    to skip song.\r
                     example => **'${process.env.PREFIX_COMMAND}skip'** or **'${process.env.PREFIX_COMMAND}s'**\r
-                    **${process.env.PREFIX_COMMAND}stop**: to stop player.\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}stop`,
+                value: 
+                    `
+                    to stop player.\r
                     example => **'${process.env.PREFIX_COMMAND}stop'** or **'${process.env.PREFIX_COMMAND}stp'**\r
-                    **${process.env.PREFIX_COMMAND}autoplay**: to set autoplay.\r
+                    `
+            },
+        ],
+        footer: { text: "2/4" }
+    },
+    {
+        title: "Player Command List", 
+        field: [
+            {
+                name: `${process.env.PREFIX_COMMAND}autoplay`,
+                value: 
+                    `
+                    to set autoplay.\r
                     example => **'${process.env.PREFIX_COMMAND}autoplay true'** or **'${process.env.PREFIX_COMMAND}ap true'**\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}loop`,
+                value: 
+                    `
+                    to set loop (0: no loop, 1: song loop, 2: playlist loop).\r
+                    example => **'${process.env.PREFIX_COMMAND}loop 0'**\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}shuffle`,
+                value: 
+                    `
+                    to set shuffle.\r
+                    example => **'${process.env.PREFIX_COMMAND}shuffle true'**\r
+                    `
+            },
+            {
+                name: `${process.env.PREFIX_COMMAND}volume`,
+                value: 
+                    `
+                    to set volume.\r
+                    example => **'${process.env.PREFIX_COMMAND}volume 50'** or **'${process.env.PREFIX_COMMAND}vol 50'**\r
                     `
             }
         ],
-        footer: { text: "2/3" }
+        footer: { text: "3/4" }
     },
     {
         title: "Slash Command List", 
@@ -147,7 +230,7 @@ const commandText: IHelp[] = [
                     `
             }
         ],
-        footer: { text: "3/3" }
+        footer: { text: "4/4" }
     }
 ]
 
