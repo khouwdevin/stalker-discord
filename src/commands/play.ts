@@ -32,7 +32,7 @@ const command: Command = {
                 `
 
                 const embed = new EmbedBuilder()
-                    .setAuthor({ name: "Player Updated", iconURL: client.user.avatarURL() || undefined })
+                    .setAuthor({ name: "Player Created", iconURL: client.user.avatarURL() || undefined })
                     .setFields({ name: " ", value: playerData })
                     .setFooter({ text: "STALKER MUSIC" })
                     .setColor(Colors.Purple)
