@@ -5,7 +5,7 @@ const command : Command = {
     execute: (message, args) => {
         try {
             const toGreet = message.mentions.members?.first()
-            message.channel.send(`Hello there ${toGreet ? toGreet.user.username : message.member?.user.username}!`)
+            message.channel.send(`Hello there ${toGreet ? toGreet.user : message.member?.user}!`)
         } catch {}
     },
     aliases: ["g"],

@@ -86,7 +86,7 @@ const command : SlashCommand = {
             const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
 
             const embed = new EmbedBuilder()
-                .setAuthor({ name: `${interaction.user.username}` || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
+                .setAuthor({ name: `${interaction.user.displayName}` || 'Default Name', iconURL: interaction.user?.avatarURL() || undefined })
                 .setTitle(`Poll's Subject: ${options[0].value?.toString().toUpperCase()}`)        
                 .setFooter(
                     { text: `poll is still ongoing until minutes ${currentMinutes}!`, iconURL: undefined }
