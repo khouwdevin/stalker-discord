@@ -1,4 +1,4 @@
-import { color, sendMessage, sendTimedMessage } from "../functions";
+import { color, getLoopString, sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { Colors, EmbedBuilder, TextChannel, resolveColor } from "discord.js";
 
@@ -23,9 +23,26 @@ const command: Command = {
                     textChannel: message.channel.id,
                     autoPlay: false
                 })
+
+                const playerData = `
+                    autoplay: **${player.autoPlay}**\r
+                    volume: **${player.volume}**\r
+                    loop: **${getLoopString(player.loop)}**\r
+                    shufle: **${player.shuffled}**
+                `
+
+                const embed = new EmbedBuilder()
+                    .setAuthor({ name: "Player Updated", iconURL: client.user.avatarURL() || undefined })
+                    .setFields({ name: " ", value: playerData })
+                    .setFooter({ text: "STALKER MUSIC" })
+                    .setColor(Colors.Purple)
+
+                message.channel.send({ embeds: [embed] })
             }
 
-            const processMessage = await message.channel.send("Processing...")
+            const embedProcess = new EmbedBuilder()
+                .setAuthor({ name: "Processing...", iconURL: client.user.avatarURL() || undefined })
+            const processMessage = await message.channel.send({ embeds: [embedProcess] })
 
             const res = await client.moon.search(title)
 

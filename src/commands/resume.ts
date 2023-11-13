@@ -6,7 +6,6 @@ const command: Command = {
     name: "resume",
     execute: async (message, args) => {
         try {
-
             if (!message.guildId || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
             if (!message.member.voice.channel || !message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
@@ -19,7 +18,7 @@ const command: Command = {
 
             if (player.paused) {
                 const embed = new EmbedBuilder()
-                    .setFields({ name: " ", value: `${message.member} music is **resumed**!` })
+                    .setAuthor({ name: `${message.member.displayName} music is resumed!`, iconURL: client.user.avatarURL() || undefined })
                 channel.send({ embeds: [embed] })
                 
                 await player.resume()

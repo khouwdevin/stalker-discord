@@ -6,7 +6,6 @@ const command: Command = {
     name: "skip",
     execute: async (message, args) => {
         try {
-
             if (!message.guildId || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
             if (!message.member.voice.channel || !message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
@@ -19,7 +18,7 @@ const command: Command = {
             if (player.queue.size <= 0) return sendMessage(`${message.member} this is the last song, no other song in queue!`, channel as TextChannel)
 
             const embed = new EmbedBuilder()
-                .setFields({ name: " ", value: `${message.member} song is **skipped**!` })
+                .setAuthor({ name: `${message.member.displayName} song is skipped!`, iconURL: client.user.avatarURL() || undefined })
             channel.send({ embeds: [embed] })
 
             await player.skip()
