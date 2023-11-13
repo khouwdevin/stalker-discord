@@ -8,12 +8,15 @@ const event: BotEvent = {
     execute: async (oldstate: VoiceState, newstate: VoiceState) => {
         if (newstate.channelId === null) {
             DetectPresence(oldstate, 0)
-            DetectUser(oldstate, 0)
         }
         else if (oldstate.channelId === null){
             DetectPresence(newstate, 1)
-            DetectUser(newstate, 1)
         }
+        else {
+            DetectPresence(newstate, 2)
+        }
+
+        DetectUser(oldstate, newstate)
     }
 }
 

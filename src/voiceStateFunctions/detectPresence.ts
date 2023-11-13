@@ -14,7 +14,8 @@ const DetectPresence = async (voiceState: VoiceState, option: number) => {
         if (!channel) return notifyToConfigDefaultTextChannel(voiceState.guild.channels)
 
         if (option === 0) sendMessage(`${voiceState.member?.user} left ${voiceState.channel} channel!`, channel as TextChannel)
-        else sendMessage(`${voiceState.member.user} joined ${voiceState.channel} channel!`, channel as TextChannel)
+        else if (option === 1) sendMessage(`${voiceState.member.user} joined ${voiceState.channel} channel!`, channel as TextChannel)
+        else sendMessage(`${voiceState.member.user} moved to ${voiceState.channel} channel!`, channel as TextChannel)
     } catch(e) {console.log(color("text", `❌ Failed to detect presence : ${color("error", e.message)}`))}
 }
 
