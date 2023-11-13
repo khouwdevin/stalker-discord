@@ -17,8 +17,7 @@ const command: Command = {
             if (message.member.voice.channel.id !== player.voiceChannel) return sendTimedMessage(`${message.member} isn't joining in a same voice channel!`, message.channel as TextChannel, 5000)
 
             sendMessage(`${message.member} player stopped!`, message.channel as TextChannel)
-            await player.stop()
-            player.disconnect()
+            await player.stop(true)
         } catch(e) {console.log(color("text", `❌ Failed to stop music : ${color("error", e.message)}`))}
     },
     cooldown: 1,

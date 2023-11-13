@@ -22,8 +22,7 @@ const event: MoonEvent = {
         }
         else {
             if (attemp <= 0) {
-                await player.stop()
-                player.disconnect()
+                await player.stop(true)
 
                 const embed  = new EmbedBuilder()
                 .setAuthor({ name: `Error occured, bot is disconnected!` })

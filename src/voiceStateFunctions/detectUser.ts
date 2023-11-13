@@ -16,8 +16,8 @@ const DetectUser = (voiceState: VoiceState, option: number) => {
         if (option === 0) {
             if (members.size > 2) return
 
-            const timeout = setTimeout(() => {
-                player.disconnect()
+            const timeout = setTimeout( async () => {
+                await player.stop(true)
                 client.timeouts.delete(`player-${player.guildId}`)
             }, 20000)
 

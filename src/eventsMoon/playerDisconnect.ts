@@ -1,7 +1,6 @@
 import { MoonlinkPlayer } from "moonlink.js";
 import { MoonEvent } from "../types";
 import { Client } from "discord.js";
-import { color } from "../functions";
 
 const event: MoonEvent = {
     name: "playerDisconnect",
