@@ -14,12 +14,16 @@ const command: Command = {
 
             const client = message.client
 
-            const player = client.moon.players.create({
-                guildId: message.guild.id,
-                voiceChannel: message.member.voice.channel.id,
-                textChannel: message.channel.id,
-                autoPlay: false
-            })
+            let player = client.moon.players.get(message.guild.id)
+
+            if (!player) {
+                player = client.moon.players.create({
+                    guildId: message.guild.id,
+                    voiceChannel: message.member.voice.channel.id,
+                    textChannel: message.channel.id,
+                    autoPlay: false
+                })
+            }
 
             const processMessage = await message.channel.send("Processing...")
 
@@ -75,7 +79,16 @@ const command: Command = {
                 player.connect({
                     setDeaf: true,
                     setMute: false
-                })
+                })                
+            }
+
+            if (player && (player.voiceChannel !== message.member.voice.channel.id)) {
+                player.setVoiceChannel(message.member.voice.channel.id)
+                
+                player.connect({
+                    setDeaf: true,
+                    setMute: false
+                }) 
             }
 
             if (!player.playing) player.play()
