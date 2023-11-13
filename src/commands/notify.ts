@@ -1,12 +1,13 @@
 import { Command } from "../types";
-import { color, sendTimedMessage, setGuildOption } from "../functions";
-import { TextChannel } from "discord.js";
+import { color, setGuildOption } from "../functions";
+import { EmbedBuilder } from "discord.js";
 
 const command: Command = {
     name: "notify",
     execute: async (message, args) => {
         try {
             const notify = args[1]
+            const channel = message.channel
         
             if (!notify) return message.channel.send("No status is provided")
             if (notify !== "true" && notify !== "false") return message.channel.send("Please provide only true or false!")
@@ -16,7 +17,11 @@ const command: Command = {
 
             setGuildOption(message.guild, "notify", notify === "true")
 
-            sendTimedMessage("Notify successfully changed!", message.channel as TextChannel, 5000)
+            const embed = new EmbedBuilder()
+                .setAuthor({ name: "Stalker Notify", iconURL: message.client.user.avatarURL() || undefined })
+                .setFields({ name: " ", value: `Channel config successfully changed  to **${notify}**!` })
+
+            channel.send({ embeds: [embed] })
         } catch(e) {console.log(color("text", `❌ Failed to configure notify : ${color("error", e.message)}`))}
     },
     cooldown: 5,

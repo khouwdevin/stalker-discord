@@ -1,6 +1,6 @@
 import { Command } from "../types";
 import { color, sendTimedMessage, setGuildOption } from "../functions";
-import { TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 
 const command: Command = {
     name: "channelconfig",
@@ -16,8 +16,15 @@ const command: Command = {
 
             if (!channels.cache.find((c) => c.id === channelid)) return sendTimedMessage("Channel not found! Please provide an existing text channel!", channel as TextChannel, 10000)
 
+            const channelDefault = channels.cache.get(channelid)
+
             setGuildOption(message.guild, "channel", channelid)
-            sendTimedMessage("Channel config successfully changed!", channel as TextChannel, 5000)
+
+            const embed = new EmbedBuilder()
+                .setAuthor({ name: "Channel Config", iconURL: message.client.user.avatarURL() || undefined })
+                .setFields({ name: " ", value: `Channel config successfully changed  to ${channelDefault}!` })
+
+            channel.send({ embeds: [embed] })
         } catch(e) {console.log(color("text", `❌ Failed to save channel config : ${color("error", e.message)}`))}
     },
     cooldown: 5,

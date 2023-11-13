@@ -1,12 +1,13 @@
 import { Command } from "../types";
-import { color, sendTimedMessage, setGuildOption } from "../functions";
-import { TextChannel } from "discord.js";
+import { color, setGuildOption } from "../functions";
+import { EmbedBuilder } from "discord.js";
 
 const command: Command = {
     name: "detectpresence",
     execute: async (message, args) => {
         try {
             const detectpresence = args[1]
+            const channel = message.channel
         
             if (!detectpresence) return message.channel.send("No status is provided!")
             if (detectpresence !== "true" && detectpresence !== "false") return message.channel.send("Please provide only true or false!")
@@ -16,8 +17,11 @@ const command: Command = {
 
             setGuildOption(message.guild, "detectpresence", detectpresence === "true")
             
+            const embed = new EmbedBuilder()
+                embed.setAuthor({ name: "Detect Presence", iconURL: message.client.user.avatarURL() || undefined })
+                embed.setFields({ name: " ", value: `Detect presence successfully changed to **${detectpresence}**!` })
 
-            sendTimedMessage("Detect presence successfully changed!", message.channel as TextChannel, 5000)
+            channel.send({ embeds: [embed] })
         } catch(e) {console.log(color("text", `❌ Failed to configure detect presence : ${color("error", e.message)}`))}
     },
     cooldown: 5,
