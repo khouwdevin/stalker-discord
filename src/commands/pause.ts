@@ -14,6 +14,7 @@ const command: Command = {
             const channel = message.channel
 
             if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, channel as TextChannel, 5000)
+            if (message.member.voice.channelId !== player.voiceChannel) return sendTimedMessage(`${message.member} isn't joining in a same voice channel!`, channel as TextChannel, 5000)
 
             if (!player.paused) {
                 const embed = new EmbedBuilder()

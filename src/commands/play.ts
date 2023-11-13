@@ -9,17 +9,17 @@ const command: Command = {
             const title = args.slice(1, args.length).join(" ")
 
             if (!title) return sendTimedMessage("Please provide a title!", message.channel as TextChannel, 5000)
-            if (!message.guild || !message.guild.id || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
-            if (!message.member.voice.channel || !message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
+            if (!message.guild || !message.guildId || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
+            if (!message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
             const client = message.client
 
-            let player = client.moon.players.get(message.guild.id)
+            let player = client.moon.players.get(message.guildId)
 
             if (!player) {
                 player = client.moon.players.create({
-                    guildId: message.guild.id,
-                    voiceChannel: message.member.voice.channel.id,
+                    guildId: message.guildId,
+                    voiceChannel: message.member.voice.channelId,
                     textChannel: message.channel.id,
                     autoPlay: false
                 })
@@ -100,8 +100,8 @@ const command: Command = {
                 })                
             }
 
-            if (player && (player.voiceChannel !== message.member.voice.channel.id)) {
-                player.setVoiceChannel(message.member.voice.channel.id)
+            if (player && (player.voiceChannel !== message.member.voice.channelId)) {
+                player.setVoiceChannel(message.member.voice.channelId)
                 
                 player.connect({
                     setDeaf: true,
