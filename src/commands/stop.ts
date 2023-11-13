@@ -17,7 +17,7 @@ const command: Command = {
             if (message.member.voice.channel.id !== player.voiceChannel) return sendTimedMessage(`${message.member} isn't joining in a same voice channel!`, channel as TextChannel, 5000)
 
             const embed = new EmbedBuilder()
-                .setAuthor({ name: `${message.member.displayName} music is stopped!`, iconURL: client.user.avatarURL() || undefined })
+                .setAuthor({ name:  "Music is stopped!", iconURL: client.user.avatarURL() || undefined })
             channel.send({ embeds: [embed] })
 
             await player.stop(true)

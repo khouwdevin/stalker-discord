@@ -18,7 +18,7 @@ const command: Command = {
             if (player.queue.size <= 0) return sendMessage(`${message.member} this is the last song, no other song in queue!`, channel as TextChannel)
 
             const embed = new EmbedBuilder()
-                .setAuthor({ name: `${message.member.displayName} song is skipped!`, iconURL: client.user.avatarURL() || undefined })
+                .setAuthor({ name:  "Song is skipped!", iconURL: client.user.avatarURL() || undefined })
             channel.send({ embeds: [embed] })
 
             await player.skip()

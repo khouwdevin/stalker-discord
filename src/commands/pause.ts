@@ -17,7 +17,7 @@ const command: Command = {
 
             if (!player.paused) {
                 const embed = new EmbedBuilder()
-                    .setAuthor({ name: `${message.member.displayName} music is paused!`, iconURL: client.user.avatarURL() || undefined })
+                    .setAuthor({ name:  "Music is paused!", iconURL: client.user.avatarURL() || undefined })
                 channel.send({ embeds: [embed] })
 
                 await player.pause()
