@@ -5,7 +5,6 @@ import { color } from "../functions";
 const command : SlashCommand = {
     command: new SlashCommandBuilder()
         .setName("afk")
-        .setDescription("Tell your friend if you are going to AFK.")
         .addBooleanOption(options => {
             return options
                 .setName("afk")
@@ -19,7 +18,8 @@ const command : SlashCommand = {
                 .setMinValue(1)
                 .setRequired(false)
         })
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ChangeNickname)
+        .setDescription("Tell your friend if you are going to AFK.")
     ,
     execute: async (interaction) => {
         try {
@@ -34,11 +34,11 @@ const command : SlashCommand = {
             const isAFK = options[0].value as boolean
 
             if (isAFK){
-                member.setNickname(`[AFK]${member.nickname}`).catch((e) => console.log(color("text", `❌ Set nickname in AFK : ${color("error", e.message)}`)))
+                member.setNickname(`[AFK]${member.user.displayName}`).catch((e) => console.log(color("text", `❌ Set nickname in AFK : ${color("error", e.message)}`)))
                 await interaction.channel?.send(`${member} is AFK for ${userminutesafk}`)
             }
             else{
-                member.setNickname(member.nickname?.replace("[AFK]", "") || member.nickname).catch((e) => console.log(color("text", `❌ Set nickname in AFK : ${color("error", e.message)}`)))
+                member.setNickname(member.user.displayName.replace("[AFK]", "")).catch((e) => console.log(color("text", `❌ Set nickname in AFK : ${color("error", e.message)}`)))
                 await interaction.channel?.send(`${member} is not AFK`)
             }
 
