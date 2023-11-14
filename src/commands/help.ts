@@ -122,7 +122,7 @@ const commandText: IHelp[] = [
                 name: `${process.env.PREFIX_COMMAND}notify`,
                 value: 
                     `
-                    If you want to disable or enable stalker online notif.\r
+                    If you want to disable or enable Stalker online notif.\r
                     example => **'${process.env.PREFIX_COMMAND}notify false'** or **'${process.env.PREFIX_COMMAND}n false'**
                     `
             }

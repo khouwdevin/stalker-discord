@@ -1,7 +1,7 @@
 import { MoonlinkPlayer } from "moonlink.js";
 import { MoonEvent } from "../types";
 import { EmbedBuilder } from "@discordjs/builders";
-import { ChannelType, Client, Colors } from "discord.js";
+import { Client, Colors } from "discord.js";
 
 const event: MoonEvent = {
     name: "trackStart",
