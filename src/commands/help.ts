@@ -90,8 +90,8 @@ const commandText: IHelp[] = [
                 name: `${process.env.PREFIX_COMMAND}channelconfig`,
                 value: 
                     `
-                    If you want to change Stalker's channel (send the channel id).\r
-                    example => **'${process.env.PREFIX_COMMAND}channelconfig 12344556677'** or **'${process.env.PREFIX_COMMAND}cfg 12344556677'**\r
+                    If you want to change Stalker's default channel text (send the channel id).\r
+                    example => **${process.env.PREFIX_COMMAND}channelconfig 12344556677** or **${process.env.PREFIX_COMMAND}cfg 12344556677**r
                     `
             },
             {
@@ -99,7 +99,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     If you want to check Stalker's config.\r
-                    example => **'${process.env.PREFIX_COMMAND}checkstatus'** or **'${process.env.PREFIX_COMMAND}cs'**\r
+                    example => **${process.env.PREFIX_COMMAND}checkstatus** or **${process.env.PREFIX_COMMAND}cs**\r
                     `
             },
             {
@@ -107,7 +107,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     If you want to disable or enable detect presence.\r
-                    example => **'${process.env.PREFIX_COMMAND}detectpresence false'** or **'${process.env.PREFIX_COMMAND}dp false'**\r
+                    example => **${process.env.PREFIX_COMMAND}detectpresence false** or **${process.env.PREFIX_COMMAND}dp false**\r
                     `
             },
             {
@@ -115,15 +115,15 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     Stalker will greet you!\r
-                    example => **'${process.env.PREFIX_COMMAND}greet'** or **'${process.env.PREFIX_COMMAND}g'**\r
+                    example => **${process.env.PREFIX_COMMAND}greet** or **${process.env.PREFIX_COMMAND}g**\r
                     `
             },
             {
                 name: `${process.env.PREFIX_COMMAND}notify`,
                 value: 
                     `
-                    If you want to disable or enable Stalker online notif.\r
-                    example => **'${process.env.PREFIX_COMMAND}notify false'** or **'${process.env.PREFIX_COMMAND}n false'**
+                    If you want to disable or enable Stalker's online notif.\r
+                    example => **${process.env.PREFIX_COMMAND}notify false** or **${process.env.PREFIX_COMMAND}n false**
                     `
             }
         ],
@@ -137,7 +137,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to play and search song.\r
-                    example => **'${process.env.PREFIX_COMMAND}play drown'** or **'${process.env.PREFIX_COMMAND}p drown'**\r
+                    example => **${process.env.PREFIX_COMMAND}play drown** or **${process.env.PREFIX_COMMAND}p drown**\r
                     `
             },
             {
@@ -145,7 +145,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to pause song.\r
-                    example => **'${process.env.PREFIX_COMMAND}pause'** or **'${process.env.PREFIX_COMMAND}ps'**\r
+                    example => **${process.env.PREFIX_COMMAND}pause** or **${process.env.PREFIX_COMMAND}ps**\r
                     `
             },
             {
@@ -153,7 +153,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to resume song.\r
-                    example => **'${process.env.PREFIX_COMMAND}resume'** or **'${process.env.PREFIX_COMMAND}rsm'**\r
+                    example => **${process.env.PREFIX_COMMAND}resume** or **${process.env.PREFIX_COMMAND}rsm**\r
                     `
             },
             {
@@ -161,7 +161,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to skip song.\r
-                    example => **'${process.env.PREFIX_COMMAND}skip'** or **'${process.env.PREFIX_COMMAND}s'**\r
+                    example => **${process.env.PREFIX_COMMAND}skip** or **${process.env.PREFIX_COMMAND}s**\r
                     `
             },
             {
@@ -169,7 +169,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to stop player.\r
-                    example => **'${process.env.PREFIX_COMMAND}stop'** or **'${process.env.PREFIX_COMMAND}stp'**\r
+                    example => **${process.env.PREFIX_COMMAND}stop** or **${process.env.PREFIX_COMMAND}stp**\r
                     `
             },
         ],
@@ -183,7 +183,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to set autoplay.\r
-                    example => **'${process.env.PREFIX_COMMAND}autoplay true'** or **'${process.env.PREFIX_COMMAND}ap true'**\r
+                    example => **${process.env.PREFIX_COMMAND}autoplay true** or **${process.env.PREFIX_COMMAND}ap true**\r
                     `
             },
             {
@@ -191,7 +191,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to set loop (0: no loop, 1: song loop, 2: playlist loop).\r
-                    example => **'${process.env.PREFIX_COMMAND}loop 0'**\r
+                    example => **${process.env.PREFIX_COMMAND}loop 0**\r
                     `
             },
             {
@@ -199,7 +199,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to set shuffle.\r
-                    example => **'${process.env.PREFIX_COMMAND}shuffle true'**\r
+                    example => **${process.env.PREFIX_COMMAND}shuffle true**\r
                     `
             },
             {
@@ -207,7 +207,7 @@ const commandText: IHelp[] = [
                 value: 
                     `
                     to set volume.\r
-                    example => **'${process.env.PREFIX_COMMAND}volume 50'** or **'${process.env.PREFIX_COMMAND}vol 50'**\r
+                    example => **${process.env.PREFIX_COMMAND}volume 50** or **${process.env.PREFIX_COMMAND}vol 50**\r
                     `
             }
         ],
