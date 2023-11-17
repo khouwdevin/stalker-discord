@@ -14,10 +14,10 @@ const event: MoonEvent = {
 
         channel.send({ embeds: [embed] })
 
-        const attemp = client.attemps.get(`attemp-${player.guildId}`)
+        const attemp = client.attempts.get(player.guildId)
 
         if (!attemp) {
-            client.attemps.set(`attemp-${player.guildId}`, 3)
+            client.attempts.set(player.guildId, 3)
             await player.restart()
         }
         else {
@@ -30,7 +30,7 @@ const event: MoonEvent = {
                 channel.send({ embeds: [embed] })
             }
             else {
-                client.attemps.set(`attemp-${player.guildId}`, attemp - 1)
+                client.attempts.set(player.guildId, attemp - 1)
                 await player.restart()
             }
         }

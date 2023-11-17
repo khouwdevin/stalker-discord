@@ -82,7 +82,7 @@ declare module "discord.js" {
         commands: Collection<string, Command>,
         cooldowns: Collection<string, number>,
         timeouts: Collection<string, NodeJS.Timeout>,
-        attemps: Collection<string, number>,
+        attempts: Collection<string, number>,
         moon: MoonlinkManager
     }
 }

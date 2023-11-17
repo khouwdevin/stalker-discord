@@ -27,7 +27,7 @@ const command: Command = {
                 const playerData = `
                     autoplay: **${player.autoPlay}**\r
                     volume: **${player.volume}**\r
-                    loop: **${getLoopString(player.loop)}**\r
+                    loop: **${getLoopString(2)}**\r
                     shufle: **${player.shuffled}**
                 `
 
@@ -38,6 +38,7 @@ const command: Command = {
                     .setColor("Purple")
 
                 message.channel.send({ embeds: [embed] })
+                client.attempts.set(`${player.guildId}`, 3)
             }
 
             const embedProcess = new EmbedBuilder()
@@ -110,8 +111,6 @@ const command: Command = {
             }
 
             if (!player.playing) player.play()
-            
-            client.attemps.set(`${player.guildId}`, 3)
         } catch(e) {console.log(color("text", `❌ Failed to play music : ${color("error", e.message)}`))}
     },
     cooldown: 1,

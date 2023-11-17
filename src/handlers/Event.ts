@@ -33,7 +33,7 @@ module.exports = (client: Client) => {
         else if (event.name === "nodeClose") client.moon.on("nodeClose", (node, code, reason) => event.execute(node, code, reason))
         else if (event.name === "trackStart" || event.name === "trackStuck" || event.name === "trackError") client.moon.on(event.name, (player, track) => event.execute(client, player, track))
         else if (event.name === "queueEnd") client.moon.on(event.name, (player, track) => event.execute(client, player, track))
-        else if (event.name === "playerDisconnect") client.moon.on("playerDisconnect", (player) => event.execute(client, player))
+        else if (event.name === "socketClosed") client.moon.on("socketClosed", (player, track)=> event.execute(client, player, track))
         
         console.log(color("text", `🌠 Successfully loaded moon event ${color("variable", event.name)}`))
     })

@@ -1,4 +1,4 @@
-import { color, getLoopString, getPlayerData, sendTimedMessage } from "../functions";
+import { color, getPlayerData, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { EmbedBuilder, TextChannel } from "discord.js";
 
@@ -19,9 +19,10 @@ const command: Command = {
             if (!player) return sendTimedMessage(`${message.member} Stalker music is not active!`, channel as TextChannel, 5000)
             if (message.member.voice.channelId !== player.voiceChannel) return sendTimedMessage(`${message.member} isn't joining in a same voice channel!`, channel as TextChannel, 5000)
 
-            player.setAutoPlay(autoplay === "true" ? true : false)
+            const autoPlay = autoplay === "true" ? true : false
+            player.setAutoPlay(autoPlay)
 
-            const playerData = getPlayerData(player)
+            const playerData = getPlayerData(autoPlay, player.volume, player.loop, player.shuffled)
 
             const embed = new EmbedBuilder()
                 .setAuthor({ name: "Player Updated", iconURL: client.user.avatarURL() || undefined })

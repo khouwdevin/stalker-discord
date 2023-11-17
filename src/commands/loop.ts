@@ -1,4 +1,4 @@
-import { color, getLoopString, getPlayerData, sendTimedMessage } from "../functions";
+import { color, getPlayerData, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { EmbedBuilder, TextChannel } from "discord.js";
 
@@ -8,7 +8,7 @@ const command: Command = {
         try {
             const loop = parseInt(args[1])
 
-            if (!loop || (loop !== 0 && loop !== 1 && loop !== 2)) return sendTimedMessage("Loop configuration is not valid!", message.channel as TextChannel, 5000)
+            if (loop !== 0 && loop !== 1 && loop !== 2) return sendTimedMessage("Loop configuration is not valid!", message.channel as TextChannel, 5000)
             if (!message.guildId || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
             if (!message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
@@ -21,7 +21,7 @@ const command: Command = {
 
             player.setLoop(loop)
 
-            const playerData = getPlayerData(player)
+            const playerData = getPlayerData(player.autoPlay, player.volume, loop, player.shuffled)
 
             const embed = new EmbedBuilder()
                 .setAuthor({ name: "Player Updated", iconURL: client.user.avatarURL() || undefined })

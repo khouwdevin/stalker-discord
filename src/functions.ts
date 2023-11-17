@@ -249,7 +249,7 @@ export const getCode = (text: string): string => {
     return codestring.join("")
 }
 
-export const getLoopString = (loopState: number | null) => {
+export const getLoopString = (loopState: number) => {
     let loop = "no loop"
 
     if(loopState === 0) loop = "no loop"
@@ -259,11 +259,11 @@ export const getLoopString = (loopState: number | null) => {
     return loop
 }
 
-export const getPlayerData = (player: MoonlinkPlayer) => {
+export const getPlayerData = (autoplay: boolean | null, volume: number, loop: number | null, shuffle: boolean | null) => {
     return `
-        autoplay: **${player.autoPlay}**\r
-        volume: **${player.volume}**\r
-        loop type: **${getLoopString(player.loop)}**\r
-        shufle: **${player.shuffled}**
+        autoplay: **${autoplay ? autoplay : false}**\r
+        volume: **${volume}**\r
+        loop type: **${getLoopString(loop !== null ? loop : 2)}**\r
+        shufle: **${shuffle ? shuffle : false}**
     `   
 }
