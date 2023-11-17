@@ -9,7 +9,7 @@ const command: Command = {
             const shuffle = args[1]
 
             if (!shuffle || (shuffle !== "true" && shuffle !== "false")) return sendTimedMessage("Shuffle configuration is not valid!", message.channel as TextChannel, 5000)
-            if (!message.guildId || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
+            if (!message.guildId || !message.member) return sendTimedMessage("An error occurred!", message.channel as TextChannel, 5000)
             if (!message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
             const client = message.client

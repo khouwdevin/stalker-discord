@@ -6,7 +6,7 @@ const command: Command = {
     name: "skip",
     execute: async (message, args) => {
         try {
-            if (!message.guildId || !message.member) return sendTimedMessage("An error occured!", message.channel as TextChannel, 5000)
+            if (!message.guildId || !message.member) return sendTimedMessage("An error occurred!", message.channel as TextChannel, 5000)
             if (!message.member.voice.channelId) return sendTimedMessage(`${message.member} is not joining any channel!`, message.channel as TextChannel, 5000)
 
             const client = message.client

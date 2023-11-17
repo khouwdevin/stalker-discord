@@ -325,7 +325,7 @@ const command : SlashCommand = {
                 }
             }
 
-            await interaction.editReply("Some error occured!")
+            await interaction.editReply("Some error occurred!")
         } catch(e) {console.log(color("text", `❌ Failed to vote in poll slash command : ${color("error", e.message)}`))}
     },
     cooldown: 2

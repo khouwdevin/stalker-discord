@@ -12,7 +12,7 @@ const command: Command = {
             if (!detectpresence) return message.channel.send("No status is provided!")
             if (detectpresence !== "true" && detectpresence !== "false") return message.channel.send("Please provide only true or false!")
             if (!message.guild) {
-                return message.channel.send("Some error is occured!")
+                return message.channel.send("Some error is occurred!")
             }
 
             setGuildOption(message.guild, "detectpresence", detectpresence === "true")

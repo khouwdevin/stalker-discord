@@ -9,7 +9,7 @@ const command: Command = {
             const channelid = args[1]
             const channel = message.channel
 
-            if (!message.guild) return sendTimedMessage("Some error is occured!", channel as TextChannel, 5000)
+            if (!message.guild) return sendTimedMessage("Some error is occurred!", channel as TextChannel, 5000)
             if (!channelid) return sendTimedMessage("No channel is provided!", channel as TextChannel, 10000)
             
             const channels = message.guild.channels
