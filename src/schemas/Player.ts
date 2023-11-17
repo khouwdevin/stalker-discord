@@ -5,7 +5,7 @@ const PlayerSchema = new Schema<IPlayer>({
     guildId: { required:true, type: String },
     options: {
         autoPlay: { required: true, type: Boolean, default: false },
-        loop: { required: true, type: Boolean, default: false },
+        loop: { required: true, type: Number, default: 2 },
         volume: { required: true, type: Number, default: 80 }
     }
 })
