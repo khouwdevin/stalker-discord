@@ -1,4 +1,4 @@
-import { color, getLoopString, sendMessage, sendTimedMessage } from "../functions";
+import { color, getLoopString, getPlayerDB, sendMessage, sendTimedMessage } from "../functions";
 import { Command } from "../types";
 import { EmbedBuilder, TextChannel, resolveColor } from "discord.js";
 
@@ -17,17 +17,21 @@ const command: Command = {
             let player = client.moon.players.get(message.guildId)
 
             if (!player) {
+                const playerOption = await getPlayerDB(message.guildId)
                 player = client.moon.players.create({
                     guildId: message.guildId,
                     voiceChannel: message.member.voice.channelId,
                     textChannel: message.channel.id,
-                    autoPlay: false
+                    autoPlay: Boolean(playerOption.autoPlay),
+                    volume: Number(playerOption.volume)
                 })
+
+                player.setLoop(Number(playerOption.loop))
 
                 const playerData = `
                     autoplay: **${player.autoPlay}**\r
                     volume: **${player.volume}**\r
-                    loop: **${getLoopString(2)}**\r
+                    loop: **${getLoopString(Number(playerOption.loop))}**\r
                     shufle: **${player.shuffled}**
                 `
 

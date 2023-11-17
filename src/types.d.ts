@@ -26,6 +26,12 @@ interface GuildOptions {
     channel: String
 }
 
+interface PlayerOptions {
+    autoPlay: Boolean,
+    loop: Number,
+    volume: Number
+}
+
 export interface IGuild extends mongoose.Document {
     guildID: string,
     options: GuildOptions
@@ -39,7 +45,14 @@ export interface IPoll extends mongoose.Document {
     usersID: string[]
 }
 
+export interface IPlayer extends mongoose.Document {
+    guildId: string,
+    options: PlayerOptions
+}
+
 export type GuildOption = keyof GuildOptions
+export type PlayerOption = keyof PlayerOptions
+
 export interface BotEvent {
     name: string,
     once?: boolean | false,

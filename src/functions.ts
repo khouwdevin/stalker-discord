@@ -1,9 +1,9 @@
 import chalk from "chalk"
 import { ChannelManager, ChannelType, Client, Guild, GuildMember, Message, PermissionFlagsBits, PermissionResolvable, TextChannel } from "discord.js"
 import GuildDB from "./schemas/Guild"
-import { GuildOption } from "./types"
+import PlayerDB from "./schemas/Player"
+import { GuildOption, PlayerOptions } from "./types"
 import mongoose from "mongoose";
-import { MoonlinkPlayer } from "moonlink.js";
 
 type colorType = "text" | "variable" | "error"
 
@@ -164,7 +164,7 @@ export const setGuildOption = async (guild: Guild, option: GuildOption, value: a
     let foundGuild = await GuildDB.findOne({ guildID: guild.id })
     if (!foundGuild) return null;
     foundGuild.options[option] = value
-    foundGuild.save()
+    await foundGuild.save()
 }
 
 export const getAllGuild = async () => {
@@ -247,6 +247,29 @@ export const getCode = (text: string): string => {
     }
 
     return codestring.join("")
+}
+
+export const getPlayerDB = async (guildId: string): Promise<PlayerOptions> => {
+    if (mongoose.connection.readyState === 0) {
+        console.log(color("text", `❌ Database ${color("error", "not connected")}`))
+        return { autoPlay: true, loop: 2, volume: 80 }
+    }
+    const foundPlayer = await PlayerDB.findOne({ guildID: guildId })
+    if (!foundPlayer) {
+        const newPlayer = new PlayerDB({ guildId: guildId })
+        await newPlayer.save()
+        return newPlayer.options
+    }
+    return foundPlayer.options
+}
+
+export const setPlayerDB = async (guildId: string, value: PlayerOptions) => {
+    if (mongoose.connection.readyState === 0) return console.log(color("text", `❌ Database ${color("error", "not connected")}`))
+    let foundPlayer = await PlayerDB.findOne({ guildID: guildId })
+    if (!foundPlayer) return
+
+    foundPlayer.options = value
+    await foundPlayer.save()
 }
 
 export const getLoopString = (loopState: number) => {
