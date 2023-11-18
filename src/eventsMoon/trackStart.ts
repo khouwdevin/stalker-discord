@@ -13,7 +13,7 @@ const event: MoonEvent = {
 
         const embed  = new EmbedBuilder()
             .setAuthor({ name: `Now playing [${track.title}]`, iconURL: client.user?.avatarURL() || undefined })
-            .setColor("Red")
+            .setColor("Green")
 
         channel.send({ embeds: [embed] })
     }
