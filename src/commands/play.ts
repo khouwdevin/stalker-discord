@@ -88,6 +88,14 @@ const command: Command = {
                         .setColor("Yellow")
                     message.channel.send({ embeds: [embedSong] })
 
+                    if (player.loop && player.loop === 1) {
+                        const embedPlay  = new EmbedBuilder()
+                        .setAuthor({ name: `Now playing [${res.tracks[0].title}]`, iconURL: client.user?.avatarURL() || undefined })
+                        .setColor("Green")
+
+                        message.channel.send({ embeds: [embedPlay] })
+                    }
+
                     break
             }
 
