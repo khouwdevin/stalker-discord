@@ -47,6 +47,10 @@ const command: Command = {
                 message.channel.send({ embeds: [embed] })
                 client.attempts.set(`${player.guildId}`, 3)
             }
+            else {
+                client.attempts.set(`${player.guildId}`, 3)
+                loopPlayer = player.loop ?? 2
+            }
 
             const embedProcess = new EmbedBuilder()
                 .setAuthor({ name: "Processing...", iconURL: client.user.avatarURL() || undefined })
