@@ -7,6 +7,7 @@ const command: Command = {
     execute: async (message, args) => {
         try {
             const title = args.slice(1, args.length).join(" ")
+            let loopPlayer = -1
 
             if (!title) return sendTimedMessage("Please provide a title!", message.channel as TextChannel, 5000)
             if (!message.guild || !message.guildId || !message.member) return sendTimedMessage("An error occurred!", message.channel as TextChannel, 5000)
@@ -17,21 +18,23 @@ const command: Command = {
             let player = client.moon.players.get(message.guildId)
 
             if (!player) {
-                const playerOption = await getPlayerDB(message.guildId)
+                const playerOptions = await getPlayerDB(message.guildId)
+                loopPlayer = Number(playerOptions.loop)
+
                 player = client.moon.players.create({
                     guildId: message.guildId,
                     voiceChannel: message.member.voice.channelId,
                     textChannel: message.channel.id,
-                    autoPlay: Boolean(playerOption.autoPlay),
-                    volume: Number(playerOption.volume)
+                    autoPlay: Boolean(playerOptions.autoPlay),
+                    volume: Number(playerOptions.volume)
                 })
 
-                player.setLoop(Number(playerOption.loop))
+                player.setLoop(Number(playerOptions.loop))
 
                 const playerData = `
                     autoplay: **${player.autoPlay}**\r
                     volume: **${player.volume}**\r
-                    loop: **${getLoopString(Number(playerOption.loop))}**\r
+                    loop: **${getLoopString(Number(playerOptions.loop))}**\r
                     shufle: **${player.shuffled}**
                 `
 
@@ -88,10 +91,10 @@ const command: Command = {
                         .setColor("Yellow")
                     message.channel.send({ embeds: [embedSong] })
 
-                    if (player.loop && player.loop === 1) {
+                    if (loopPlayer === 1) {
                         const embedPlay  = new EmbedBuilder()
-                        .setAuthor({ name: `Now playing [${res.tracks[0].title}]`, iconURL: client.user?.avatarURL() || undefined })
-                        .setColor("Green")
+                            .setAuthor({ name: `Now in loop playing [${res.tracks[0].title}]`, iconURL: client.user?.avatarURL() || undefined })
+                            .setColor("Green")
 
                         message.channel.send({ embeds: [embedPlay] })
                     }
