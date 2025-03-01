@@ -83,7 +83,7 @@ const command: Command = {
         embeds: [embedProcess],
       })
 
-      const res = await client.moon.search(title)
+      const res = await client.moon.search({ query: title })
 
       switch (res.loadType) {
         case 'error':
@@ -167,8 +167,8 @@ const command: Command = {
         })
       }
 
-      if (player && player.voiceChannel !== message.member.voice.channelId) {
-        player.setVoiceChannel(message.member.voice.channelId)
+      if (player && player.voiceChannelId !== message.member.voice.channelId) {
+        player.setVoiceChannelId(message.member.voice.channelId)
 
         player.connect({
           setDeaf: true,
@@ -176,9 +176,8 @@ const command: Command = {
         })
       }
 
-      if (!player.playing) player.play()
+      if (!player.playing) await player.play()
     } catch (e) {
-      console.log(e)
       console.log(
         color('text', `❌ Failed to play music : ${color('error', e.message)}`)
       )

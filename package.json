@@ -19,7 +19,7 @@
     "command-line-args": "^5.2.1",
     "discord.js": "^14.14.1",
     "dotenv": "^16.0.2",
-    "mongoose": "^6.5.4",
+    "mongoose": "^8.11.0",
     "moonlink.js": "^4.4.14",
     "node-fetch": "^3.3.2"
   },

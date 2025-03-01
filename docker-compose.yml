@@ -9,8 +9,6 @@ services:
     env_file:
       - .env
     restart: unless-stopped
-    networks:
-      - stalker-bot
 
   mongo:
     image: mongo:latest
@@ -32,9 +30,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./application.yml:/opt/Lavalink/application.yml
-    #   - ./plugins/:/opt/Lavalink/plugins/
+      - ./plugins/:/opt/Lavalink/plugins/
     ports:
-      - '2333:2333'
+      - '443:443'
     networks:
       - stalker-bot
 
