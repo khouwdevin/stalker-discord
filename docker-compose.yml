@@ -1,5 +1,6 @@
 services:
   stalker-bot:
+    container_name: stalker-bot
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,6 +15,7 @@ services:
 
   mongo:
     image: mongo:latest
+    container_name: mongo
     ports:
       - '27017:27017'
     volumes:
@@ -30,6 +32,8 @@ services:
     image: ghcr.io/lavalink-devs/lavalink:latest
     container_name: lavalink
     restart: unless-stopped
+    env_file:
+      - .env
     volumes:
       - ./application.yml:/opt/Lavalink/application.yml
       - ./plugins/:/opt/Lavalink/plugins/
