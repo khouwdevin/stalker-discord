@@ -4,40 +4,53 @@ import { Client, EmbedBuilder } from "discord.js";
 import { color } from "../functions";
 
 const event: MoonEvent = {
-    name: "trackError",
-    execute: async (client: Client, player: MoonlinkPlayer, track: any) => {
-        const channel = await client.channels.fetch(player.textChannel).catch(() => {return console.log(color("text", `❌ Error fetch channel on ${color("variable", "trackError")}`))})
-        
-        if (!channel || !channel.isTextBased()) return
+  name: "trackError",
+  execute: async (client: Client, player: MoonlinkPlayer, track: any) => {
+    const channel = await client.channels
+      .fetch(player.textChannel)
+      .catch(() => {
+        return console.log(
+          color(
+            "text",
+            `❌ Error fetch channel on ${color("variable", "trackError")}`,
+          ),
+        );
+      });
 
-        const embed  = new EmbedBuilder()
-            .setAuthor({ name: `Error occurred, restarting ${track.title}`, iconURL: client.user?.avatarURL() || undefined })
-            .setColor("Red")
+    if (!channel || !channel.isTextBased()) return;
 
-        channel.send({ embeds: [embed] })
+    const embed = new EmbedBuilder()
+      .setAuthor({
+        name: `Error occurred, restarting ${track.title}`,
+        iconURL: client.user?.avatarURL() || undefined,
+      })
+      .setColor("Red");
 
-        const attemp = client.attempts.get(player.guildId)
+    channel.send({ embeds: [embed] });
 
-        if (!attemp) {
-            client.attempts.set(player.guildId, 3)
-            await player.restart()
-        }
-        else {
-            if (attemp <= 0) {
-                await player.stop(true)
+    const attemp = client.attempts.get(player.guildId);
 
-                const embed  = new EmbedBuilder()
-                    .setAuthor({ name: `Error occurred, bot is disconnected!`, iconURL: client.user?.avatarURL() || undefined })
-                    .setColor("Red")
-    
-                channel.send({ embeds: [embed] })
-            }
-            else {
-                client.attempts.set(player.guildId, attemp - 1)
-                await player.restart()
-            }
-        }
+    if (!attemp) {
+      client.attempts.set(player.guildId, 3);
+      await player.restart();
+    } else {
+      if (attemp <= 0) {
+        await player.stop(true);
+
+        const embed = new EmbedBuilder()
+          .setAuthor({
+            name: `Error occurred, bot is disconnected!`,
+            iconURL: client.user?.avatarURL() || undefined,
+          })
+          .setColor("Red");
+
+        channel.send({ embeds: [embed] });
+      } else {
+        client.attempts.set(player.guildId, attemp - 1);
+        await player.restart();
+      }
     }
-}
+  },
+};
 
 export default event;
