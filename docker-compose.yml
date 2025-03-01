@@ -9,6 +9,8 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    networks:
+      - stalker-bot
 
   mongo:
     image: mongo:latest
