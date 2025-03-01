@@ -1,0 +1,47 @@
+services:
+  stalker-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+      - lavalink
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - stalker-bot
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: stalker-bot
+      MONGO_INITDB_DATABASE: stalker
+    networks:
+      - stalker-bot
+
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:latest
+    container_name: lavalink
+    restart: unless-stopped
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml
+    #   - ./plugins/:/opt/Lavalink/plugins/
+    ports:
+      - '2333:2333'
+    networks:
+      - stalker-bot
+
+volumes:
+  mongo_data:
+  lavalink_plugins:
+
+networks:
+  stalker-bot:
+    name: stalker-bot

@@ -1,28 +1,40 @@
-import mongoose from "mongoose";
-import { color } from "../functions";
+import mongoose from 'mongoose'
+import { color } from '../functions'
 
 module.exports = () => {
-  const MONGO_URI = process.env.MONGO_URI;
-  if (!MONGO_URI)
+  initalizeMongoDB()
+}
+
+const initalizeMongoDB = () => {
+  if (!process.env.MONGO_URI)
     return console.log(
-      color("text", `🍃 Mongo URI not found, ${color("error", "skipping")}`),
-    );
+      color('text', `🍃 Mongo URI not found, ${color('error', 'skipping')}`)
+    )
   mongoose
-    .connect(`${MONGO_URI}@${process.env.MONGO_DATABASE_NAME}`)
+    .connect(`${process.env.MONGO_URI}@${process.env.MONGO_DATABASE_NAME}`)
     .then(() => {
       console.log(
         color(
-          "text",
-          `🍃 MongoDB connection has been ${color("variable", "established")}`,
-        ),
-      );
+          'text',
+          `🍃 MongoDB connection has been ${color('variable', 'established')}`
+        )
+      )
     })
-    .catch(() =>
+    .catch(() => {
       console.log(
         color(
-          "text",
-          `🍃 MongoDB connection has been ${color("error", "failed")}`,
-        ),
-      ),
-    );
-};
+          'text',
+          `🍃 MongoDB connection has been ${color('error', 'failed')}`
+        )
+      )
+      setTimeout(() => {
+        console.log(
+          color(
+            'text',
+            `🍃 Try ${color('variable', 'reconnecting')} to MongoDB`
+          )
+        )
+        initalizeMongoDB()
+      }, 5000)
+    })
+}

@@ -1,14 +1,14 @@
-import { MoonlinkNode } from "moonlink.js";
-import { MoonEvent } from "../types";
-import { color } from "../functions";
+import { Node } from 'moonlink.js'
+import { MoonEvent } from '../types'
+import { color } from '../functions'
 
 const event: MoonEvent = {
-  name: "nodeReconnect",
-  execute: (node: MoonlinkNode) => {
+  name: 'nodeReconnect',
+  execute: (node: Node) => {
     console.log(
-      color("text", `🔃 Reconnecting to ${color("variable", node.host)}`),
-    );
+      color('text', `🔃 Reconnecting to ${color('variable', node.host)}`)
+    )
   },
-};
+}
 
-export default event;
+export default event

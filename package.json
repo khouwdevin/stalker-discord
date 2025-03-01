@@ -1,34 +1,34 @@
 {
-    "name": "stalker-bot",
-    "version": "1.2.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "start:production": "node build/index.js --env=production",
-        "start:dev": "cls && node build/index.js --env=development",
-        "dev": "start tsc -w && start nodemon build/index.js",
-        "watch": "tsc -w",
-        "build": "tsc"
-    },
-    "keywords": [],
-    "author": "khouwdevin",
-    "license": "MIT",
-    "dependencies": {
-        "@types/node": "^20.9.0",
-        "chalk": "^4.1.2",
-        "command-line-args": "^5.2.1",
-        "discord.js": "^14.14.1",
-        "dotenv": "^16.0.2",
-        "mongoose": "^6.5.4",
-        "moonlink.js": "^2.14.90",
-        "node-fetch": "^3.3.2"
-    },
-    "devDependencies": {
-        "@types/command-line-args": "^5.2.2",
-        "nodemon": "^3.0.1",
-        "typescript": "^5.2.2"
-    },
-    "overrides": {
-        "discord-api-types": "0.37.20"
-    }
+  "name": "stalker-bot",
+  "version": "1.2.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:production": "node build/index.js --env=production",
+    "start:dev": "cls && node build/index.js --env=development",
+    "dev": "start tsc -w && start nodemon build/index.js",
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "khouwdevin",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.9.0",
+    "chalk": "^4.1.2",
+    "command-line-args": "^5.2.1",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.0.2",
+    "mongoose": "^6.5.4",
+    "moonlink.js": "^4.4.14",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/command-line-args": "^5.2.2",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.2.2"
+  },
+  "overrides": {
+    "discord-api-types": "0.37.20"
+  }
 }

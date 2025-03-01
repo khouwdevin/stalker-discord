@@ -1,8 +1,8 @@
-import { Client, GatewayIntentBits, Collection } from "discord.js";
-import { Command, SlashCommand } from "./types";
-import { readdirSync } from "fs";
-import { join } from "path";
-import { MoonlinkManager } from "moonlink.js";
+import { Client, GatewayIntentBits, Collection } from 'discord.js'
+import { Command, SlashCommand } from './types'
+import { readdirSync } from 'fs'
+import { join } from 'path'
+import { Manager } from 'moonlink.js'
 
 const {
   Guilds,
@@ -13,7 +13,7 @@ const {
   GuildMembers,
   GuildVoiceStates,
   GuildScheduledEvents,
-} = GatewayIntentBits;
+} = GatewayIntentBits
 const client = new Client({
   intents: [
     Guilds,
@@ -25,46 +25,42 @@ const client = new Client({
     GuildVoiceStates,
     GuildScheduledEvents,
   ],
-});
+})
 
-client.slashCommands = new Collection<string, SlashCommand>();
-client.commands = new Collection<string, Command>();
-client.cooldowns = new Collection<string, number>();
-client.timeouts = new Collection<string, NodeJS.Timeout>();
-client.attempts = new Collection<string, number>();
+client.slashCommands = new Collection<string, SlashCommand>()
+client.commands = new Collection<string, Command>()
+client.cooldowns = new Collection<string, number>()
+client.timeouts = new Collection<string, NodeJS.Timeout>()
+client.attempts = new Collection<string, number>()
 
-client.moon = new MoonlinkManager(
-  [
+client.moon = new Manager({
+  nodes: [
     {
       host: `${process.env.LAVALINK_HOST}`,
       port: parseInt(process.env.LAVALINK_PORT),
-      secure: true,
+      secure: false,
       password: `${process.env.LAVALINK_PASSWORD}`,
       identifier: `${process.env.LAVALINK_IDENTIFIER}`,
+      retryAmount: 10,
+      retryDelay: 10000,
     },
   ],
-  {
-    clientName: "stalkerbot",
-    retryTime: 10000,
-    retryAmount: 100,
-    spotify: {
-      clientId: process.env.SPOTIFY_CLIENTID,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    },
-    sortNode: "memory",
+  options: {
+    clientName: 'stalkerbot',
+    sortTypeNode: 'memory',
   },
-  (guildId: string, sPayload: string) => {
-    if (!guildId || !client.guilds || !client.guilds.cache) return;
+  sendPayload: (guildId: string, sPayload: string) => {
+    if (!guildId || !client.guilds || !client.guilds.cache) return
 
-    const guild = client.guilds.cache.get(guildId);
-    if (guild) guild.shard.send(JSON.parse(sPayload));
+    const guild = client.guilds.cache.get(guildId)
+    if (guild) guild.shard.send(JSON.parse(sPayload))
   },
-);
+})
 
-const handlersDir = join(__dirname, "./handlers");
+const handlersDir = join(__dirname, './handlers')
 readdirSync(handlersDir).forEach((handler) => {
-  if (!handler.endsWith(".js")) return;
-  require(`${handlersDir}/${handler}`)(client);
-});
+  if (!handler.endsWith('.js')) return
+  require(`${handlersDir}/${handler}`)(client)
+})
 
-client.login(process.env.TOKEN);
+client.login(process.env.TOKEN)

@@ -1,0 +1,93 @@
+# plugins:
+#   lavasrc:
+#     providers:
+#     sources:
+#       spotify: true # Enable Spotify source
+#       applemusic: false # Enable Apple Music source
+#       deezer: false # Enable Deezer source
+#       yandexmusic: false # Enable Yandex Music source
+#       flowerytts: false # Enable Flowery TTS source
+#       youtube: true # Enable YouTube search source (https://github.com/topi314/LavaSearch)
+#     spotify:
+#       # https://developer.spotify.com/documentation/web-api/
+#       clientId: "c1a26ef31a3840268b758a1841249fe5"
+#       clientSecret: "2a88e56c84d04b47b88d96c2a2d6d778"
+#       countryCode: "ID"
+#       playlistLoadLimit: 6
+#       albumLoadLimit: 6
+#     applemusic:
+#       countryCode: "US" # the country code you want to use for filtering the artists top tracks and language. See https:#en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+#       mediaAPIToken: "your apple music api token" # apple music api token
+#       # or specify an apple music key
+#       keyID: "your key id"
+#       teamID: "your team id"
+#       musicKitKey: |
+#         -----BEGIN PRIVATE KEY-----
+#         your key
+#         -----END PRIVATE KEY-----      #
+#       playlistLoadLimit: 6 # The number of pages at 300 tracks each
+#       albumLoadLimit: 6 # The number of pages at 300 tracks each
+#     deezer:
+#       masterDecryptionKey: "your master decryption key" # the master key used for decrypting the deezer tracks. (yes this is not here you need to get it from somewhere else)
+#     yandexmusic:
+#       accessToken: "your access token" # the token used for accessing the yandex music api. See https:#github.com/TopiSenpai/LavaSrc#yandex-music
+#     flowerytts:
+#       voice: "default voice" # (case-sensitive) get default voice from here https:#api.flowery.pw/v1/tts/voices
+#       translate: false # whether to translate the text to the native language of voice
+#       silence: 0 # the silence parameter is in milliseconds. Range is 0 to 10000. The default is 0.
+#       speed: 1.0 # the speed parameter is a float between 0.5 and 10. The default is 1.0. (0.5 is half speed, 2.0 is double speed, etc.)
+#       audioFormat: "mp3" # supported formats are: mp3, ogg_opus, ogg_vorbis, aac, wav, and flac. Default format is mp3
+server:
+  port: 2333
+  address: 0.0.0.0
+lavalink:
+  # plugins:
+  # - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:3.29"
+  #   repository: "https://maven.topi.wtf/releases"
+  # - dependency: "com.github.topi314.lavasearch:lavasearch-plugin:1.0.0-beta2"
+  #   repository: "https://maven.topi.wtf/releases"
+  server:
+    password: wlseal76ieua51bkge5ykdujijkei1op
+    playerUpdateInterval: 1
+    koe:
+      useEpoll: true
+      highPacketPriority: true
+      bufferDurationMs: 400
+      byteBufAllocator: 'default'
+    sources:
+      youtube: true
+      bandcamp: true
+      soundcloud: true
+      twitch: true
+      vimeo: true
+      mixer: true
+      http: true
+      local: false
+    lavaplayer:
+      nonAllocating: false # Whether to use the non-allocating frame buffer.
+      frameBufferDuration: 5000 # The frame buffer duration, in milliseconds
+      youtubePlaylistLoadLimit: 6 # Number of pages at 100 each
+      gc-warnings: true
+      youtubeSearchEnabled: true
+      soundcloudSearchEnabled: true
+    youtubeConfig: # Required for avoiding all age restrictions by YouTube, some restricted videos still can be played without.
+      email: '' # Email of Google account
+      password: '' # Password of Google account
+metrics:
+  prometheus:
+    enabled: true
+    endpoint: /metrics
+
+sentry:
+  dsn: ''
+  environment: ''
+
+logging:
+  file:
+    max-history: 30
+    max-size: 1GB
+  path: ./logs/
+
+  level:
+    root: INFO
+    lavalink: INFO
