@@ -1,5 +1,5 @@
 import { ShardingManager } from 'discord.js'
-import { color } from './functions'
+import { color, sleep } from './functions'
 import commandLineArgs from 'command-line-args'
 import dotenv from 'dotenv'
 import path from 'path'
@@ -27,6 +27,8 @@ try {
 
 ;(async () => {
   try {
+    await sleep(5000)
+
     const shardingManager = new ShardingManager('./build/pre-start.js', {
       token: process.env.TOKEN,
       totalShards: 'auto',

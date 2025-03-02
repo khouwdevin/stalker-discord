@@ -420,3 +420,12 @@ export const getPlayerData = (
         shufle: **${shuffle ? shuffle : false}**
     `
 }
+
+export const sleep = async (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export const initialMoonlink = async (client: Client, id: string) => {
+  await sleep(5000)
+  client.moon.init(id)
+}
