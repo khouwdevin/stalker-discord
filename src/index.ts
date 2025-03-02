@@ -1,5 +1,5 @@
 import { ShardingManager } from 'discord.js'
-import { color, sleep } from './functions'
+import { forLavalinkServer, color } from './functions'
 import commandLineArgs from 'command-line-args'
 import dotenv from 'dotenv'
 import path from 'path'
@@ -27,7 +27,7 @@ try {
 
 ;(async () => {
   try {
-    await sleep(10000)
+    await forLavalinkServer()
 
     const shardingManager = new ShardingManager('./build/pre-start.js', {
       token: process.env.TOKEN,

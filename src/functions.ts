@@ -14,6 +14,7 @@ import GuildDB from './schemas/Guild'
 import PlayerDB from './schemas/Player'
 import { GuildOption, PlayerOptions } from './types'
 import mongoose from 'mongoose'
+import { WebSocket } from 'ws'
 
 type colorType = 'text' | 'variable' | 'error'
 
@@ -421,11 +422,73 @@ export const getPlayerData = (
     `
 }
 
-export const sleep = async (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+function cleanup(ws: WebSocket, timeoutId: NodeJS.Timeout) {
+  clearTimeout(timeoutId)
+  if (
+    ws.readyState === WebSocket.OPEN ||
+    ws.readyState === WebSocket.CONNECTING
+  ) {
+    ws.close()
+  }
 }
 
-export const initialMoonlink = async (client: Client, id: string) => {
-  await sleep(5000)
-  client.moon.init(id)
+export const checkLavalinkConnection = async (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const headers = {
+      Authorization: process.env.LAVALINK_PASSWORD,
+      'User-Id': '1',
+      'Client-Name': 'stalkerbot',
+    }
+
+    const ws = new WebSocket(
+      `ws://${process.env.LAVALINK_HOST}:${process.env.LAVALINK_PORT}/v4/websocket`,
+      { headers }
+    )
+
+    let timeoutId: NodeJS.Timeout
+
+    ws.addEventListener('open', () => {
+      cleanup(ws, timeoutId)
+      resolve()
+    })
+
+    ws.addEventListener('error', () => {
+      cleanup(ws, timeoutId)
+      reject(new Error('Websocket error'))
+    })
+
+    timeoutId = setTimeout(() => {
+      cleanup(ws, timeoutId)
+      reject(new Error('Connection timeout.'))
+    }, 5000)
+  })
+}
+
+export const forLavalinkServer = async () => {
+  let retries = 0
+
+  while (retries < 10) {
+    try {
+      return await checkLavalinkConnection()
+    } catch (error) {
+      console.log(
+        color(
+          'text',
+          `❌ Connection attempt ${retries + 1} failed:  ${color(
+            'error',
+            error.message
+          )}`
+        )
+      )
+      retries++
+      if (retries < 10) {
+        console.log(
+          color('text', `🔃 Retrying in ${color('variable', '10')} seconds...`)
+        )
+        await new Promise((resolve) => setTimeout(resolve, 10000))
+      } else {
+        throw new Error(`Failed to connect to Lavalink after 10 retries.`)
+      }
+    }
+  }
 }
