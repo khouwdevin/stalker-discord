@@ -27,7 +27,7 @@ try {
 
 ;(async () => {
   try {
-    await sleep(5000)
+    await sleep(10000)
 
     const shardingManager = new ShardingManager('./build/pre-start.js', {
       token: process.env.TOKEN,
