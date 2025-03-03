@@ -1,68 +1,62 @@
-import { EmbedBuilder } from "discord.js";
-import { Command } from "../types";
-import { color } from "../functions";
+import { EmbedBuilder } from 'discord.js'
+import { Command } from '../types'
+import { color } from '../functions'
 
 const command: Command = {
-  name: "connect",
+  name: 'connect',
   execute: async (message, args) => {
     try {
-      if (!message.guild || !args) return;
+      if (!message.guild || !args) return
       if (
         !message.member ||
         (message.member && message.member.id !== process.env.MY_ID)
       )
-        return;
+        return
 
-      const client = message.client;
-      const status = args[1] === "true" ? true : false;
+      const client = message.client
+      const status = args[1] === 'true' ? true : false
+
+      const node = client.moon.nodes.get(process.env.LAVALINK_IDENTIFIER)
 
       if (status) {
-        const node = client.moon.addNode({
-          host: `${process.env.LAVALINK_HOST}`,
-          port: parseInt(process.env.LAVALINK_PORT),
-          secure: true,
-          password: `${process.env.LAVALINK_PASSWORD}`,
-          identifier: `${process.env.LAVALINK_IDENTIFIER}`,
-        });
+        node.connect()
 
         const embed = new EmbedBuilder()
-          .setTitle(`Connected to ${node.host}`)
-          .setColor("Green");
+          .setTitle(`Connecting to ${node.host}`)
+          .setColor('Green')
 
-        return message.channel.send({ embeds: [embed] });
+        return message.channel.send({ embeds: [embed] })
       }
 
-      const isSuccess = client.moon.removeNode("lavalink.stalkerbot.xyz");
+      node.destroy()
 
       const embed = new EmbedBuilder()
-        .setTitle(`Disconnecting ${isSuccess ? "success" : "failed"}`)
-        .setColor("Red");
+        .setTitle(`Disconnecting to ${node.host}`)
+        .setColor('Red')
 
-      message.channel.send({ embeds: [embed] });
+      message.channel.send({ embeds: [embed] })
+
       return console.log(
-        color(
-          "text",
-          `⛔ Disconnecting from ${color("variable", "lavalink.stalkerbot.xyz")} ${color("variable", isSuccess ? "success" : "failed")}`,
-        ),
-      );
+        color('text', `⛔ Disconnecting from ${color('variable', node.host)}`)
+      )
     } catch (e) {
       if (message.member && message.member.id === process.env.MY_ID) {
         const embed = new EmbedBuilder()
-          .setTitle("Error occurred")
-          .setColor("Red");
-        message.channel.send({ embeds: [embed] });
+          .setTitle('Error occurred')
+          .setColor('Red')
+        message.channel.send({ embeds: [embed] })
       }
       console.log(
         color(
-          "text",
-          `❌ Failed to run connect command : ${color("error", e.message)}`,
-        ),
-      );
+          'text',
+          `❌ Failed to run connect command : ${color('error', e.message)}`
+        )
+      )
     }
   },
   cooldown: 1,
-  aliases: [""],
+  aliases: [''],
   permissions: [],
-};
+}
 
-export default command;
+export default command

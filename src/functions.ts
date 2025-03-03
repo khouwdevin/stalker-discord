@@ -12,9 +12,11 @@ import {
 } from 'discord.js'
 import GuildDB from './schemas/Guild'
 import PlayerDB from './schemas/Player'
-import { GuildOption, PlayerOptions } from './types'
+import { GuildOption, GuildOptions, IGuild, PlayerOptions } from './types'
 import mongoose from 'mongoose'
 import { WebSocket } from 'ws'
+import GuildModel from './schemas/Guild'
+import { TPlayerLoop } from 'moonlink.js'
 
 type colorType = 'text' | 'variable' | 'error'
 
@@ -253,13 +255,34 @@ export const deleteTimedMessage = (
   )
 }
 
+export const registerGuild = async (
+  guild: Guild,
+  channelid: string
+): Promise<IGuild> => {
+  const newGuild = new GuildModel({
+    guildID: guild.id,
+    options: {
+      detectpresence: false,
+      notify: false,
+      channel: channelid,
+    },
+    joinedAt: Date.now(),
+  })
+  await newGuild.save()
+
+  return newGuild
+}
+
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
   if (mongoose.connection.readyState === 0)
     return console.log(
       color('text', `❌ Database ${color('error', 'not connected')}`)
     )
   let foundGuild = await GuildDB.findOne({ guildID: guild.id })
-  if (!foundGuild) return null
+  if (!foundGuild) {
+    const newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
+    return newGuild.options[option]
+  }
   return foundGuild.options[option]
 }
 
@@ -269,7 +292,10 @@ export const getAllGuildOption = async (guild: Guild) => {
       color('text', `❌ Database ${color('error', 'not connected')}`)
     )
   let foundGuild = await GuildDB.findOne({ guildID: guild.id })
-  if (!foundGuild) return null
+  if (!foundGuild) {
+    const newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
+    return newGuild.options
+  }
   return foundGuild.options
 }
 
@@ -283,7 +309,12 @@ export const setGuildOption = async (
       color('text', `❌ Database ${color('error', 'not connected')}`)
     )
   let foundGuild = await GuildDB.findOne({ guildID: guild.id })
-  if (!foundGuild) return null
+  if (!foundGuild) {
+    let newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
+    newGuild.options[option] = value
+    await newGuild.save()
+    return
+  }
   foundGuild.options[option] = value
   await foundGuild.save()
 }
@@ -411,13 +442,13 @@ export const getLoopString = (loopState: number) => {
 export const getPlayerData = (
   autoplay: boolean | null,
   volume: number,
-  loop: number | null,
+  loop: TPlayerLoop | null,
   shuffle: boolean | null
 ) => {
   return `
         autoplay: **${autoplay ? autoplay : false}**\r
         volume: **${volume}**\r
-        loop type: **${getLoopString(loop !== null ? loop : 2)}**\r
+        loop type: **${loop !== null ? loop : 'off'}**\r
         shufle: **${shuffle ? shuffle : false}**
     `
 }

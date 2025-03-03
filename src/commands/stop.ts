@@ -29,7 +29,7 @@ const command: Command = {
           channel as TextChannel,
           5000
         )
-      if (message.member.voice.channelId !== player.voiceChannel)
+      if (message.member.voice.channelId !== player.voiceChannelId)
         return sendTimedMessage(
           `${message.member} isn't joining in a same voice channel!`,
           channel as TextChannel,

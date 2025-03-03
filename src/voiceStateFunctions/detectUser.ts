@@ -12,7 +12,7 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
     )
       return
     if (!player) return
-    if (player.voiceChannel === oldstate.channelId) {
+    if (player.voiceChannelId === oldstate.channelId) {
       if (!oldstate.channel) return
 
       const members = oldstate.channel.members
@@ -32,7 +32,7 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
       }, 20000)
 
       client.timeouts.set(`player-${player.guildId}`, timeout)
-    } else if (player.voiceChannel === newState.channelId) {
+    } else if (player.voiceChannelId === newState.channelId) {
       if (!newState.channel) return
 
       const members = newState.channel.members

@@ -1,23 +1,14 @@
-import { Guild } from "discord.js";
-import GuildModel from "../schemas/Guild";
-import { BotEvent } from "../types";
+import { Guild } from 'discord.js'
+import { BotEvent } from '../types'
+import { registerGuild } from '../functions'
 
 const event: BotEvent = {
-  name: "guildCreate",
+  name: 'guildCreate',
   execute: (guild: Guild) => {
-    const channelid = guild.systemChannel ? guild.systemChannel.id : "default";
+    const channelid = guild.systemChannel ? guild.systemChannel.id : 'default'
 
-    const newGuild = new GuildModel({
-      guildID: guild.id,
-      options: {
-        detectpresence: false,
-        notify: false,
-        channel: channelid,
-      },
-      joinedAt: Date.now(),
-    });
-    newGuild.save();
+    registerGuild(guild, channelid)
   },
-};
+}
 
-export default event;
+export default event

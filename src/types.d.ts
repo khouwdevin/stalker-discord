@@ -11,7 +11,7 @@ import {
   APIEmbedField,
   EmbedFooterOptions,
 } from 'discord.js'
-import { MoonlinkManager, Player, MoonlinkEvents } from 'moonlink.js'
+import { Player, MoonlinkEvents, Manager, TPlayerLoop } from 'moonlink.js'
 import mongoose from 'mongoose'
 
 export interface SlashCommand {
@@ -40,7 +40,7 @@ interface GuildOptions {
 
 interface PlayerOptions {
   autoPlay: Boolean
-  loop: String
+  loop: TPlayerLoop
   volume: Number
 }
 
@@ -109,6 +109,6 @@ declare module 'discord.js' {
     cooldowns: Collection<string, number>
     timeouts: Collection<string, NodeJS.Timeout>
     attempts: Collection<string, number>
-    moon: MoonlinkManager
+    moon: Manager
   }
 }

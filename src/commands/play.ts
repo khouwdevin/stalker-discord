@@ -13,7 +13,7 @@ const command: Command = {
   execute: async (message, args) => {
     try {
       const title = args.slice(1, args.length).join(' ')
-      let loopPlayer = -1
+      let loopPlayer = 'off'
 
       if (!title)
         return sendTimedMessage(
@@ -40,7 +40,7 @@ const command: Command = {
 
       if (!player) {
         const playerOptions = await getPlayerDB(message.guildId)
-        loopPlayer = Number(playerOptions.loop)
+        loopPlayer = playerOptions.loop
 
         player = client.moon.players.create({
           guildId: message.guildId,
@@ -50,13 +50,13 @@ const command: Command = {
           volume: Number(playerOptions.volume),
         })
 
-        player.setLoop(Number(playerOptions.loop))
+        player.setLoop(playerOptions.loop)
 
         const playerData = `
                     autoplay: **${player.autoPlay}**\r
                     volume: **${player.volume}**\r
                     loop: **${getLoopString(Number(playerOptions.loop))}**\r
-                    shufle: **${player.shuffled}**
+                    shufle: **${player.shuffle()}**
                 `
 
         const embed = new EmbedBuilder()
@@ -72,7 +72,7 @@ const command: Command = {
         client.attempts.set(`${player.guildId}`, 3)
       } else {
         client.attempts.set(`${player.guildId}`, 3)
-        loopPlayer = player.loop ?? 2
+        loopPlayer = player.loop
       }
 
       const embedProcess = new EmbedBuilder().setAuthor({
@@ -139,7 +139,7 @@ const command: Command = {
             .setColor('Yellow')
           message.channel.send({ embeds: [embedSong] })
 
-          if (loopPlayer === 1) {
+          if (loopPlayer === 'track') {
             const embedPlay = new EmbedBuilder()
               .setAuthor({
                 name: `Now in loop playing [${res.tracks[0].title}]`,
