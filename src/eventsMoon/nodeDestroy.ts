@@ -1,12 +1,11 @@
-import { Node } from 'moonlink.js'
 import { MoonEvent } from '../types'
 import { color } from '../functions'
 
 const event: MoonEvent = {
   name: 'nodeDestroy',
-  execute: (node: Node) => {
+  execute: (identifier: string) => {
     console.log(
-      color('text', `❌ Node ${color('variable', node.host)} is destroyed!`)
+      color('text', `❌ Node ${color('variable', identifier)} is destroyed!`)
     )
   },
 }

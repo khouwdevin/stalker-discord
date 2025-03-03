@@ -3,6 +3,7 @@ import { readdirSync } from 'fs'
 import { MoonEvent } from '../types'
 import { join } from 'path'
 import { color } from '../functions'
+import { INode } from 'moonlink.js'
 
 module.exports = (client: Client) => {
   let eventsMoonDir = join(__dirname, '../eventsMoon')
@@ -13,20 +14,18 @@ module.exports = (client: Client) => {
 
     if (event.name === 'raw') {
       client.on(event.name, (...args) => event.execute(client, ...args))
-    } else if (
-      event.name === 'nodeCreate' ||
-      event.name === 'nodeReconnect' ||
-      event.name === 'nodeDestroy'
-    )
-      client.moon.on(event.name, (node: Node) => event.execute(node))
-    else if (event.name === 'nodeClose')
-      client.moon.on('nodeClose', (node, code, reason) =>
+    } else if (event.name === 'nodeCreate' || event.name === 'nodeReconnect')
+      client.moon.on(event.name, (node: INode) => event.execute(node))
+    else if (event.name === 'nodeDisconnect')
+      client.moon.on('nodeDisconnect', (node, code, reason) =>
         event.execute(node, code, reason)
       )
+    else if (event.name === 'nodeDestroy')
+      client.moon.on('nodeDestroy', (identifier) => event.execute(identifier))
     else if (
       event.name === 'trackStart' ||
       event.name === 'trackStuck' ||
-      event.name === 'trackError'
+      event.name === 'trackException'
     )
       client.moon.on(event.name, (player, track) =>
         event.execute(client, player, track)

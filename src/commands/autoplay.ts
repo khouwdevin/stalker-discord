@@ -51,7 +51,7 @@ const command: Command = {
         autoPlay,
         player.volume,
         player.loop,
-        player.shuffled
+        player.shuffle()
       )
 
       const embed = new EmbedBuilder()

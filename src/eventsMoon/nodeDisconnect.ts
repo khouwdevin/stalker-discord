@@ -3,7 +3,7 @@ import { MoonEvent } from '../types'
 import { color } from '../functions'
 
 const event: MoonEvent = {
-  name: 'nodeClose',
+  name: 'nodeDisconnect',
   execute: (node: Node, code: number, reason: any) => {
     console.log(
       color(

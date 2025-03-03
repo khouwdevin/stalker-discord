@@ -6,9 +6,9 @@ const command: Command = {
   name: 'loop',
   execute: async (message, args) => {
     try {
-      const loop = parseInt(args[1])
+      const loop = args[1]
 
-      if (loop !== 0 && loop !== 1 && loop !== 2)
+      if (loop !== 'off' && loop !== 'track' && loop != 'queue')
         return sendTimedMessage(
           'Loop configuration is not valid!',
           message.channel as TextChannel,
@@ -50,7 +50,7 @@ const command: Command = {
         player.autoPlay,
         player.volume,
         loop,
-        player.shuffled
+        player.shuffle()
       )
 
       const embed = new EmbedBuilder()
