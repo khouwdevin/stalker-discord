@@ -44,7 +44,7 @@ const command: Command = {
         .setColor('Red')
       channel.send({ embeds: [embed] })
 
-      player.stop()
+      player.stop({ destroy: true })
     } catch (e) {
       console.log(
         color('text', `❌ Failed to stop music : ${color('error', e.message)}`)
