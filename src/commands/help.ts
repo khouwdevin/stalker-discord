@@ -3,40 +3,40 @@ import {
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
-} from "discord.js";
-import { Command, IHelp } from "../types";
-import { color } from "../functions";
+} from 'discord.js'
+import { Command, IHelp } from '../types'
+import { color } from '../functions'
 
 const command: Command = {
-  name: "help",
+  name: 'help',
   execute: async (message, args) => {
     try {
-      const client = message.client;
+      const client = message.client
 
       const embed = new EmbedBuilder()
         .setTitle(commandText[0].title)
-        .setColor("Orange")
+        .setColor('Orange')
         .setFields(commandText[0].field)
-        .setFooter(commandText[0].footer);
+        .setFooter(commandText[0].footer)
 
-      const currentMessage = await message.channel.send({ embeds: [embed] });
+      const currentMessage = await message.channel.send({ embeds: [embed] })
 
       const backButton = new ButtonBuilder()
-        .setLabel("⬅️")
+        .setLabel('⬅️')
         .setStyle(ButtonStyle.Primary)
-        .setCustomId(`help.${currentMessage.id}.back`);
+        .setCustomId(`help.${currentMessage.id}.back`)
 
       const nextButton = new ButtonBuilder()
-        .setLabel("➡️")
+        .setLabel('➡️')
         .setStyle(ButtonStyle.Primary)
-        .setCustomId(`help.${currentMessage.id}.next`);
+        .setCustomId(`help.${currentMessage.id}.next`)
 
       const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         backButton,
-        nextButton,
-      );
+        nextButton
+      )
 
-      await currentMessage.edit({ embeds: [embed], components: [buttonsRow] });
+      await currentMessage.edit({ embeds: [embed], components: [buttonsRow] })
 
       const timeout = setTimeout(async () => {
         await currentMessage
@@ -44,56 +44,56 @@ const command: Command = {
           .catch((e) =>
             console.log(
               color(
-                "text",
-                `❌ Failed to delete message : ${color("error", e.message)}`,
-              ),
-            ),
-          );
-      }, 20000);
+                'text',
+                `❌ Failed to delete message : ${color('error', e.message)}`
+              )
+            )
+          )
+      }, 20000)
 
-      client.timeouts.set(`help-${currentMessage.id}`, timeout);
+      client.timeouts.set(`help-${currentMessage.id}`, timeout)
     } catch (e) {
       console.log(
-        color("text", `❌ Failed to show help : ${color("error", e.message)}`),
-      );
+        color('text', `❌ Failed to show help : ${color('error', e.message)}`)
+      )
     }
   },
   button: async (interaction) => {
     try {
-      if (!interaction.channel) return;
+      if (!interaction.channel) return
 
-      const [type, messageId, command] = interaction.customId.split(".");
-      const client = interaction.client;
+      const [type, messageId, command] = interaction.customId.split('.')
+      const client = interaction.client
       const currentMessage = await interaction.channel.messages
         .fetch(messageId)
         .catch((e) =>
           console.log(
             color(
-              "text",
-              `❌ Failed to fetch message : ${color("error", e.message)}`,
-            ),
-          ),
-        );
+              'text',
+              `❌ Failed to fetch message : ${color('error', e.message)}`
+            )
+          )
+        )
 
-      if (!currentMessage) return;
-      if (!currentMessage.embeds[0].footer) return;
+      if (!currentMessage) return
+      if (!currentMessage.embeds[0].footer) return
 
-      const components = currentMessage.components[0];
+      const components = currentMessage.components[0]
       const currentPage =
-        parseInt(currentMessage.embeds[0].footer.text.split("/")[0]) - 1;
-      const index = command === "next" ? 1 : -1;
-      const nextPage = Math.max(0, Math.min(currentPage + index, 3));
+        parseInt(currentMessage.embeds[0].footer.text.split('/')[0]) - 1
+      const index = command === 'next' ? 1 : -1
+      const nextPage = Math.max(0, Math.min(currentPage + index, 3))
 
       const embed = new EmbedBuilder()
         .setTitle(commandText[nextPage].title)
-        .setColor("Orange")
+        .setColor('Orange')
         .setFields(commandText[nextPage].field)
-        .setFooter(commandText[nextPage].footer);
+        .setFooter(commandText[nextPage].footer)
 
-      currentMessage.edit({ embeds: [embed], components: [components] });
+      currentMessage.edit({ embeds: [embed], components: [components] })
 
-      clearTimeout(client.timeouts.get(`help-${messageId}`));
-      client.timeouts.delete(`help-${messageId}`);
+      clearTimeout(client.timeouts.get(`help-${messageId}`))
+      client.timeouts.delete(`help-${messageId}`)
 
       const timeout = setTimeout(async () => {
         await currentMessage
@@ -101,39 +101,42 @@ const command: Command = {
           .catch((e) =>
             console.log(
               color(
-                "text",
-                `❌ Failed to delete message : ${color("error", e.message)}`,
-              ),
-            ),
-          );
-      }, 20000);
+                'text',
+                `❌ Failed to delete message : ${color('error', e.message)}`
+              )
+            )
+          )
+      }, 20000)
 
-      client.timeouts.set(`help-${currentMessage.id}`, timeout);
+      client.timeouts.set(`help-${currentMessage.id}`, timeout)
 
-      interaction.deferUpdate();
+      interaction.deferUpdate()
     } catch (e) {
       console.log(
         color(
-          "text",
-          `❌ Failed to process interact button help : ${color("error", e.message)}`,
-        ),
-      );
+          'text',
+          `❌ Failed to process interact button help : ${color(
+            'error',
+            e.message
+          )}`
+        )
+      )
     }
   },
   cooldown: 2,
-  aliases: ["h"],
+  aliases: ['h'],
   permissions: [],
-};
+}
 
 const commandText: IHelp[] = [
   {
-    title: "Command List",
+    title: 'Command List',
     field: [
       {
         name: `${process.env.PREFIX_COMMAND}channelconfig`,
         value: `
                     If you want to change Stalker's default channel text (send the channel id).\r
-                    example => **${process.env.PREFIX_COMMAND}channelconfig 12344556677** or **${process.env.PREFIX_COMMAND}cfg 12344556677**r
+                    example => **${process.env.PREFIX_COMMAND}channelconfig 12344556677** or **${process.env.PREFIX_COMMAND}cfg 12344556677**\r
                     `,
       },
       {
@@ -165,10 +168,10 @@ const commandText: IHelp[] = [
                     `,
       },
     ],
-    footer: { text: "1/4" },
+    footer: { text: '1/4' },
   },
   {
-    title: "Music Command List",
+    title: 'Music Command List',
     field: [
       {
         name: `${process.env.PREFIX_COMMAND}play`,
@@ -206,10 +209,10 @@ const commandText: IHelp[] = [
                     `,
       },
     ],
-    footer: { text: "2/4" },
+    footer: { text: '2/4' },
   },
   {
-    title: "Player Command List",
+    title: 'Player Command List',
     field: [
       {
         name: `${process.env.PREFIX_COMMAND}autoplay`,
@@ -221,8 +224,8 @@ const commandText: IHelp[] = [
       {
         name: `${process.env.PREFIX_COMMAND}loop`,
         value: `
-                    to set loop (0: no loop, 1: song loop, 2: playlist loop).\r
-                    example => **${process.env.PREFIX_COMMAND}loop 0**\r
+                    to set loop (off, track, queue).\r
+                    example => **${process.env.PREFIX_COMMAND}loop track**\r
                     `,
       },
       {
@@ -240,13 +243,13 @@ const commandText: IHelp[] = [
                     `,
       },
     ],
-    footer: { text: "3/4" },
+    footer: { text: '3/4' },
   },
   {
-    title: "Slash Command List",
+    title: 'Slash Command List',
     field: [
       {
-        name: " ",
+        name: ' ',
         value: `
                     **/afk**: to announce your afk status\r
                     **/clear**: to clear messages\r
@@ -258,8 +261,8 @@ const commandText: IHelp[] = [
                     `,
       },
     ],
-    footer: { text: "4/4" },
+    footer: { text: '4/4' },
   },
-];
+]
 
-export default command;
+export default command
