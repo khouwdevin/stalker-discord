@@ -6,6 +6,8 @@ import { color } from '../functions'
 import { INode } from 'moonlink.js'
 
 module.exports = (client: Client) => {
+  if (process.env.TURN_ON_MUSIC !== 'true') return
+
   let eventsMoonDir = join(__dirname, '../eventsMoon')
 
   readdirSync(eventsMoonDir).forEach((file) => {

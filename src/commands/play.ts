@@ -133,7 +133,7 @@ const command: Command = {
 
           const embedSong = new EmbedBuilder()
             .setAuthor({
-              name: `[${res.tracks[0].title}] was added to the waiting list!`,
+              name: `[${res.tracks[0].title}] is added to the waiting list!`,
               iconURL: message.client.user.avatarURL() || undefined,
             })
             .setColor('Yellow')

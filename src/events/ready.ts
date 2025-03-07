@@ -1,31 +1,31 @@
-import { ActivityType, Client } from "discord.js";
-import { BotEvent } from "../types";
-import { color, sendNotifyStalkerOnline } from "../functions";
+import { ActivityType, Client } from 'discord.js'
+import { BotEvent } from '../types'
+import { color, sendNotifyStalkerOnline } from '../functions'
 
 const event: BotEvent = {
-  name: "ready",
+  name: 'ready',
   once: true,
   execute: async (client: Client) => {
-    sendNotifyStalkerOnline(client);
+    sendNotifyStalkerOnline(client)
 
-    if (!client.user) return;
+    if (!client.user) return
 
     client.user.setPresence({
-      status: "online",
+      status: 'online',
       activities: [
         {
           name: `${process.env.PREFIX_COMMAND}help`,
           type: ActivityType.Listening,
         },
       ],
-    });
+    })
 
-    client.moon.init(client.user.id);
+    if (process.env.TURN_ON_MUSIC === 'true') client.moon.init(client.user.id)
 
     console.log(
-      color("text", `💪 Logged in as ${color("variable", client.user.tag)}`),
-    );
+      color('text', `💪 Logged in as ${color('variable', client.user.tag)}`)
+    )
   },
-};
+}
 
-export default event;
+export default event

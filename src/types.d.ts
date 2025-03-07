@@ -98,6 +98,7 @@ declare global {
       LAVALINK_IDENTIFIER: string
       SPOTIFY_CLIENTID: string
       SPOTIFY_CLIENT_SECRET: string
+      TURN_ON_MUSIC: string
     }
   }
 }

@@ -27,7 +27,7 @@ try {
 
 ;(async () => {
   try {
-    await forLavalinkServer()
+    if (process.env.TURN_ON_MUSIC === 'true') await forLavalinkServer()
 
     const shardingManager = new ShardingManager('./build/pre-start.js', {
       token: process.env.TOKEN,
