@@ -68,7 +68,7 @@ docker compose up -d
 
 Enter the logs of lavalink, it will appear for you to initialize OAuth for Youtube as like the plugin says, do not use main account, use your burner account.
 
-After you logged in, find the refresh token and paste into application.yml, then restart the lavalink.
+After you logged in, find the refresh token and paste into your .env, then restart the docker.
 
 Everything should be okay and you can start use the bot, if you find any trouble please open an issue, I will happy to help.
 
