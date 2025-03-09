@@ -24,77 +24,54 @@
 git clone https://github.com/khouwdevin/stalker-discord.git
 ```
 
-### 2. Put The Code to Host Server / Host It Locally
-
-#### Local hosting
-
-```node
-npm install
-npm run build
-npm run start
-```
-
-#### Host Server
-
-> if the host support automatically deploy from github, then just let the provider access your repository then it's done.
-
-> if they don't have then follow this instruction.
-
-1. Apply this commands.
-```node
-npm install
-npm run build
-```
-
-2. Upload the /dist/ and the /node_modules/ folders.
-3. Set node start to index.js inside host server setting.
+### 2. Set up
 
 #### Set Up Environment Variables
 
-> (local hosting) put the environment variables inside working directory and name the file to .env <br/>
-> (using hosting provider) put the environment variables inside host's setting for environment variables
+put the environment variables inside working directory and name the file to .env
 
 ```env
 TOKEN=(Discord bot token)
 CLIENT_ID=(Discord client id)
-PREFIX_COMMAND=$ #default prefix is $
-MONGO_URI=(Mongo DB url) #if you don't want to use mongo then let it empty
-MONGO_DATABASE_NAME=(Mongo Database name) #if you don't want to use mongo then let it empty
-STALKER_DATABASE=(DB name in Mongo DB) #if you don't want to use mongo then let it empty
+PREFIX_COMMAND=$ # default prefix is $
+MONGO_URI=(Mongo DB url) # default mongodb://mongo:stalker-bot
+MONGO_DATABASE_NAME=(Mongo Database name) # default mongo:27017
+STALKER_DATABASE=(DB name in Mongo DB) # default stalker
 LAVALINK_PASSWORD=(Lavalink password)
-LAVALINK_PORT=(Lavalink port)
-LAVALINK_HOST=(Lavalink host or domain that used by Lavalink server)
-LAVALINK_IDENTIFIER=(Fill it same as lavalink host)
-SPOTIFY_CLIENTID=(Spotify client id) #if you don't want to use spotify then let it empty
-SPOTIFY_CLIENT_SECRET=(Spotify client secret) #if you don't want to use mongo then let it empty
+LAVALINK_PORT=(Lavalink port) # default 443
+LAVALINK_HOST=(Lavalink host or domain that used by Lavalink server) # default lavalink
+LAVALINK_IDENTIFIER=(Fill it same as lavalink host) # default lavalink-local
+SPOTIFY_CLIENTID=(Spotify client id) # if you don't want to use spotify then let it empty
+SPOTIFY_CLIENT_SECRET=(Spotify client secret) # if you don't want to use spotify then let it empty
+TURN_ON_MUSIC=(true or false)
+YOUTUBE_REFRESH_TOKEN=(Youtube refresh token) # get the token from lavalink, further explaination below
 ```
 
 > you can get Spotify client id and client secret from https://developer.spotify.com
+> please fill the default and if you wish to change the variable please check for docker-compose.yml
 
 ### 4. Set up Lavalink
 
-#### Host Locally
+1. download plugins, by default Stalker Bot use 2 plugins lavasrc and youtube, place the (plugin).jar into ./plugins
 
-1. clone this repository
+2. change the application.yml if you add more plugins
+
+### 5. Run the service
+
+Stalker bot is designed to run with docker, but if you wish to run it with external lavalink or external mongodb, please update the docker compose to suit your needs.
+
 ```sh
-git clone https://github.com/khouwdevin/lavalink-template.git
+# if you use Linux add sudo if not just use this command
+# run the command on root of this project
+docker compose up -d
 ```
 
-2. change the application.yml
+Enter the logs of lavalink, it will appear for you to initialize OAuth for Youtube as like the plugin says, do not use main account, use your burner account.
 
-3. run docker
+After you logged in, find the refresh token and paste into application.yml, then restart the lavalink.
 
-#### Host Remote
+Everything should be okay and you can start use the bot, if you find any trouble please open an issue, I will happy to help.
 
-1. clone this repository
-```sh
-git clone https://github.com/khouwdevin/lavalink-template.git
-```
+### Contributing
 
-2. change the application.yml
-
-3. let the hosting provider clone and buld it for you
-
-### 5. Finishing
-
-> after all done, then Stalker Bot should be appear and can be used!
+If you find any bugs and you want to contribute, please open PR or an issue first, but if you wish to add new features, please fork this repo do not create PR or issues.
