@@ -2,6 +2,8 @@
 
 > This is Stalker Bot.
 
+clone from [Discord.js v14 Bot Template](https://github.com/MericcaN41/discordjs-v14-template-ts)
+
 ## Stalker
 
 <h3 align="center">Stalker</h3>
