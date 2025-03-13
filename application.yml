@@ -1,8 +1,12 @@
 plugins:
   lavasrc:
     providers:
+      - 'dzisrc:%ISRC%'
       - 'ytsearch:"%ISRC%"'
+      - 'dzsearch:%QUERY%'
+      - 'ytmsearch:%QUERY%'
       - 'ytsearch:%QUERY%'
+      - 'scsearch:%QUERY%'
     sources:
       spotify: true
       applemusic: false
@@ -88,6 +92,7 @@ lavalink:
     password: ${LAVALINK_PASSWORD}
     sources:
       youtube: false
+      spotify: true
       bandcamp: true
       soundcloud: true
       twitch: true
