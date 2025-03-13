@@ -45,7 +45,6 @@ const command: Command = {
           autoPlay: Boolean(playerOptions.autoPlay),
           volume: Number(playerOptions.volume),
           loop: playerOptions.loop,
-          autoLeave: true,
         })
 
         const playerData = `
@@ -68,7 +67,6 @@ const command: Command = {
         client.playerAttempts.set(`${player.guildId}`, 3)
       } else {
         client.playerAttempts.set(`${player.guildId}`, 3)
-        player.setAutoLeave(true)
       }
 
       const embedProcess = new EmbedBuilder().setAuthor({
@@ -125,8 +123,6 @@ const command: Command = {
 
           break
         default:
-          player.queue.add(res.tracks[0])
-
           const embedSong = new EmbedBuilder()
             .setAuthor({
               name: `[${res.tracks[0].title}] is added to the waiting list!`,
@@ -136,6 +132,8 @@ const command: Command = {
           message.channel.send({ embeds: [embedSong] })
 
           if (player.loop === 'track') {
+            player.queue.clear()
+
             const embedPlay = new EmbedBuilder()
               .setAuthor({
                 name: `Now in loop playing [${res.tracks[0].title}]`,
@@ -145,6 +143,8 @@ const command: Command = {
 
             message.channel.send({ embeds: [embedPlay] })
           }
+
+          player.queue.add(res.tracks[0])
 
           break
       }

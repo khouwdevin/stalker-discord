@@ -1,4 +1,4 @@
-import { VoiceState } from 'discord.js'
+import { EmbedBuilder, VoiceState } from 'discord.js'
 import logger from '../logger'
 
 const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
@@ -26,12 +26,33 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
         return
       }
 
-      const timeout = setTimeout(async () => {
-        player.stop({ destroy: true })
-        client.timeouts.delete(`player-${player.guildId}`)
-      }, 10000)
+      if (player.connected) {
+        const timeout = setTimeout(async () => {
+          player.stop({ destroy: true })
+          client.timeouts.delete(`player-${player.guildId}`)
 
-      client.timeouts.set(`player-${player.guildId}`, timeout)
+          const channel = await client.channels
+            .fetch(player.textChannelId)
+            .catch(() => {
+              return logger.error(
+                '[Event Moon]: ❌ Error fetch channel on queueEnd'
+              )
+            })
+
+          if (!channel || !channel.isTextBased()) return
+
+          const embed = new EmbedBuilder()
+            .setAuthor({
+              name: 'Users have left. The player is disconnected.',
+              iconURL: client.user?.avatarURL() || undefined,
+            })
+            .setColor('Grey')
+
+          channel.send({ embeds: [embed] })
+        }, 10000)
+
+        client.timeouts.set(`player-${player.guildId}`, timeout)
+      }
     } else if (player.voiceChannelId === newState.channelId) {
       if (!newState.channel) return
 
@@ -49,6 +70,25 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
       const timeout = setTimeout(async () => {
         player.stop({ destroy: true })
         client.timeouts.delete(`player-${player.guildId}`)
+
+        const channel = await client.channels
+          .fetch(player.textChannelId)
+          .catch(() => {
+            return logger.error(
+              '[Event Moon]: ❌ Error fetch channel on queueEnd'
+            )
+          })
+
+        if (!channel || !channel.isTextBased()) return
+
+        const embed = new EmbedBuilder()
+          .setAuthor({
+            name: 'Users have left. The player is disconnected.',
+            iconURL: client.user?.avatarURL() || undefined,
+          })
+          .setColor('Grey')
+
+        channel.send({ embeds: [embed] })
       }, 10000)
 
       client.timeouts.set(`player-${player.guildId}`, timeout)

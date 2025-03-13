@@ -24,6 +24,24 @@ const event: MoonEvent = {
       .setColor('Grey')
 
     channel.send({ embeds: [embed] })
+
+    if (player.connected) {
+      const timeout = setTimeout(async () => {
+        player.stop({ destroy: true })
+        client.timeouts.delete(`player-${player.guildId}`)
+
+        const embed = new EmbedBuilder()
+          .setAuthor({
+            name: 'No queue left, player disconnected.',
+            iconURL: client.user?.avatarURL() || undefined,
+          })
+          .setColor('Grey')
+
+        channel.send({ embeds: [embed] })
+      }, 10000)
+
+      client.timeouts.set(`player-${player.guildId}`, timeout)
+    }
   },
 }
 

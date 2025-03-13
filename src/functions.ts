@@ -374,13 +374,13 @@ export const getCode = (text: string): string => {
 export const getPlayerDB = async (guildId: string): Promise<PlayerOptions> => {
   if (mongoose.connection.readyState === 0) {
     logger.error('[Get Player DB]: ❌ Database is not connected')
-    return { autoPlay: true, loop: 'off', volume: 80, shuffle: false }
+    return { autoPlay: false, loop: 'off', volume: 80, shuffle: false }
   }
   const foundPlayer = await PlayerDB.findOne({ guildID: guildId })
   if (!foundPlayer) {
     const newPlayer = new PlayerDB({
       guildId: guildId,
-      options: { autoPlay: true, loop: 'off', volume: 80, shuffle: false },
+      options: { autoPlay: false, loop: 'off', volume: 80, shuffle: false },
     })
     await newPlayer.save()
     return newPlayer.options
@@ -399,7 +399,7 @@ export const setPlayerDB = async (
   if (!foundPlayer) {
     const newPlayer = new PlayerDB({
       guildId: guildId,
-      options: { autoPlay: true, loop: 'off', volume: 80, shuffle: false },
+      options: { autoPlay: false, loop: 'off', volume: 80, shuffle: false },
     })
     await newPlayer.save()
     return
@@ -473,7 +473,7 @@ export const forLavalinkServer = async () => {
       return await checkLavalinkConnection()
     } catch (error) {
       logger.error(
-        `[For Lavalink Server]: ❌ Connection attempt ${retries + 1} failed:  ${
+        `[For Lavalink Server]: ❌ Connection attempt ${retries + 1} failed: ${
           error.message
         }`
       )
