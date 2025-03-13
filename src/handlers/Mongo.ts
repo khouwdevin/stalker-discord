@@ -1,40 +1,25 @@
 import mongoose from 'mongoose'
-import { color } from '../functions'
+import { Client } from 'discord.js'
+import logger from '../logger'
 
-module.exports = () => {
-  initalizeMongoDB()
+module.exports = (client: Client) => {
+  initalizeMongoDB(client)
 }
 
-const initalizeMongoDB = () => {
+const initalizeMongoDB = (client: Client) => {
   if (!process.env.MONGO_URI)
-    return console.log(
-      color('text', `🍃 Mongo URI not found, ${color('error', 'skipping')}`)
-    )
+    return logger.error('[Handler] : 🍃 Mongo URI not found, skipping')
+
   mongoose
     .connect(`${process.env.MONGO_URI}@${process.env.MONGO_DATABASE_NAME}`)
     .then(() => {
-      console.log(
-        color(
-          'text',
-          `🍃 MongoDB connection has been ${color('variable', 'established')}`
-        )
-      )
+      logger.info('[Handler] : 🍃 MongoDB connection has been established')
     })
     .catch(() => {
-      console.log(
-        color(
-          'text',
-          `🍃 MongoDB connection has been ${color('error', 'failed')}`
-        )
-      )
+      logger.error('[Handler] : ❌ MongoDB connection has been failed')
       setTimeout(() => {
-        console.log(
-          color(
-            'text',
-            `🍃 Try ${color('variable', 'reconnecting')} to MongoDB`
-          )
-        )
-        initalizeMongoDB()
+        logger.info('[Handler] : 🍃 Try reconnecting to MongoDB')
+        initalizeMongoDB(client)
       }, 5000)
     })
 }

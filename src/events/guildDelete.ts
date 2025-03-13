@@ -1,20 +1,17 @@
-import { Guild } from "discord.js";
-import GuildModel from "../schemas/Guild";
-import { BotEvent } from "../types";
-import { color } from "../functions";
+import { Guild } from 'discord.js'
+import GuildModel from '../schemas/Guild'
+import { BotEvent } from '../types'
+import logger from '../logger'
 
 const event: BotEvent = {
-  name: "guildDelete",
+  name: 'guildDelete',
   execute: (guild: Guild) => {
-    GuildModel.deleteOne({ guildID: guild.id }).catch((message) =>
-      console.log(
-        color(
-          "text",
-          `❌ Failed to delete guild doc : ${color("error", message)}`,
-        ),
-      ),
-    );
-  },
-};
+    logger.info('[Event]: Guild is deleted')
 
-export default event;
+    GuildModel.deleteOne({ guildID: guild.id }).catch((message) =>
+      logger.error(`[Event]: ❌ Failed to delete guild doc : ${message}`)
+    )
+  },
+}
+
+export default event

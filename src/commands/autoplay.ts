@@ -1,4 +1,5 @@
-import { color, getPlayerData, sendTimedMessage } from '../functions'
+import { getPlayerData, sendTimedMessage } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -6,6 +7,8 @@ const command: Command = {
   name: 'autoplay',
   execute: async (message, args) => {
     try {
+      logger.debug('[Autoplay Command]: Run autoplay command.')
+
       const autoplay = args[1]
 
       if (!autoplay || (autoplay !== 'true' && autoplay !== 'false'))
@@ -64,11 +67,9 @@ const command: Command = {
         .setColor('Purple')
       channel.send({ embeds: [embed] })
     } catch (e) {
-      console.log(
-        color(
-          'text',
-          `❌ Failed to configure autoplay : ${color('error', e.message)}`
-        )
+      const client = message.client
+      logger.error(
+        `[Autoplay Command]: ❌ Failed to configure autoplay : ${e.message}`
       )
     }
   },

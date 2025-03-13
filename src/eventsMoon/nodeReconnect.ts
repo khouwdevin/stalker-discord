@@ -1,13 +1,11 @@
 import { Node } from 'moonlink.js'
 import { MoonEvent } from '../types'
-import { color } from '../functions'
+import logger from '../logger'
 
 const event: MoonEvent = {
   name: 'nodeReconnect',
   execute: (node: Node) => {
-    console.log(
-      color('text', `🔃 Reconnecting to ${color('variable', node.host)}`)
-    )
+    logger.info(`[Event Moon]: 🔃 Reconnecting to ${node.host}`)
   },
 }
 

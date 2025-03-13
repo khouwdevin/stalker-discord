@@ -1,4 +1,5 @@
-import { color, sendTimedMessage } from '../functions'
+import { sendTimedMessage } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -6,6 +7,8 @@ const command: Command = {
   name: 'pause',
   execute: async (message, args) => {
     try {
+      logger.debug('[Pause Command]: Run pause command')
+
       if (!message.guildId || !message.member)
         return sendTimedMessage(
           'An error occurred!',
@@ -48,9 +51,8 @@ const command: Command = {
         await player.pause()
       }
     } catch (e) {
-      console.log(
-        color('text', `❌ Failed to pause music : ${color('error', e.message)}`)
-      )
+      const client = message.client
+      logger.error(`[Pause Command]: ❌ Failed to pause music : ${e.message}`)
     }
   },
   cooldown: 1,

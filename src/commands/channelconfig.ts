@@ -1,64 +1,69 @@
-import { Command } from "../types";
-import { color, sendTimedMessage, setGuildOption } from "../functions";
-import { EmbedBuilder, TextChannel } from "discord.js";
+import { Command } from '../types'
+import { sendTimedMessage, setGuildOption } from '../functions'
+import { EmbedBuilder, TextChannel } from 'discord.js'
+import logger from '../logger'
 
 const command: Command = {
-  name: "channelconfig",
+  name: 'channelconfig',
   execute: async (message, args) => {
     try {
-      const channelid = args[1];
-      const channel = message.channel;
+      const channelid = args[1]
+      const channel = message.channel
+
+      logger.debug('[Channel Config Command]: Run channel config command.')
 
       if (!message.guild)
         return sendTimedMessage(
-          "Some error is occurred!",
+          'Some error is occurred!',
           channel as TextChannel,
-          5000,
-        );
+          5000
+        )
       if (!channelid)
         return sendTimedMessage(
-          "No channel is provided!",
+          'No channel is provided!',
           channel as TextChannel,
-          10000,
-        );
+          10000
+        )
 
-      const channels = message.guild.channels;
+      const channels = message.guild.channels
 
       if (!channels.cache.find((c) => c.id === channelid))
         return sendTimedMessage(
-          "Channel not found! Please provide an existing text channel!",
+          'Channel not found! Please provide an existing text channel!',
           channel as TextChannel,
-          10000,
-        );
+          10000
+        )
 
-      const channelDefault = channels.cache.get(channelid);
+      const channelDefault = channels.cache.get(channelid)
 
-      setGuildOption(message.guild, "channel", channelid);
+      setGuildOption(message.guild, 'channel', channelid)
 
       const embed = new EmbedBuilder()
         .setAuthor({
-          name: "Channel Config",
+          name: 'Channel Config',
           iconURL: message.client.user.avatarURL() || undefined,
         })
         .setFields({
-          name: " ",
+          name: ' ',
           value: `Channel config successfully changed  to ${channelDefault}!`,
         })
-        .setColor("Blurple");
+        .setColor('Blurple')
 
-      channel.send({ embeds: [embed] });
+      channel.send({ embeds: [embed] })
+
+      logger.trace(
+        `[Channel Config Command]: Channel config changed to ${channelDefault}`
+      )
     } catch (e) {
-      console.log(
-        color(
-          "text",
-          `❌ Failed to save channel config : ${color("error", e.message)}`,
-        ),
-      );
+      const client = message.client
+      logger.error(
+        `[Channel Config Command]: ❌ Failed to save channel config : ${e.message}`
+      )
     }
   },
   cooldown: 5,
-  permissions: ["Administrator"],
-  aliases: ["cfg"],
-};
+  permissions: ['Administrator'],
+  aliases: ['cfg'],
+}
 
-export default command;
+export default command

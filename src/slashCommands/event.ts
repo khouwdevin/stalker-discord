@@ -3,87 +3,87 @@ import {
   GuildScheduledEventPrivacyLevel,
   GuildScheduledEventEntityType,
   ChannelType,
-} from "discord.js";
-import { SlashCommand } from "../types";
-import { color, getDateChoices, getTimeChoices } from "../functions";
+} from 'discord.js'
+import { SlashCommand } from '../types'
+import { getDateChoices, getTimeChoices } from '../functions'
+import logger from '../logger'
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
-    .setName("event")
+    .setName('event')
     .addStringOption((options) => {
       return options
-        .setName("title")
-        .setDescription("Set your title for the event.")
+        .setName('title')
+        .setDescription('Set your title for the event.')
         .setMaxLength(400)
-        .setRequired(true);
+        .setRequired(true)
     })
     .addStringOption((options) => {
       return options
-        .setName("description")
-        .setDescription("Set your description for the event.")
+        .setName('description')
+        .setDescription('Set your description for the event.')
         .setMaxLength(1000)
-        .setRequired(true);
+        .setRequired(true)
     })
     .addChannelOption((options) => {
       return options
-        .setName("channel")
-        .setDescription("Set channel where event will be held.")
+        .setName('channel')
+        .setDescription('Set channel where event will be held.')
         .addChannelTypes(ChannelType.GuildVoice)
-        .setRequired(true);
+        .setRequired(true)
     })
     .addStringOption((options) => {
-      const date = getDateChoices();
-      date.map((value) => options.addChoices({ name: value, value: value }));
+      const date = getDateChoices()
+      date.map((value) => options.addChoices({ name: value, value: value }))
 
       return options
-        .setName("startdate")
-        .setDescription("Set date when event will be held.")
-        .setRequired(true);
+        .setName('startdate')
+        .setDescription('Set date when event will be held.')
+        .setRequired(true)
     })
     .addStringOption((options) => {
-      const time = getTimeChoices();
-      time.map((value) => options.addChoices({ name: value, value: value }));
+      const time = getTimeChoices()
+      time.map((value) => options.addChoices({ name: value, value: value }))
 
       return options
-        .setName("starttime")
-        .setDescription("Set time when event will start.")
-        .setRequired(true);
+        .setName('starttime')
+        .setDescription('Set time when event will start.')
+        .setRequired(true)
     })
     .addStringOption((options) => {
-      const time = getTimeChoices();
-      time.map((value) => options.addChoices({ name: value, value: value }));
+      const time = getTimeChoices()
+      time.map((value) => options.addChoices({ name: value, value: value }))
 
       return options
-        .setName("dayornight")
-        .setDescription("Set time when event will start.")
-        .setChoices({ name: "AM", value: "AM" }, { name: "PM", value: "PM" })
-        .setRequired(true);
+        .setName('dayornight')
+        .setDescription('Set time when event will start.')
+        .setChoices({ name: 'AM', value: 'AM' }, { name: 'PM', value: 'PM' })
+        .setRequired(true)
     })
-    .setDescription("Create event using slash command"),
+    .setDescription('Create event using slash command'),
   execute: async (interaction) => {
     try {
-      await interaction.deferReply({ ephemeral: true });
+      logger.debug('[Event Slash Command]: Run event slash command')
+
+      await interaction.deferReply({ ephemeral: true })
 
       if (!interaction.guild)
-        return console.log(
-          color(
-            "text",
-            `❌ Failed to execute event slash command : ${color("error", "guild unavailable")}`,
-          ),
-        );
+        return logger.error(
+          '[Event Slash Command]: ❌ Failed to execute event slash command : guild unavailable'
+        )
 
-      const options = interaction.options.data;
+      const options = interaction.options.data
 
-      const title = options[0].value;
-      const description = options[1].value;
-      const channel = options[2].value;
-      const date = options[3].value;
-      const hour = options[4].value;
-      const ampm = options[5].value;
+      const title = options[0].value
+      const description = options[1].value
+      const channel = options[2].value
+      const date = options[3].value
+      const hour = options[4].value
+      const ampm = options[5].value
 
-      const finalhour = ampm === "AM" ? hour : parseInt(`${hour}`) + 12;
+      const finalhour = ampm === 'AM' ? hour : parseInt(`${hour}`) + 12
 
-      const finaldate = `${date} ${finalhour}:00:00`;
+      const finaldate = `${date} ${finalhour}:00:00`
 
       await interaction.guild.scheduledEvents.create({
         name: `${title}`,
@@ -92,19 +92,16 @@ const command: SlashCommand = {
         scheduledStartTime: new Date(`${finaldate}`),
         privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
         entityType: GuildScheduledEventEntityType.Voice,
-      });
+      })
 
-      await interaction.editReply("Your event has been posted!");
+      await interaction.editReply('Your event has been posted!')
     } catch (e) {
-      console.log(
-        color(
-          "text",
-          `❌ Failed to create event : ${color("error", e.message)}`,
-        ),
-      );
+      logger.error(
+        `[Event Slash Command]: ❌ Failed to create event : ${e.message}`
+      )
     }
   },
   cooldown: 5,
-};
+}
 
-export default command;
+export default command

@@ -1,51 +1,51 @@
-import { Command } from "../types";
-import { color, setGuildOption } from "../functions";
-import { EmbedBuilder } from "discord.js";
+import { Command } from '../types'
+import { setGuildOption } from '../functions'
+import { EmbedBuilder } from 'discord.js'
+import logger from '../logger'
 
 const command: Command = {
-  name: "detectpresence",
+  name: 'detectpresence',
   execute: async (message, args) => {
     try {
-      const detectpresence = args[1];
-      const channel = message.channel;
+      logger.debug('[Detect Presence Command]: Run detect presence command')
 
-      if (!detectpresence)
-        return message.channel.send("No status is provided!");
-      if (detectpresence !== "true" && detectpresence !== "false")
-        return message.channel.send("Please provide only true or false!");
+      const detectpresence = args[1]
+      const channel = message.channel
+
+      if (!detectpresence) return message.channel.send('No status is provided!')
+      if (detectpresence !== 'true' && detectpresence !== 'false')
+        return message.channel.send('Please provide only true or false!')
       if (!message.guild) {
-        return message.channel.send("Some error is occurred!");
+        return message.channel.send('Some error is occurred!')
       }
 
-      setGuildOption(
-        message.guild,
-        "detectpresence",
-        detectpresence === "true",
-      );
+      setGuildOption(message.guild, 'detectpresence', detectpresence === 'true')
 
       const embed = new EmbedBuilder()
         .setAuthor({
-          name: "Detect Presence",
+          name: 'Detect Presence',
           iconURL: message.client.user.avatarURL() || undefined,
         })
         .setFields({
-          name: " ",
+          name: ' ',
           value: `Detect presence successfully changed to **${detectpresence}**!`,
         })
-        .setColor("Blurple");
-      channel.send({ embeds: [embed] });
+        .setColor('Blurple')
+      channel.send({ embeds: [embed] })
+
+      logger.trace(
+        `[Detect Presence Command]: Detect presence changed to ${detectpresence}`
+      )
     } catch (e) {
-      console.log(
-        color(
-          "text",
-          `❌ Failed to configure detect presence : ${color("error", e.message)}`,
-        ),
-      );
+      const client = message.client
+      logger.error(
+        `[Detect Presence Command]: ❌ Failed to configure detect presence : ${e.message}`
+      )
     }
   },
   cooldown: 5,
-  permissions: ["Administrator"],
-  aliases: ["dp"],
-};
+  permissions: ['Administrator'],
+  aliases: ['dp'],
+}
 
-export default command;
+export default command

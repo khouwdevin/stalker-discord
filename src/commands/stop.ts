@@ -1,4 +1,5 @@
-import { color, sendTimedMessage } from '../functions'
+import { sendTimedMessage } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -6,6 +7,8 @@ const command: Command = {
   name: 'stop',
   execute: async (message, args) => {
     try {
+      logger.debug('[Stop Command]: Run stop command')
+
       if (!message.guildId || !message.member)
         return sendTimedMessage(
           'An error occurred!',
@@ -45,10 +48,10 @@ const command: Command = {
       channel.send({ embeds: [embed] })
 
       player.stop({ destroy: true })
+      logger.trace('[Stop Command]: Player is stopped')
     } catch (e) {
-      console.log(
-        color('text', `❌ Failed to stop music : ${color('error', e.message)}`)
-      )
+      const client = message.client
+      logger.error(`[Stop Command]: ❌ Failed to stop music : ${e.message}`)
     }
   },
   cooldown: 1,

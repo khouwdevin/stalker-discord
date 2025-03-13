@@ -1,4 +1,5 @@
-import { color, sendMessage, sendTimedMessage } from '../functions'
+import { sendMessage, sendTimedMessage } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -6,6 +7,8 @@ const command: Command = {
   name: 'skip',
   execute: async (message, args) => {
     try {
+      logger.debug('[Skip Command]: Run skip command')
+
       if (!message.guildId || !message.member)
         return sendTimedMessage(
           'An error occurred!',
@@ -51,9 +54,8 @@ const command: Command = {
 
       await player.skip()
     } catch (e) {
-      console.log(
-        color('text', `❌ Failed to skip music : ${color('error', e.message)}`)
-      )
+      const client = message.client
+      logger.error(`[Skip Command]: ❌ Failed to skip music : ${e.message}`)
     }
   },
   cooldown: 1,

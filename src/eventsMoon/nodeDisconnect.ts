@@ -1,18 +1,12 @@
 import { Node } from 'moonlink.js'
 import { MoonEvent } from '../types'
-import { color } from '../functions'
+import logger from '../logger'
 
 const event: MoonEvent = {
   name: 'nodeDisconnect',
   execute: (node: Node, code: number, reason: any) => {
-    console.log(
-      color(
-        'text',
-        `❌ Disconnected from ${color('variable', node.host)} code ${color(
-          'variable',
-          code
-        )} reason ${color('variable', reason)}`
-      )
+    logger.info(
+      `[Event Moon]: ❌ Disconnected from ${node.host} code ${code} reason ${reason}`
     )
   },
 }

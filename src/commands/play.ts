@@ -1,10 +1,10 @@
 import {
-  color,
   getLoopString,
   getPlayerDB,
   sendMessage,
   sendTimedMessage,
 } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel, resolveColor } from 'discord.js'
 
@@ -12,6 +12,8 @@ const command: Command = {
   name: 'play',
   execute: async (message, args) => {
     try {
+      logger.debug('[Play Command]: Run play command')
+
       const title = args.slice(1, args.length).join(' ')
       let loopPlayer = 'off'
 
@@ -35,7 +37,6 @@ const command: Command = {
         )
 
       const client = message.client
-
       let player = client.moon.players.get(message.guildId)
 
       if (!player) {
@@ -178,9 +179,8 @@ const command: Command = {
 
       if (!player.playing) await player.play()
     } catch (e) {
-      console.log(
-        color('text', `❌ Failed to play music : ${color('error', e.message)}`)
-      )
+      const client = message.client
+      logger.error(`[Play Command]: ❌ Failed to play music : ${e.message}`)
     }
   },
   cooldown: 1,

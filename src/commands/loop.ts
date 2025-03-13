@@ -1,4 +1,5 @@
-import { color, getPlayerData, sendTimedMessage } from '../functions'
+import { getPlayerData, sendTimedMessage } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -6,6 +7,8 @@ const command: Command = {
   name: 'loop',
   execute: async (message, args) => {
     try {
+      logger.debug('[Loop Command]: Run loop command')
+
       const loop = args[1]
 
       if (loop !== 'off' && loop !== 'track' && loop != 'queue')
@@ -62,13 +65,10 @@ const command: Command = {
         .setFooter({ text: 'STALKER MUSIC' })
         .setColor('Purple')
       channel.send({ embeds: [embed] })
+      logger.trace(`[Loop Command]: Loop is changed to ${playerData}`)
     } catch (e) {
-      console.log(
-        color(
-          'text',
-          `❌ Failed to configure loop : ${color('error', e.message)}`
-        )
-      )
+      const client = message.client
+      logger.trace(`[Loop Command]: ❌ Failed to configure loop : ${e.message}`)
     }
   },
   cooldown: 1,

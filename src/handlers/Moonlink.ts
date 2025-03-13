@@ -2,8 +2,8 @@ import { Client } from 'discord.js'
 import { readdirSync } from 'fs'
 import { MoonEvent } from '../types'
 import { join } from 'path'
-import { color } from '../functions'
-import { INode } from 'moonlink.js'
+import { INode, Player, Track } from 'moonlink.js'
+import logger from '../logger'
 
 module.exports = (client: Client) => {
   if (process.env.TURN_ON_MUSIC !== 'true') return
@@ -29,7 +29,7 @@ module.exports = (client: Client) => {
       event.name === 'trackStuck' ||
       event.name === 'trackException'
     )
-      client.moon.on(event.name, (player, track) =>
+      client.moon.on(event.name, (player: Player, track: Track) =>
         event.execute(client, player, track)
       )
     else if (event.name === 'queueEnd')
@@ -41,11 +41,8 @@ module.exports = (client: Client) => {
         event.execute(client, player, track)
       )
 
-    console.log(
-      color(
-        'text',
-        `🌠 Successfully loaded moon event ${color('variable', event.name)}`
-      )
+    logger.info(
+      `[Handler]: 🌠 Successfully loaded moon event ${event.name.toString()}`
     )
   })
 }

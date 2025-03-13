@@ -1,46 +1,49 @@
-import { Command } from "../types";
-import { color, setGuildOption } from "../functions";
-import { EmbedBuilder } from "discord.js";
+import { Command } from '../types'
+import { setGuildOption } from '../functions'
+import { EmbedBuilder } from 'discord.js'
+import logger from '../logger'
 
 const command: Command = {
-  name: "notify",
+  name: 'notify',
   execute: async (message, args) => {
     try {
-      const notify = args[1];
-      const channel = message.channel;
+      logger.debug('[Notify Command]: Run notify command')
 
-      if (!notify) return message.channel.send("No status is provided");
-      if (notify !== "true" && notify !== "false")
-        return message.channel.send("Please provide only true or false!");
+      const notify = args[1]
+      const channel = message.channel
+
+      if (!notify) return message.channel.send('No status is provided')
+      if (notify !== 'true' && notify !== 'false')
+        return message.channel.send('Please provide only true or false!')
       if (!message.guild) {
-        return message.channel.send("Some error is occurred!");
+        return message.channel.send('Some error is occurred!')
       }
 
-      setGuildOption(message.guild, "notify", notify === "true");
+      setGuildOption(message.guild, 'notify', notify === 'true')
 
       const embed = new EmbedBuilder()
         .setAuthor({
-          name: "Stalker Notify",
+          name: 'Stalker Notify',
           iconURL: message.client.user.avatarURL() || undefined,
         })
         .setFields({
-          name: " ",
+          name: ' ',
           value: `Channel config successfully changed  to **${notify}**!`,
         })
-        .setColor("Blurple");
-      channel.send({ embeds: [embed] });
+        .setColor('Blurple')
+      channel.send({ embeds: [embed] })
+
+      logger.trace(`[Notify Command]: Notify is changed to ${notify}`)
     } catch (e) {
-      console.log(
-        color(
-          "text",
-          `❌ Failed to configure notify : ${color("error", e.message)}`,
-        ),
-      );
+      const client = message.client
+      logger.error(
+        `[Notify Command]: ❌ Failed to configure notify : ${e.message}`
+      )
     }
   },
   cooldown: 5,
-  permissions: ["Administrator"],
-  aliases: ["n"],
-};
+  permissions: ['Administrator'],
+  aliases: ['n'],
+}
 
-export default command;
+export default command

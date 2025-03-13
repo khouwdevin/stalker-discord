@@ -1,6 +1,7 @@
 import { Player } from 'moonlink.js'
 import { MoonEvent } from '../types'
 import { Client } from 'discord.js'
+import logger from '../logger'
 
 const event: MoonEvent = {
   name: 'queueEnd',
@@ -11,6 +12,8 @@ const event: MoonEvent = {
     }, 20000)
 
     client.timeouts.set(`player-${player.guildId}`, timeout)
+
+    logger.debug(`[Event Moon]: Queue end player-${player.guildId}`)
   },
 }
 

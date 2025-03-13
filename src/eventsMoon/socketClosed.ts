@@ -2,6 +2,7 @@ import { Player } from 'moonlink.js'
 import { MoonEvent } from '../types'
 import { Client } from 'discord.js'
 import { setPlayerDB } from '../functions'
+import logger from '../logger'
 
 const event: MoonEvent = {
   name: 'socketClosed',
@@ -17,6 +18,8 @@ const event: MoonEvent = {
     }
 
     await setPlayerDB(player.guildId, options)
+
+    logger.debug(`[Event Moon]: Socket closed ${player.guildId}`)
   },
 }
 

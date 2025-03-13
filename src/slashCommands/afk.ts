@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, GuildMember } from 'discord.js'
 import { SlashCommand } from '../types'
-import { color } from '../functions'
+import logger from '../logger'
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -21,17 +21,12 @@ const command: SlashCommand = {
     .setDescription('Tell your friend if you are going to AFK.'),
   execute: async (interaction) => {
     try {
+      logger.debug('[AFK Slash Command]: Run afk slash command')
       await interaction.deferReply({ ephemeral: true })
 
       if (!interaction.channel)
-        return console.log(
-          color(
-            'text',
-            `❌ Failed to execute AFK slash command : ${color(
-              'error',
-              'channel unavailable'
-            )}`
-          )
+        return logger.error(
+          '[AFK Slash Command]: ❌ Failed to execute AFK slash command : channel unavailable'
         )
 
       const options = interaction.options.data
@@ -45,22 +40,24 @@ const command: SlashCommand = {
           `${member} is AFK for ${minutes} minutes`
         )
         await member.setNickname(`[AFK]${member.user.displayName}`)
+
+        logger.trace(
+          `[AFK Slash Command]: Set AFK for ${member.user.displayName}`
+        )
       } else {
         await interaction.channel?.send(`${member} is not AFK`)
         await member.setNickname(member.user.displayName.replace('[AFK]', ''))
+
+        logger.trace(
+          `[AFK Slash Command]: Set not AFK for ${member.user.displayName}`
+        )
       }
 
       await interaction.editReply('Your command is successfully ran!')
     } catch (e) {
       await interaction.editReply('Error occured!')
-      console.log(
-        color(
-          'text',
-          `❌ Failed to execute AFK slash command : ${color(
-            'error',
-            e.message
-          )}`
-        )
+      return logger.error(
+        `[AFK Slash Command]: ❌ Failed to execute AFK slash command : ${e.message}`
       )
     }
   },

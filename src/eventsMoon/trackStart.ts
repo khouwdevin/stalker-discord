@@ -1,7 +1,7 @@
 import { Player } from 'moonlink.js'
 import { MoonEvent } from '../types'
 import { Client, EmbedBuilder } from 'discord.js'
-import { color } from '../functions'
+import logger from '../logger'
 
 const event: MoonEvent = {
   name: 'trackStart',
@@ -9,11 +9,8 @@ const event: MoonEvent = {
     const channel = await client.channels
       .fetch(player.textChannelId)
       .catch(() => {
-        return console.log(
-          color(
-            'text',
-            `❌ Error fetch channel on ${color('variable', 'trackStart')}`
-          )
+        return logger.error(
+          '[Event Moon]: ❌ Error fetch channel on trackStart'
         )
       })
 
@@ -28,6 +25,8 @@ const event: MoonEvent = {
       .setColor('Green')
 
     channel.send({ embeds: [embed] })
+
+    logger.debug('[Event Moon]: Track start on trackStart')
   },
 }
 

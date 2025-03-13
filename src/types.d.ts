@@ -13,6 +13,7 @@ import {
 } from 'discord.js'
 import { Player, MoonlinkEvents, Manager, TPlayerLoop } from 'moonlink.js'
 import mongoose from 'mongoose'
+import { Logger } from 'pino'
 
 export interface SlashCommand {
   command: SlashCommandBuilder

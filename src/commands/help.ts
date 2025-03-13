@@ -5,13 +5,13 @@ import {
   EmbedBuilder,
 } from 'discord.js'
 import { Command, IHelp } from '../types'
-import { color } from '../functions'
+import logger from '../logger'
 
 const command: Command = {
   name: 'help',
   execute: async (message, args) => {
     try {
-      const client = message.client
+      logger.debug('[Help Command]: Run help command')
 
       const embed = new EmbedBuilder()
         .setTitle(commandText[0].title)
@@ -42,20 +42,18 @@ const command: Command = {
         await currentMessage
           .delete()
           .catch((e) =>
-            console.log(
-              color(
-                'text',
-                `❌ Failed to delete message : ${color('error', e.message)}`
-              )
+            logger.error(
+              `[Help Command]: ❌ Failed to delete message : ${e.message}`
             )
           )
       }, 20000)
 
+      const client = message.client
       client.timeouts.set(`help-${currentMessage.id}`, timeout)
+      logger.trace(`[Help Command]: Current timeout help-${currentMessage.id}`)
     } catch (e) {
-      console.log(
-        color('text', `❌ Failed to show help : ${color('error', e.message)}`)
-      )
+      const client = message.client
+      logger.error(`[Help Command]: ❌ Failed to show help : ${e.message}`)
     }
   },
   button: async (interaction) => {
@@ -67,11 +65,8 @@ const command: Command = {
       const currentMessage = await interaction.channel.messages
         .fetch(messageId)
         .catch((e) =>
-          console.log(
-            color(
-              'text',
-              `❌ Failed to fetch message : ${color('error', e.message)}`
-            )
+          logger.error(
+            `[Help Command Button]: ❌ Failed to fetch message : ${e.message}`
           )
         )
 
@@ -99,11 +94,8 @@ const command: Command = {
         await currentMessage
           .delete()
           .catch((e) =>
-            console.log(
-              color(
-                'text',
-                `❌ Failed to delete message : ${color('error', e.message)}`
-              )
+            logger.error(
+              `[Help Command Button]: ❌ Failed to delete message : ${e.message}`
             )
           )
       }, 20000)
@@ -112,14 +104,9 @@ const command: Command = {
 
       interaction.deferUpdate()
     } catch (e) {
-      console.log(
-        color(
-          'text',
-          `❌ Failed to process interact button help : ${color(
-            'error',
-            e.message
-          )}`
-        )
+      const client = interaction.client
+      logger.error(
+        `[Help Command Button]: ❌ Failed to process interact button help : ${e.message}`
       )
     }
   },

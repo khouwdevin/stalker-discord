@@ -1,5 +1,5 @@
 import { VoiceState } from 'discord.js'
-import { color } from '../functions'
+import logger from '../logger'
 
 const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
   try {
@@ -54,9 +54,7 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
       client.timeouts.set(`player-${player.guildId}`, timeout)
     }
   } catch (e) {
-    console.log(
-      color('text', `❌ Failed to detect user : ${color('error', e.message)}`)
-    )
+    logger.error(`[Detect User]: ❌ Failed to detect user : ${e.message}`)
   }
 }
 

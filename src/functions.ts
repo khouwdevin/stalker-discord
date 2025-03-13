@@ -1,4 +1,3 @@
-import chalk from 'chalk'
 import {
   ChannelManager,
   ChannelType,
@@ -12,11 +11,12 @@ import {
 } from 'discord.js'
 import GuildDB from './schemas/Guild'
 import PlayerDB from './schemas/Player'
-import { GuildOption, GuildOptions, IGuild, PlayerOptions } from './types'
+import { GuildOption, IGuild, PlayerOptions } from './types'
 import mongoose from 'mongoose'
 import { WebSocket } from 'ws'
 import GuildModel from './schemas/Guild'
 import { TPlayerLoop } from 'moonlink.js'
+import logger from './logger'
 
 type colorType = 'text' | 'variable' | 'error'
 
@@ -28,10 +28,6 @@ const themeColors = {
 
 export const getThemeColor = (color: colorType) =>
   Number(`0x${themeColors[color].substring(1)}`)
-
-export const color = (color: colorType, message: any) => {
-  return chalk.hex(themeColors[color])(message)
-}
 
 export const checkPermissions = (
   member: GuildMember,
@@ -65,11 +61,8 @@ export const sendTimedMessage = (
           (await channel.messages.fetch(m))
             .delete()
             .catch((e) =>
-              console.log(
-                color(
-                  'text',
-                  `❌ Failed to delete message : ${color('error', e.message)}`
-                )
+              logger.error(
+                `[Send Timed Message]: ❌ Failed to delete message : ${e.message}`
               )
             ),
         duration
@@ -82,12 +75,7 @@ export const sendMessage = (message: string, channel: TextChannel) => {
   channel
     .send(message)
     .catch((e) =>
-      console.log(
-        color(
-          'text',
-          `❌ Failed to delete message : ${color('error', e.message)}`
-        )
-      )
+      logger.error(`[Send Message]: ❌ Failed to delete message : ${e.message}`)
     )
 }
 
@@ -107,11 +95,8 @@ export const sendMessageToExistingChannel = (
     return channel
       .send(message)
       .catch((e) =>
-        console.log(
-          color(
-            'text',
-            `❌ Failed to send message : ${color('error', e.message)}`
-          )
+        logger.error(
+          `[Send Message to Existing Channel]: ❌ Failed to send message : ${e.message}`
         )
       )
   }
@@ -135,11 +120,8 @@ export const sendTimedMessageToExistingChannel = (
       .send(message)
       .then((m) => setTimeout(() => m.delete(), duration))
       .catch((e) =>
-        console.log(
-          color(
-            'text',
-            `❌ Failed to send message : ${color('error', e.message)}`
-          )
+        logger.error(
+          `[Send Timed Message to Existing Channel]: ❌ Failed to send message : ${e.message}`
         )
       )
   }
@@ -223,12 +205,9 @@ export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
     return channel
       .send("Please add or update default text channel to Stalker's config!")
       .then((m) => setTimeout(() => m.delete(), 10000))
-      .catch(() =>
-        console.log(
-          color(
-            'text',
-            `❌ Failed to ${color('error', 'notify config default message')}`
-          )
+      .catch((e) =>
+        logger.error(
+          `[Notify to Config Default Channel]: ❌ Failed to notify config default message : ${e.message}`
         )
       )
   }
@@ -244,11 +223,8 @@ export const deleteTimedMessage = (
       (await channel.messages.fetch(message))
         .delete()
         .catch((e) =>
-          console.log(
-            color(
-              'text',
-              `❌ Failed to delete message : ${color('error', e.message)}`
-            )
+          logger.error(
+            `[Delete Timed Message]: ❌ Failed to delete message : ${e.message}`
           )
         ),
     duration
@@ -275,9 +251,7 @@ export const registerGuild = async (
 
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
   if (mongoose.connection.readyState === 0)
-    return console.log(
-      color('text', `❌ Database ${color('error', 'not connected')}`)
-    )
+    return logger.error('[Get Guild Option]: ❌ Database is not connected')
   let foundGuild = await GuildDB.findOne({ guildID: guild.id })
   if (!foundGuild) {
     const newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
@@ -288,9 +262,7 @@ export const getGuildOption = async (guild: Guild, option: GuildOption) => {
 
 export const getAllGuildOption = async (guild: Guild) => {
   if (mongoose.connection.readyState === 0)
-    return console.log(
-      color('text', `❌ Database ${color('error', 'not connected')}`)
-    )
+    return logger.error('[Get All Guild Option]: ❌ Database is not connected')
   let foundGuild = await GuildDB.findOne({ guildID: guild.id })
   if (!foundGuild) {
     const newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
@@ -305,9 +277,7 @@ export const setGuildOption = async (
   value: any
 ) => {
   if (mongoose.connection.readyState === 0)
-    return console.log(
-      color('text', `❌ Database ${color('error', 'not connected')}`)
-    )
+    return logger.error('[Set Guild Option]: ❌ Database is not connected')
   let foundGuild = await GuildDB.findOne({ guildID: guild.id })
   if (!foundGuild) {
     let newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
@@ -321,9 +291,7 @@ export const setGuildOption = async (
 
 export const getAllGuild = async () => {
   if (mongoose.connection.readyState === 0)
-    return console.log(
-      color('text', `❌ Database ${color('error', 'not connected')}`)
-    )
+    return logger.error('[Get All Guild]: ❌ Database is not connected')
   const guilds = await GuildDB.find()
   return guilds
 }
@@ -405,7 +373,7 @@ export const getCode = (text: string): string => {
 
 export const getPlayerDB = async (guildId: string): Promise<PlayerOptions> => {
   if (mongoose.connection.readyState === 0) {
-    console.log(color('text', `❌ Database ${color('error', 'not connected')}`))
+    logger.error('[Get Player DB]: ❌ Database is not connected')
     return { autoPlay: true, loop: 'off', volume: 80 }
   }
   const foundPlayer = await PlayerDB.findOne({ guildID: guildId })
@@ -419,9 +387,7 @@ export const getPlayerDB = async (guildId: string): Promise<PlayerOptions> => {
 
 export const setPlayerDB = async (guildId: string, value: PlayerOptions) => {
   if (mongoose.connection.readyState === 0)
-    return console.log(
-      color('text', `❌ Database ${color('error', 'not connected')}`)
-    )
+    return logger.error('[Set Player DB]: ❌ Database is not connected')
   let foundPlayer = await PlayerDB.findOne({ guildID: guildId })
   if (!foundPlayer) return
 
@@ -500,22 +466,17 @@ export const forLavalinkServer = async () => {
 
   while (retries < 10) {
     try {
-      return await checkLavalinkConnection()
+      await checkLavalinkConnection()
     } catch (error) {
-      console.log(
-        color(
-          'text',
-          `❌ Connection attempt ${retries + 1} failed:  ${color(
-            'error',
-            error.message
-          )}`
-        )
+      logger.error(
+        `[For Lavalink Server]: ❌ Connection attempt ${retries + 1} failed:  ${
+          error.message
+        }`
       )
+
       retries++
       if (retries < 10) {
-        console.log(
-          color('text', `🔃 Retrying in ${color('variable', '10')} seconds...`)
-        )
+        logger.info('[For Lavalink Server]: 🔃 Retrying in 10 seconds...')
         await new Promise((resolve) => setTimeout(resolve, 10000))
       } else {
         throw new Error(`Failed to connect to Lavalink after 10 retries.`)

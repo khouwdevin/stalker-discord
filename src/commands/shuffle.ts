@@ -1,4 +1,5 @@
-import { color, getPlayerData, sendTimedMessage } from '../functions'
+import { getPlayerData, sendTimedMessage } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -6,6 +7,8 @@ const command: Command = {
   name: 'shuffle',
   execute: async (message, args) => {
     try {
+      logger.debug('[Shuffle Command]: Run shuffle command')
+
       const shuffle = args[1]
 
       if (!shuffle || (shuffle !== 'true' && shuffle !== 'false'))
@@ -69,12 +72,12 @@ const command: Command = {
         .setFooter({ text: 'STALKER MUSIC' })
         .setColor('Purple')
       channel.send({ embeds: [embed] })
+
+      logger.trace(`[Shuffle Command]: Shuffle is changed to ${playerData}`)
     } catch (e) {
-      console.log(
-        color(
-          'text',
-          `❌ Failed to configure shuffle : ${color('error', e.message)}`
-        )
+      const client = message.client
+      logger.error(
+        `[Shuffle Command]: ❌ Failed to configure shuffle : ${e.message}`
       )
     }
   },

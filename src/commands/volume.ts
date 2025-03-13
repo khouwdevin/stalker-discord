@@ -1,4 +1,5 @@
-import { color, getPlayerData, sendTimedMessage } from '../functions'
+import { getPlayerData, sendTimedMessage } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -6,6 +7,8 @@ const command: Command = {
   name: 'volume',
   execute: async (message, args) => {
     try {
+      logger.debug('[Volume Command]: Run volume command')
+
       const volume = parseInt(args[1])
 
       if (!volume || volume < 0 || volume > 100)
@@ -68,12 +71,12 @@ const command: Command = {
         .setFooter({ text: 'STALKER MUSIC' })
         .setColor('Purple')
       channel.send({ embeds: [embed] })
+
+      logger.trace(`[Volume Command]: Volume is changed to ${playerData}`)
     } catch (e) {
-      console.log(
-        color(
-          'text',
-          `❌ Failed to configure volume : ${color('error', e.message)}`
-        )
+      const client = message.client
+      logger.error(
+        `[Volume Command]: ❌ Failed to configure volume : ${e.message}`
       )
     }
   },

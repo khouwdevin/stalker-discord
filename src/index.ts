@@ -1,8 +1,9 @@
 import { ShardingManager } from 'discord.js'
-import { forLavalinkServer, color } from './functions'
+import { forLavalinkServer } from './functions'
 import commandLineArgs from 'command-line-args'
 import dotenv from 'dotenv'
 import path from 'path'
+import logger from './logger'
 
 const options = commandLineArgs([
   {
@@ -35,21 +36,11 @@ try {
     })
 
     shardingManager.on('shardCreate', (shard) => {
-      console.log(
-        color(
-          'text',
-          `🤖 Launched sharding manager ${color('variable', shard.id)} shard`
-        )
-      )
+      logger.info(`[Shard]: 🤖 Launched sharding manager ${shard.id} shard`)
     })
 
     await shardingManager.spawn()
   } catch (e) {
-    console.log(
-      color(
-        'text',
-        `❌ Launched sharding manager error :  ${color('error', e.message)}`
-      )
-    )
+    logger.error(`[Shard]: ❌ Launched sharding manager error :  ${e.message}`)
   }
 })()

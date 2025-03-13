@@ -1,7 +1,7 @@
 import { Player } from 'moonlink.js'
 import { MoonEvent } from '../types'
 import { Client, EmbedBuilder } from 'discord.js'
-import { color } from '../functions'
+import logger from '../logger'
 
 const event: MoonEvent = {
   name: 'trackStuck',
@@ -9,11 +9,8 @@ const event: MoonEvent = {
     const channel = await client.channels
       .fetch(player.textChannelId)
       .catch(() => {
-        return console.log(
-          color(
-            'text',
-            `❌ Error fetch channel on ${color('variable', 'trackStuck')}`
-          )
+        return logger.error(
+          '[Event Moon]: ❌ Error fetch channel on trackStuck'
         )
       })
 
@@ -33,6 +30,8 @@ const event: MoonEvent = {
     if (!attemp) {
       client.attempts.set(player.guildId, 3)
       await player.restart()
+
+      logger.debug('[Event Moon]: Restart player on trackStuck')
     } else {
       if (attemp <= 0) {
         player.stop()
@@ -45,9 +44,13 @@ const event: MoonEvent = {
           .setColor('Red')
 
         channel.send({ embeds: [embed] })
+
+        logger.debug('[Event Moon]: Player is being stopped on trackStuck')
       } else {
         client.attempts.set(player.guildId, attemp - 1)
         await player.restart()
+
+        logger.debug('[Event Moon]: Restart player on trackStuck')
       }
     }
   },

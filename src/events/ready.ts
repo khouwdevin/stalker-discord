@@ -1,11 +1,13 @@
 import { ActivityType, Client } from 'discord.js'
 import { BotEvent } from '../types'
-import { color, sendNotifyStalkerOnline } from '../functions'
+import { sendNotifyStalkerOnline } from '../functions'
+import logger from '../logger'
 
 const event: BotEvent = {
   name: 'ready',
   once: true,
   execute: async (client: Client) => {
+    logger.debug('[Event]: Client is ready')
     sendNotifyStalkerOnline(client)
 
     if (!client.user) return
@@ -22,9 +24,7 @@ const event: BotEvent = {
 
     if (process.env.TURN_ON_MUSIC === 'true') client.moon.init(client.user.id)
 
-    console.log(
-      color('text', `💪 Logged in as ${color('variable', client.user.tag)}`)
-    )
+    logger.info(`[Event] : 💪 Logged in as ${client.user.tag}`)
   },
 }
 

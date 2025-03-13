@@ -1,4 +1,5 @@
-import { color, sendTimedMessage } from '../functions'
+import { sendTimedMessage } from '../functions'
+import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
 
@@ -6,6 +7,8 @@ const command: Command = {
   name: 'resume',
   execute: async (message, args) => {
     try {
+      logger.debug('[Resume Command]: Run resume command')
+
       if (!message.guildId || !message.member)
         return sendTimedMessage(
           'An error occurred!',
@@ -45,15 +48,11 @@ const command: Command = {
           .setColor('Green')
         channel.send({ embeds: [embed] })
 
-        await player.resume()
+        player.resume()
       }
     } catch (e) {
-      console.log(
-        color(
-          'text',
-          `❌ Failed to resume music : ${color('error', e.message)}`
-        )
-      )
+      const client = message.client
+      logger.error(`[Resume Command]: ❌ Failed to resume music : ${e.message}`)
     }
   },
   cooldown: 1,

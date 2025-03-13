@@ -4,53 +4,51 @@ import {
   TextInputBuilder,
   TextInputStyle,
   ActionRowBuilder,
-} from "discord.js";
-import { SlashCommand } from "../types";
-import { color, getDecode } from "../functions";
+} from 'discord.js'
+import { SlashCommand } from '../types'
+import { getDecode } from '../functions'
+import logger from '../logger'
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
-    .setName("decode")
-    .setDescription("Decode your secret message here!"),
+    .setName('decode')
+    .setDescription('Decode your secret message here!'),
   execute: async (interaction) => {
     try {
-      const modal = new ModalBuilder().setCustomId("decode").setTitle("Decode");
+      logger.debug('[Decode Slash Command]: Run decode slash command')
+
+      const modal = new ModalBuilder().setCustomId('decode').setTitle('Decode')
 
       const decodeInput = new TextInputBuilder()
-        .setCustomId("codeInput")
-        .setLabel("Put your code here!")
+        .setCustomId('codeInput')
+        .setLabel('Put your code here!')
         .setRequired(true)
-        .setStyle(TextInputStyle.Paragraph);
+        .setStyle(TextInputStyle.Paragraph)
 
       const firstActionRow =
-        new ActionRowBuilder<TextInputBuilder>().addComponents(decodeInput);
+        new ActionRowBuilder<TextInputBuilder>().addComponents(decodeInput)
 
-      modal.addComponents(firstActionRow);
+      modal.addComponents(firstActionRow)
 
-      await interaction.showModal(modal);
+      await interaction.showModal(modal)
     } catch (e) {
-      console.log(
-        color(
-          "text",
-          `❌ Failed to launch decode modal : ${color("error", e.message)}`,
-        ),
-      );
+      logger.error(
+        `[Decode Slash Command]: ❌ Failed to launch decode modal : ${e.message}`
+      )
     }
   },
   modal: async (interaction) => {
     try {
-      await interaction.deferReply({ ephemeral: true });
+      await interaction.deferReply({ ephemeral: true })
 
-      const code = interaction.fields.getTextInputValue("codeInput");
-      const result = getDecode(code);
+      const code = interaction.fields.getTextInputValue('codeInput')
+      const result = getDecode(code)
 
-      await interaction.editReply({ content: result });
+      await interaction.editReply({ content: result })
     } catch (e) {
-      console.log(
-        color("text", `❌ Failed to decode : ${color("error", e.message)}`),
-      );
+      logger.error(`[Decode Slash Command]: ❌ Failed to decode : ${e.message}`)
     }
   },
-};
+}
 
-export default command;
+export default command

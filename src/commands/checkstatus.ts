@@ -1,44 +1,49 @@
-import { EmbedBuilder } from "discord.js";
-import { Command } from "../types";
-import { color, getAllGuildOption } from "../functions";
+import { EmbedBuilder } from 'discord.js'
+import { Command } from '../types'
+import { getAllGuildOption } from '../functions'
+import logger from '../logger'
 
 const command: Command = {
-  name: "checkstatus",
+  name: 'checkstatus',
   execute: async (message, args) => {
     try {
-      if (!message.guild) return;
+      logger.debug('[Check Status Command]: Run check status command')
 
-      const guildoptions = await getAllGuildOption(message.guild);
-      if (!guildoptions) return;
+      if (!message.guild) return
 
-      const options = guildoptions;
+      const guildoptions = await getAllGuildOption(message.guild)
+      if (!guildoptions) return
+
+      const options = guildoptions
 
       const statuslist = `
                 **detect presence**: ${options?.detectpresence}\r
                 **notify**: ${options?.notify}\r
                 **channel**: <#${options?.channel}>
-                `;
+                `
 
       const embed = new EmbedBuilder()
         .setTitle("Here's the list")
-        .setColor("Blurple")
+        .setColor('Blurple')
         .addFields(
-          { name: "Status List", value: " " },
-          { name: " ", value: statuslist },
-        );
-      message.channel.send({ embeds: [embed] });
+          { name: 'Status List', value: ' ' },
+          { name: ' ', value: statuslist }
+        )
+      message.channel.send({ embeds: [embed] })
+
+      logger.trace(
+        `[Check Status Command]: Check Stalker Bot status ${statuslist}`
+      )
     } catch (e) {
-      console.log(
-        color(
-          "text",
-          `❌ Failed to show check status : ${color("error", e.message)}`,
-        ),
-      );
+      const client = message.client
+      logger.error(
+        `[Check Status Command]: ❌ Failed to show check status : ${e.message}`
+      )
     }
   },
   cooldown: 5,
-  aliases: ["cs"],
+  aliases: ['cs'],
   permissions: [],
-};
+}
 
-export default command;
+export default command
