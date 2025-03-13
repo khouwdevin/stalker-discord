@@ -25,16 +25,16 @@ const event: MoonEvent = {
 
     channel.send({ embeds: [embed] })
 
-    const attemp = client.attempts.get(player.guildId)
+    const attemp = client.playerAttempts.get(player.guildId)
 
     if (!attemp) {
-      client.attempts.set(player.guildId, 3)
+      client.playerAttempts.set(player.guildId, 3)
       await player.restart()
 
       logger.debug('[Event Moon]: Restart player on trackError')
     } else {
       if (attemp <= 0) {
-        player.stop()
+        player.stop({ destroy: true })
 
         const embed = new EmbedBuilder()
           .setAuthor({
@@ -47,7 +47,7 @@ const event: MoonEvent = {
 
         logger.debug('[Event Moon]: Player is being stopped on trackError')
       } else {
-        client.attempts.set(player.guildId, attemp - 1)
+        client.playerAttempts.set(player.guildId, attemp - 1)
         await player.restart()
 
         logger.debug('[Event Moon]: Restart player on trackError')

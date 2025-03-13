@@ -8,50 +8,50 @@ import {
   PermissionFlagsBits,
   PermissionResolvable,
   TextChannel,
-} from "discord.js";
-import GuildDB from "./schemas/Guild";
-import PlayerDB from "./schemas/Player";
-import { GuildOption, IGuild, PlayerOptions } from "./types";
-import mongoose from "mongoose";
-import { WebSocket } from "ws";
-import GuildModel from "./schemas/Guild";
-import { TPlayerLoop } from "moonlink.js";
-import logger from "./logger";
+} from 'discord.js'
+import GuildDB from './schemas/Guild'
+import PlayerDB from './schemas/Player'
+import { GuildOption, IGuild, PlayerOption, PlayerOptions } from './types'
+import mongoose from 'mongoose'
+import { WebSocket } from 'ws'
+import GuildModel from './schemas/Guild'
+import { TPlayerLoop } from 'moonlink.js'
+import logger from './logger'
 
-type colorType = "text" | "variable" | "error";
+type colorType = 'text' | 'variable' | 'error'
 
 const themeColors = {
-  text: "#ff8e4d",
-  variable: "#ff624d",
-  error: "#f5426c",
-};
+  text: '#ff8e4d',
+  variable: '#ff624d',
+  error: '#f5426c',
+}
 
 export const getThemeColor = (color: colorType) =>
-  Number(`0x${themeColors[color].substring(1)}`);
+  Number(`0x${themeColors[color].substring(1)}`)
 
 export const checkPermissions = (
   member: GuildMember,
-  permissions: Array<PermissionResolvable>,
+  permissions: Array<PermissionResolvable>
 ) => {
-  let neededPermissions: PermissionResolvable[] = [];
+  let neededPermissions: PermissionResolvable[] = []
   permissions.forEach((permission) => {
-    if (!member.permissions.has(permission)) neededPermissions.push(permission);
-  });
-  if (neededPermissions.length === 0) return null;
+    if (!member.permissions.has(permission)) neededPermissions.push(permission)
+  })
+  if (neededPermissions.length === 0) return null
   return neededPermissions.map((p) => {
-    if (typeof p === "string") return p.split(/(?=[A-Z])/).join(" ");
+    if (typeof p === 'string') return p.split(/(?=[A-Z])/).join(' ')
     else
       return Object.keys(PermissionFlagsBits)
         .find((k) => Object(PermissionFlagsBits)[k] === p)
         ?.split(/(?=[A-Z])/)
-        .join(" ");
-  });
-};
+        .join(' ')
+  })
+}
 
 export const sendTimedMessage = (
   message: string,
   channel: TextChannel,
-  duration: number,
+  duration: number
 ) => {
   channel
     .send(message)
@@ -62,163 +62,161 @@ export const sendTimedMessage = (
             .delete()
             .catch((e) =>
               logger.error(
-                `[Send Timed Message]: ❌ Failed to delete message : ${e.message}`,
-              ),
+                `[Send Timed Message]: ❌ Failed to delete message : ${e.message}`
+              )
             ),
-        duration,
-      ),
-    );
-  return;
-};
+        duration
+      )
+    )
+  return
+}
 
 export const sendMessage = (message: string, channel: TextChannel) => {
   channel
     .send(message)
     .catch((e) =>
-      logger.error(
-        `[Send Message]: ❌ Failed to delete message : ${e.message}`,
-      ),
-    );
-};
+      logger.error(`[Send Message]: ❌ Failed to delete message : ${e.message}`)
+    )
+}
 
 export const sendMessageToExistingChannel = (
   channels: ChannelManager,
-  message: string,
+  message: string
 ) => {
   for (let i = 0; i < channels.cache.size; i++) {
-    const channelGuild = channels.cache.at(i);
+    const channelGuild = channels.cache.at(i)
 
-    if (!channelGuild) continue;
-    if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue;
+    if (!channelGuild) continue
+    if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue
 
     const channel = channelGuild.guild.systemChannel
       ? channelGuild.guild.systemChannel
-      : channelGuild;
+      : channelGuild
     return channel
       .send(message)
       .catch((e) =>
         logger.error(
-          `[Send Message to Existing Channel]: ❌ Failed to send message : ${e.message}`,
-        ),
-      );
+          `[Send Message to Existing Channel]: ❌ Failed to send message : ${e.message}`
+        )
+      )
   }
-};
+}
 
 export const sendTimedMessageToExistingChannel = (
   channels: ChannelManager,
   message: string,
-  duration: number,
+  duration: number
 ) => {
   for (let i = 0; i < channels.cache.size; i++) {
-    const channelGuild = channels.cache.at(i);
+    const channelGuild = channels.cache.at(i)
 
-    if (!channelGuild) continue;
-    if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue;
+    if (!channelGuild) continue
+    if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue
 
     const channel = channelGuild.guild.systemChannel
       ? channelGuild.guild.systemChannel
-      : channelGuild;
+      : channelGuild
     return channel
       .send(message)
       .then((m) => setTimeout(() => m.delete(), duration))
       .catch((e) =>
         logger.error(
-          `[Send Timed Message to Existing Channel]: ❌ Failed to send message : ${e.message}`,
-        ),
-      );
+          `[Send Timed Message to Existing Channel]: ❌ Failed to send message : ${e.message}`
+        )
+      )
   }
-};
+}
 
 export const sendNotifyStalkerOnline = async (client: Client) => {
-  const guilds = client.guilds.cache;
+  const guilds = client.guilds.cache
 
   for (let i = 0; i < guilds.size; i++) {
-    const guild = guilds.at(i) as Guild;
-    const channelId = await getGuildOption(guild, "channel");
-    const notify = await getGuildOption(guild, "notify");
+    const guild = guilds.at(i) as Guild
+    const channelId = await getGuildOption(guild, 'channel')
+    const notify = await getGuildOption(guild, 'notify')
 
-    if (!notify) continue;
+    if (!notify) continue
 
-    if (channelId === "default") {
+    if (channelId === 'default') {
       if (!guild.systemChannel) {
-        const channels = guild.channels;
+        const channels = guild.channels
         sendTimedMessageToExistingChannel(
           channels,
           "Please add or update default text channel to Stalker's config!",
-          10000,
-        );
+          10000
+        )
 
-        continue;
+        continue
       }
 
-      const channel = guild.systemChannel as TextChannel;
-      sendTimedMessage("Stalker is back online!", channel, 5000);
+      const channel = guild.systemChannel as TextChannel
+      sendTimedMessage('Stalker is back online!', channel, 5000)
 
-      continue;
+      continue
     }
     if (channelId) {
-      const channel = guild.channels.cache.find((c) => c.id === channelId);
+      const channel = guild.channels.cache.find((c) => c.id === channelId)
 
       if (!channel || channel.type !== ChannelType.GuildText) {
-        const channels = guild.channels;
+        const channels = guild.channels
         sendTimedMessageToExistingChannel(
           channels,
           "Please add or update default text channel to Stalker's config!",
-          10000,
-        );
+          10000
+        )
 
-        continue;
+        continue
       }
 
-      sendTimedMessage("Stalker is back online!", channel as TextChannel, 5000);
+      sendTimedMessage('Stalker is back online!', channel as TextChannel, 5000)
 
-      continue;
+      continue
     }
 
-    const channels = guild.channels.cache;
+    const channels = guild.channels.cache
 
     for (let j = 0; j < channels.size; j++) {
-      const channel = channels.at(j);
+      const channel = channels.at(j)
 
-      if (!channel) continue;
-      if (channel.type !== ChannelType.GuildText) continue;
+      if (!channel) continue
+      if (channel.type !== ChannelType.GuildText) continue
 
-      sendTimedMessage("Stalker is back online!", channel as TextChannel, 5000);
+      sendTimedMessage('Stalker is back online!', channel as TextChannel, 5000)
 
-      break;
+      break
     }
   }
-};
+}
 
 export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
   for (let i = 0; i < channels.cache.size; i++) {
-    const channelGuild = channels.cache.at(i);
+    const channelGuild = channels.cache.at(i)
 
-    if (!channelGuild) continue;
-    if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue;
+    if (!channelGuild) continue
+    if (!channelGuild.isTextBased() || channelGuild.isDMBased()) continue
     if (!channelGuild.guild.systemChannel)
       return sendTimedMessageToExistingChannel(
         channels,
         "Please add or update default text channel to Stalker's config!",
-        10000,
-      );
+        10000
+      )
 
-    const channel = channelGuild.guild.systemChannel;
+    const channel = channelGuild.guild.systemChannel
     return channel
       .send("Please add or update default text channel to Stalker's config!")
       .then((m) => setTimeout(() => m.delete(), 10000))
       .catch((e) =>
         logger.error(
-          `[Notify to Config Default Channel]: ❌ Failed to notify config default message : ${e.message}`,
-        ),
-      );
+          `[Notify to Config Default Channel]: ❌ Failed to notify config default message : ${e.message}`
+        )
+      )
   }
-};
+}
 
 export const deleteTimedMessage = (
   message: Message,
   channel: TextChannel,
-  duration: number,
+  duration: number
 ) => {
   setTimeout(
     async () =>
@@ -226,16 +224,16 @@ export const deleteTimedMessage = (
         .delete()
         .catch((e) =>
           logger.error(
-            `[Delete Timed Message]: ❌ Failed to delete message : ${e.message}`,
-          ),
+            `[Delete Timed Message]: ❌ Failed to delete message : ${e.message}`
+          )
         ),
-    duration,
-  );
-};
+    duration
+  )
+}
 
 export const registerGuild = async (
   guild: Guild,
-  channelid: string,
+  channelid: string
 ): Promise<IGuild> => {
   const newGuild = new GuildModel({
     guildID: guild.id,
@@ -245,189 +243,193 @@ export const registerGuild = async (
       channel: channelid,
     },
     joinedAt: Date.now(),
-  });
-  await newGuild.save();
+  })
+  await newGuild.save()
 
-  return newGuild;
-};
+  return newGuild
+}
 
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
   if (mongoose.connection.readyState === 0)
-    return logger.error("[Get Guild Option]: ❌ Database is not connected");
-  let foundGuild = await GuildDB.findOne({ guildID: guild.id });
+    return logger.error('[Get Guild Option]: ❌ Database is not connected')
+  let foundGuild = await GuildDB.findOne({ guildID: guild.id })
   if (!foundGuild) {
-    const newGuild = await registerGuild(guild, guild.systemChannelId ?? "");
-    return newGuild.options[option];
+    const newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
+    return newGuild.options[option]
   }
-  return foundGuild.options[option];
-};
+  return foundGuild.options[option]
+}
 
 export const getAllGuildOption = async (guild: Guild) => {
   if (mongoose.connection.readyState === 0)
-    return logger.error("[Get All Guild Option]: ❌ Database is not connected");
-  let foundGuild = await GuildDB.findOne({ guildID: guild.id });
+    return logger.error('[Get All Guild Option]: ❌ Database is not connected')
+  let foundGuild = await GuildDB.findOne({ guildID: guild.id })
   if (!foundGuild) {
-    const newGuild = await registerGuild(guild, guild.systemChannelId ?? "");
-    return newGuild.options;
+    const newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
+    return newGuild.options
   }
-  return foundGuild.options;
-};
+  return foundGuild.options
+}
 
 export const setGuildOption = async (
   guild: Guild,
   option: GuildOption,
-  value: any,
+  value: any
 ) => {
   if (mongoose.connection.readyState === 0)
-    return logger.error("[Set Guild Option]: ❌ Database is not connected");
-  let foundGuild = await GuildDB.findOne({ guildID: guild.id });
+    return logger.error('[Set Guild Option]: ❌ Database is not connected')
+  let foundGuild = await GuildDB.findOne({ guildID: guild.id })
   if (!foundGuild) {
-    let newGuild = await registerGuild(guild, guild.systemChannelId ?? "");
-    newGuild.options[option] = value;
-    await newGuild.save();
-    return;
+    let newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
+    newGuild.options[option] = value
+    await newGuild.save()
+    return
   }
-  foundGuild.options[option] = value;
-  await foundGuild.save();
-};
+  foundGuild.options[option] = value
+  await foundGuild.save()
+}
 
 export const getAllGuild = async () => {
   if (mongoose.connection.readyState === 0)
-    return logger.error("[Get All Guild]: ❌ Database is not connected");
-  const guilds = await GuildDB.find();
-  return guilds;
-};
+    return logger.error('[Get All Guild]: ❌ Database is not connected')
+  const guilds = await GuildDB.find()
+  return guilds
+}
 
 export const getDateChoices = (): Array<string> => {
-  const result: Array<string> = [];
+  const result: Array<string> = []
 
   for (let i = 0; i < 8; i++) {
-    const date = new Date();
-    date.setDate(date.getDate() + i);
+    const date = new Date()
+    date.setDate(date.getDate() + i)
 
-    const thedate = date.toDateString().split(" ");
-    const formateddate = `${thedate[2]} ${thedate[1]} ${thedate[3]}`;
+    const thedate = date.toDateString().split(' ')
+    const formateddate = `${thedate[2]} ${thedate[1]} ${thedate[3]}`
 
-    result.push(formateddate);
+    result.push(formateddate)
   }
 
-  return result;
-};
+  return result
+}
 
 export const getTimeChoices = (): Array<string> => {
-  const result: Array<string> = [];
+  const result: Array<string> = []
 
   for (let i = 1; i < 13; i++) {
     if (i < 10) {
-      result.push(`0${i}:00`);
+      result.push(`0${i}:00`)
     } else {
-      result.push(`${i}:00`);
+      result.push(`${i}:00`)
     }
   }
 
-  return result;
-};
+  return result
+}
 
 const alphabet =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?£€¥¢©®™¿¡÷¦¬×§¶°";
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=~!@#$%^&*()_+[]\\;\',./{}|:"<>?£€¥¢©®™¿¡÷¦¬×§¶°'
 const formula =
-  "°¶§×¬¦÷¡¿™®©¢¥€£?><\":|}{/.,';\\][+_)(*&^%$#@!~=-0987654321`zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA";
+  '°¶§×¬¦÷¡¿™®©¢¥€£?><":|}{/.,\';\\][+_)(*&^%$#@!~=-0987654321`zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA'
 
 export const getDecode = (code: string): string => {
-  const decodestring: string[] = [];
+  const decodestring: string[] = []
 
   for (let i = 0; i < code.length; i++) {
     if (/\n/.test(code[i]) || /\r/.test(code[i])) {
-      decodestring.push("\r");
-      continue;
+      decodestring.push('\r')
+      continue
     } else if (/\s/.test(code[i])) {
-      decodestring.push(" ");
-      continue;
+      decodestring.push(' ')
+      continue
     }
 
     for (let j = 0; j < formula.length; j++) {
-      if (code[i] === formula[j]) decodestring.push(alphabet[j]);
+      if (code[i] === formula[j]) decodestring.push(alphabet[j])
     }
   }
 
-  return decodestring.join("");
-};
+  return decodestring.join('')
+}
 
 export const getCode = (text: string): string => {
-  const codestring: string[] = [];
+  const codestring: string[] = []
 
   for (let i = 0; i < text.length; i++) {
     if (/\n/.test(text[i]) || /\r/.test(text[i])) {
-      codestring.push("\r");
-      continue;
+      codestring.push('\r')
+      continue
     } else if (/\s/.test(text[i])) {
-      codestring.push(" ");
-      continue;
+      codestring.push(' ')
+      continue
     }
 
     for (let j = 0; j < alphabet.length; j++) {
-      if (text[i] === alphabet[j]) codestring.push(formula[j]);
+      if (text[i] === alphabet[j]) codestring.push(formula[j])
     }
   }
 
-  return codestring.join("");
-};
+  return codestring.join('')
+}
 
 export const getPlayerDB = async (guildId: string): Promise<PlayerOptions> => {
   if (mongoose.connection.readyState === 0) {
-    logger.error("[Get Player DB]: ❌ Database is not connected");
-    return { autoPlay: true, loop: "off", volume: 80 };
+    logger.error('[Get Player DB]: ❌ Database is not connected')
+    return { autoPlay: true, loop: 'off', volume: 80, shuffle: false }
   }
-  const foundPlayer = await PlayerDB.findOne({ guildID: guildId });
+  const foundPlayer = await PlayerDB.findOne({ guildID: guildId })
   if (!foundPlayer) {
-    const newPlayer = new PlayerDB({ guildId: guildId });
-    await newPlayer.save();
-    return newPlayer.options;
+    const newPlayer = new PlayerDB({
+      guildId: guildId,
+      options: { autoPlay: true, loop: 'off', volume: 80, shuffle: false },
+    })
+    await newPlayer.save()
+    return newPlayer.options
   }
-  return foundPlayer.options;
-};
+  return foundPlayer.options
+}
 
-export const setPlayerDB = async (guildId: string, value: PlayerOptions) => {
+export const setPlayerDB = async (
+  guildId: string,
+  options: PlayerOption,
+  value: any
+) => {
   if (mongoose.connection.readyState === 0)
-    return logger.error("[Set Player DB]: ❌ Database is not connected");
-  let foundPlayer = await PlayerDB.findOne({ guildID: guildId });
-  if (!foundPlayer) return;
+    return logger.error('[Set Player DB]: ❌ Database is not connected')
+  let foundPlayer = await PlayerDB.findOne({ guildID: guildId })
+  if (!foundPlayer) {
+    const newPlayer = new PlayerDB({
+      guildId: guildId,
+      options: { autoPlay: true, loop: 'off', volume: 80, shuffle: false },
+    })
+    await newPlayer.save()
+    return
+  }
 
-  foundPlayer.options = value;
-  await foundPlayer.save();
-};
-
-export const getLoopString = (loopState: number) => {
-  let loop = "no loop";
-
-  if (loopState === 0) loop = "none";
-  else if (loopState === 1) loop = "track";
-  else loop = "queue";
-
-  return loop;
-};
+  foundPlayer.options[options] = value
+  await foundPlayer.save()
+}
 
 export const getPlayerData = (
   autoplay: boolean | null,
   volume: number,
   loop: TPlayerLoop | null,
-  shuffle: boolean | null,
+  shuffle: boolean | null
 ) => {
   return `
         autoplay: **${autoplay ? autoplay : false}**\r
         volume: **${volume}**\r
-        loop type: **${loop !== null ? loop : "off"}**\r
+        loop type: **${loop !== null ? loop : 'off'}**\r
         shufle: **${shuffle ? shuffle : false}**
-    `;
-};
+    `
+}
 
 function cleanup(ws: WebSocket, timeoutId: NodeJS.Timeout) {
-  clearTimeout(timeoutId);
+  clearTimeout(timeoutId)
   if (
     ws.readyState === WebSocket.OPEN ||
     ws.readyState === WebSocket.CONNECTING
   ) {
-    ws.close();
+    ws.close()
   }
 }
 
@@ -435,54 +437,54 @@ export const checkLavalinkConnection = async (): Promise<void> => {
   return new Promise((resolve, reject) => {
     const headers = {
       Authorization: process.env.LAVALINK_PASSWORD,
-      "User-Id": "1",
-      "Client-Name": "stalkerbot",
-    };
+      'User-Id': '1',
+      'Client-Name': 'stalkerbot',
+    }
 
     const ws = new WebSocket(
       `ws://${process.env.LAVALINK_HOST}:${process.env.LAVALINK_PORT}/v4/websocket`,
-      { headers },
-    );
+      { headers }
+    )
 
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: NodeJS.Timeout
 
-    ws.addEventListener("open", () => {
-      cleanup(ws, timeoutId);
-      resolve();
-    });
+    ws.addEventListener('open', () => {
+      cleanup(ws, timeoutId)
+      resolve()
+    })
 
-    ws.addEventListener("error", () => {
-      cleanup(ws, timeoutId);
-      reject(new Error("Websocket error"));
-    });
+    ws.addEventListener('error', () => {
+      cleanup(ws, timeoutId)
+      reject(new Error('Websocket error'))
+    })
 
     timeoutId = setTimeout(() => {
-      cleanup(ws, timeoutId);
-      reject(new Error("Connection timeout."));
-    }, 5000);
-  });
-};
+      cleanup(ws, timeoutId)
+      reject(new Error('Connection timeout.'))
+    }, 5000)
+  })
+}
 
 export const forLavalinkServer = async () => {
-  let retries = 0;
+  let retries = 0
 
   while (retries < 10) {
     try {
-      return await checkLavalinkConnection();
+      return await checkLavalinkConnection()
     } catch (error) {
       logger.error(
         `[For Lavalink Server]: ❌ Connection attempt ${retries + 1} failed:  ${
           error.message
-        }`,
-      );
+        }`
+      )
 
-      retries++;
+      retries++
       if (retries < 10) {
-        logger.info("[For Lavalink Server]: 🔃 Retrying in 10 seconds...");
-        await new Promise((resolve) => setTimeout(resolve, 10000));
+        logger.info('[For Lavalink Server]: 🔃 Retrying in 10 seconds...')
+        await new Promise((resolve) => setTimeout(resolve, 10000))
       } else {
-        throw new Error(`Failed to connect to Lavalink after 10 retries.`);
+        throw new Error(`Failed to connect to Lavalink after 10 retries.`)
       }
     }
   }
-};
+}

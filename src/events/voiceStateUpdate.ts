@@ -17,7 +17,7 @@ const event: BotEvent = {
       DetectPresence(newstate, 2)
     }
 
-    DetectUser(oldstate, newstate)
+    // DetectUser(oldstate, newstate)
   },
 }
 

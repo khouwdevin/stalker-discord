@@ -36,7 +36,7 @@ const command: Command = {
 
       const channelDefault = channels.cache.get(channelid)
 
-      setGuildOption(message.guild, 'channel', channelid)
+      await setGuildOption(message.guild, 'channel', channelid)
 
       const embed = new EmbedBuilder()
         .setAuthor({
@@ -55,7 +55,6 @@ const command: Command = {
         `[Channel Config Command]: Channel config changed to ${channelDefault}`
       )
     } catch (e) {
-      const client = message.client
       logger.error(
         `[Channel Config Command]: ❌ Failed to save channel config : ${e.message}`
       )

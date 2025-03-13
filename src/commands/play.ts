@@ -1,9 +1,4 @@
-import {
-  getLoopString,
-  getPlayerDB,
-  sendMessage,
-  sendTimedMessage,
-} from '../functions'
+import { getPlayerDB, sendMessage, sendTimedMessage } from '../functions'
 import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel, resolveColor } from 'discord.js'
@@ -15,7 +10,6 @@ const command: Command = {
       logger.debug('[Play Command]: Run play command')
 
       const title = args.slice(1, args.length).join(' ')
-      let loopPlayer = 'off'
 
       if (!title)
         return sendTimedMessage(
@@ -37,11 +31,12 @@ const command: Command = {
         )
 
       const client = message.client
-      let player = client.moon.players.get(message.guildId)
+      let player = client.moon.players.has(message.guildId)
+        ? client.moon.players.get(message.guildId)
+        : null
 
       if (!player) {
         const playerOptions = await getPlayerDB(message.guildId)
-        loopPlayer = playerOptions.loop
 
         player = client.moon.players.create({
           guildId: message.guildId,
@@ -49,14 +44,14 @@ const command: Command = {
           textChannelId: message.channel.id,
           autoPlay: Boolean(playerOptions.autoPlay),
           volume: Number(playerOptions.volume),
+          loop: playerOptions.loop,
+          autoLeave: true,
         })
-
-        player.setLoop(playerOptions.loop)
 
         const playerData = `
                     autoplay: **${player.autoPlay}**\r
                     volume: **${player.volume}**\r
-                    loop: **${getLoopString(Number(playerOptions.loop))}**\r
+                    loop: **${playerOptions.loop}**\r
                     shufle: **${player.shuffle()}**
                 `
 
@@ -70,10 +65,10 @@ const command: Command = {
           .setColor('Purple')
 
         message.channel.send({ embeds: [embed] })
-        client.attempts.set(`${player.guildId}`, 3)
+        client.playerAttempts.set(`${player.guildId}`, 3)
       } else {
-        client.attempts.set(`${player.guildId}`, 3)
-        loopPlayer = player.loop
+        client.playerAttempts.set(`${player.guildId}`, 3)
+        player.setAutoLeave(true)
       }
 
       const embedProcess = new EmbedBuilder().setAuthor({
@@ -140,7 +135,7 @@ const command: Command = {
             .setColor('Yellow')
           message.channel.send({ embeds: [embedSong] })
 
-          if (loopPlayer === 'track') {
+          if (player.loop === 'track') {
             const embedPlay = new EmbedBuilder()
               .setAuthor({
                 name: `Now in loop playing [${res.tracks[0].title}]`,
@@ -179,7 +174,6 @@ const command: Command = {
 
       if (!player.playing) await player.play()
     } catch (e) {
-      const client = message.client
       logger.error(`[Play Command]: ❌ Failed to play music : ${e.message}`)
     }
   },

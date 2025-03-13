@@ -50,7 +50,6 @@ const command: Command = {
       player.stop({ destroy: true })
       logger.trace('[Stop Command]: Player is stopped')
     } catch (e) {
-      const client = message.client
       logger.error(`[Stop Command]: ❌ Failed to stop music : ${e.message}`)
     }
   },

@@ -51,7 +51,6 @@ const command: Command = {
         player.resume()
       }
     } catch (e) {
-      const client = message.client
       logger.error(`[Resume Command]: ❌ Failed to resume music : ${e.message}`)
     }
   },

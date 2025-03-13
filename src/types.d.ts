@@ -43,6 +43,7 @@ interface PlayerOptions {
   autoPlay: Boolean
   loop: TPlayerLoop
   volume: Number
+  shuffle: Boolean
 }
 
 export interface IGuild extends mongoose.Document {
@@ -110,7 +111,7 @@ declare module 'discord.js' {
     commands: Collection<string, Command>
     cooldowns: Collection<string, number>
     timeouts: Collection<string, NodeJS.Timeout>
-    attempts: Collection<string, number>
+    playerAttempts: Collection<string, number>
     moon: Manager
   }
 }

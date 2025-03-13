@@ -35,7 +35,6 @@ const command: Command = {
         `[Check Status Command]: Check Stalker Bot status ${statuslist}`
       )
     } catch (e) {
-      const client = message.client
       logger.error(
         `[Check Status Command]: ❌ Failed to show check status : ${e.message}`
       )

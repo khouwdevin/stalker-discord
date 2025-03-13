@@ -19,7 +19,7 @@ const command: Command = {
         return message.channel.send('Some error is occurred!')
       }
 
-      setGuildOption(message.guild, 'notify', notify === 'true')
+      await setGuildOption(message.guild, 'notify', notify === 'true')
 
       const embed = new EmbedBuilder()
         .setAuthor({
@@ -35,7 +35,6 @@ const command: Command = {
 
       logger.trace(`[Notify Command]: Notify is changed to ${notify}`)
     } catch (e) {
-      const client = message.client
       logger.error(
         `[Notify Command]: ❌ Failed to configure notify : ${e.message}`
       )

@@ -1,4 +1,4 @@
-import { getPlayerData, sendTimedMessage } from '../functions'
+import { getPlayerData, sendTimedMessage, setPlayerDB } from '../functions'
 import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
@@ -55,6 +55,7 @@ const command: Command = {
 
       const shuffled = shuffle === 'true' ? true : false
       player.set('shuffle', shuffled)
+      await setPlayerDB(message.guildId, 'shuffle', shuffled)
 
       const playerData = getPlayerData(
         player.autoPlay,
@@ -75,7 +76,6 @@ const command: Command = {
 
       logger.trace(`[Shuffle Command]: Shuffle is changed to ${playerData}`)
     } catch (e) {
-      const client = message.client
       logger.error(
         `[Shuffle Command]: ❌ Failed to configure shuffle : ${e.message}`
       )

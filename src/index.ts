@@ -16,8 +16,10 @@ const options = commandLineArgs([
 
 try {
   if (options.env === 'production') {
+    process.env.NODE_ENV = 'production'
     dotenv.config()
   } else {
+    process.env.NODE_ENV = 'development'
     dotenv.config({
       path: path.join(__dirname, `../development.env`),
     })
@@ -28,6 +30,8 @@ try {
 
 ;(async () => {
   try {
+    logger.level = process.env.NODE_ENV === 'production' ? 'info' : 'trace'
+
     if (process.env.TURN_ON_MUSIC === 'true') await forLavalinkServer()
 
     const shardingManager = new ShardingManager('./build/pre-start.js', {

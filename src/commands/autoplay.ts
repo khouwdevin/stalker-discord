@@ -1,4 +1,4 @@
-import { getPlayerData, sendTimedMessage } from '../functions'
+import { getPlayerData, sendTimedMessage, setPlayerDB } from '../functions'
 import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
@@ -49,6 +49,7 @@ const command: Command = {
 
       const autoPlay = autoplay === 'true' ? true : false
       player.setAutoPlay(autoPlay)
+      await setPlayerDB(message.guildId, 'autoPlay', autoPlay)
 
       const playerData = getPlayerData(
         autoPlay,
@@ -67,7 +68,6 @@ const command: Command = {
         .setColor('Purple')
       channel.send({ embeds: [embed] })
     } catch (e) {
-      const client = message.client
       logger.error(
         `[Autoplay Command]: ❌ Failed to configure autoplay : ${e.message}`
       )

@@ -27,9 +27,9 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
       }
 
       const timeout = setTimeout(async () => {
-        player.stop()
+        player.stop({ destroy: true })
         client.timeouts.delete(`player-${player.guildId}`)
-      }, 20000)
+      }, 10000)
 
       client.timeouts.set(`player-${player.guildId}`, timeout)
     } else if (player.voiceChannelId === newState.channelId) {
@@ -47,9 +47,9 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
       }
 
       const timeout = setTimeout(async () => {
-        player.stop()
+        player.stop({ destroy: true })
         client.timeouts.delete(`player-${player.guildId}`)
-      }, 20000)
+      }, 10000)
 
       client.timeouts.set(`player-${player.guildId}`, timeout)
     }

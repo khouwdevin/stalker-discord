@@ -1,4 +1,4 @@
-import { getPlayerData, sendTimedMessage } from '../functions'
+import { getPlayerData, sendTimedMessage, setPlayerDB } from '../functions'
 import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel } from 'discord.js'
@@ -53,7 +53,8 @@ const command: Command = {
           5000
         )
 
-      await player.setVolume(volume)
+      player.setVolume(volume)
+      await setPlayerDB(message.guildId, 'volume', volume)
 
       const playerData = getPlayerData(
         player.autoPlay,
@@ -74,7 +75,6 @@ const command: Command = {
 
       logger.trace(`[Volume Command]: Volume is changed to ${playerData}`)
     } catch (e) {
-      const client = message.client
       logger.error(
         `[Volume Command]: ❌ Failed to configure volume : ${e.message}`
       )

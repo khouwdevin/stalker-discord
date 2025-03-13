@@ -31,7 +31,7 @@ client.slashCommands = new Collection<string, SlashCommand>()
 client.commands = new Collection<string, Command>()
 client.cooldowns = new Collection<string, number>()
 client.timeouts = new Collection<string, NodeJS.Timeout>()
-client.attempts = new Collection<string, number>()
+client.playerAttempts = new Collection<string, number>()
 
 client.moon = new Manager({
   nodes: [

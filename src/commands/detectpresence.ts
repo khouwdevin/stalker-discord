@@ -19,7 +19,11 @@ const command: Command = {
         return message.channel.send('Some error is occurred!')
       }
 
-      setGuildOption(message.guild, 'detectpresence', detectpresence === 'true')
+      await setGuildOption(
+        message.guild,
+        'detectpresence',
+        detectpresence === 'true'
+      )
 
       const embed = new EmbedBuilder()
         .setAuthor({
@@ -37,7 +41,6 @@ const command: Command = {
         `[Detect Presence Command]: Detect presence changed to ${detectpresence}`
       )
     } catch (e) {
-      const client = message.client
       logger.error(
         `[Detect Presence Command]: ❌ Failed to configure detect presence : ${e.message}`
       )

@@ -52,7 +52,6 @@ const command: Command = {
       client.timeouts.set(`help-${currentMessage.id}`, timeout)
       logger.trace(`[Help Command]: Current timeout help-${currentMessage.id}`)
     } catch (e) {
-      const client = message.client
       logger.error(`[Help Command]: ❌ Failed to show help : ${e.message}`)
     }
   },

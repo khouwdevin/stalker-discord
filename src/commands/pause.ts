@@ -48,10 +48,9 @@ const command: Command = {
           .setColor('Red')
         channel.send({ embeds: [embed] })
 
-        await player.pause()
+        player.pause()
       }
     } catch (e) {
-      const client = message.client
       logger.error(`[Pause Command]: ❌ Failed to pause music : ${e.message}`)
     }
   },

@@ -54,7 +54,6 @@ const command: Command = {
 
       await player.skip()
     } catch (e) {
-      const client = message.client
       logger.error(`[Skip Command]: ❌ Failed to skip music : ${e.message}`)
     }
   },
