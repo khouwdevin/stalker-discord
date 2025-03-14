@@ -1,4 +1,9 @@
-import { getPlayerDB, sendMessage, sendTimedMessage } from '../functions'
+import {
+  formattedTime,
+  getPlayerDB,
+  sendMessage,
+  sendTimedMessage,
+} from '../functions'
 import logger from '../logger'
 import { Command } from '../types'
 import { EmbedBuilder, TextChannel, resolveColor } from 'discord.js'
@@ -110,7 +115,7 @@ const command: Command = {
               },
               {
                 name: 'Playlist duration',
-                value: `${res.playlistInfo?.duration || '-'}`,
+                value: `${formattedTime(res.playlistInfo?.duration ?? 0)}`,
               }
             )
             .setColor(color)
