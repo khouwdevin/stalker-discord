@@ -5,26 +5,23 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
   try {
     const client = newState.client
     const player = client.moon.players.get(newState.guild.id)
-    const botVoiceChannel = client.guilds.cache
-      .get(newState.guild.id)
-      ?.members.cache.get(client.user.id)?.voice.channelId
 
-    if (!botVoiceChannel) return
     if (
+      !player ||
       newState.member?.user === client.user ||
       oldstate.member?.user === client.user
     )
       return
-    if (!player) return
-    if (newState.channelId === botVoiceChannel) {
+
+    if (newState.channelId === player.voiceChannelId) {
       if (player.playing) client.timeouts.delete(`player-${player.guildId}`)
 
       logger.trace(
         `[Detect User]: ${newState.member?.user.tag} joined the same channel as the bot.`
       )
     } else if (
-      oldstate.channelId === botVoiceChannel &&
-      newState.channelId !== botVoiceChannel
+      oldstate.channelId === player.voiceChannelId &&
+      newState.channelId !== player.voiceChannelId
     ) {
       if (!oldstate.channel) return
 
