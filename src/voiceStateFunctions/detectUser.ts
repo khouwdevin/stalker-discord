@@ -46,7 +46,6 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
         !client.timeouts.has(`player-${player.guildId}`)
       ) {
         const timeout = setTimeout(async () => {
-          player.stop()
           player.disconnect()
           player.destroy()
 

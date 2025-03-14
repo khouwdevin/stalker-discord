@@ -51,7 +51,6 @@ const command: Command = {
         player.pause()
 
         const timeout = setTimeout(async () => {
-          player.stop()
           player.disconnect()
           player.destroy()
 
@@ -85,7 +84,7 @@ const command: Command = {
 
           const embed = new EmbedBuilder()
             .setAuthor({
-              name: 'Users have left. The player is disconnected.',
+              name: 'Player is disconnected for pause too long.',
               iconURL: client.user?.avatarURL() || undefined,
             })
             .setColor('Grey')

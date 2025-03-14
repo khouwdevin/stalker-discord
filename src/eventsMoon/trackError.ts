@@ -31,7 +31,9 @@ const event: MoonEvent = {
       client.playerAttempts.set(player.guildId, 3)
       await player.restart()
 
-      logger.debug('[Event Moon]: Restart player on trackError')
+      logger.debug(
+        `[Event Moon]: Restart player on trackError : ${player.guildId}`
+      )
     } else {
       if (attemp <= 0) {
         player.stop({ destroy: true })
@@ -50,7 +52,9 @@ const event: MoonEvent = {
         client.playerAttempts.set(player.guildId, attemp - 1)
         await player.restart()
 
-        logger.debug('[Event Moon]: Restart player on trackError')
+        logger.debug(
+          `[Event Moon]: Restart player on trackError : ${player.guildId}`
+        )
       }
     }
   },

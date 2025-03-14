@@ -27,7 +27,6 @@ const event: MoonEvent = {
 
     if (player.connected && !client.timeouts.has(`player-${player.guildId}`)) {
       const timeout = setTimeout(async () => {
-        player.stop()
         player.disconnect()
         player.destroy()
 

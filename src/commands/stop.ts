@@ -49,7 +49,7 @@ const command: Command = {
         .setColor('Red')
       channel.send({ embeds: [embed] })
 
-      player.stop()
+      player.pause()
       player.disconnect()
       player.destroy()
 
