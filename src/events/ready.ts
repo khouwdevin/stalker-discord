@@ -24,7 +24,7 @@ const event: BotEvent = {
 
     if (process.env.TURN_ON_MUSIC === 'true') client.moon.init(client.user.id)
 
-    logger.info(`[Event] : 💪 Logged in as ${client.user.tag}`)
+    logger.info(`[Event]: 💪 Logged in as ${client.user.tag}`)
   },
 }
 
