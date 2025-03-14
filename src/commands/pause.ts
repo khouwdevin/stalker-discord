@@ -39,7 +39,7 @@ const command: Command = {
           5000
         )
 
-      if (!player.paused) {
+      if (!player.paused && !client.timeouts.has(`player-${player.guildId}`)) {
         const embed = new EmbedBuilder()
           .setAuthor({
             name: 'Music is paused!',

@@ -25,7 +25,7 @@ const event: MoonEvent = {
 
     channel.send({ embeds: [embed] })
 
-    if (player.connected) {
+    if (player.connected && !client.timeouts.has(`player-${player.guildId}`)) {
       const timeout = setTimeout(async () => {
         player.stop()
         player.disconnect()

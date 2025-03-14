@@ -14,7 +14,10 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
       return
 
     if (newState.channelId === player.voiceChannelId) {
-      if (player.playing) client.timeouts.delete(`player-${player.guildId}`)
+      if (player.playing && client.timeouts.has(`player-${player.guildId}`)) {
+        clearTimeout(client.timeouts.get(`player-${player.guildId}`))
+        client.timeouts.delete(`player-${player.guildId}`)
+      }
 
       logger.trace(
         `[Detect User]: ${newState.member?.user.tag} joined the same channel as the bot.`
@@ -38,7 +41,10 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
         return
       }
 
-      if (player.connected) {
+      if (
+        player.connected &&
+        !client.timeouts.has(`player-${player.guildId}`)
+      ) {
         const timeout = setTimeout(async () => {
           player.stop()
           player.disconnect()
