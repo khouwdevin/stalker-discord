@@ -14,6 +14,7 @@ const event: MoonEvent = {
         return logger.error('[Event Moon]: ❌ Error fetch channel on queueEnd')
       })
 
+    if (!player.connected) return
     if (!channel || !channel.isTextBased()) return
 
     const embed = new EmbedBuilder()
@@ -27,6 +28,7 @@ const event: MoonEvent = {
 
     if (player.connected && !client.timeouts.has(`player-${player.guildId}`)) {
       const timeout = setTimeout(async () => {
+        player.stop()
         player.disconnect()
         player.destroy()
 

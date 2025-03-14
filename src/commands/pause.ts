@@ -51,6 +51,7 @@ const command: Command = {
         player.pause()
 
         const timeout = setTimeout(async () => {
+          player.stop()
           player.disconnect()
           player.destroy()
 
