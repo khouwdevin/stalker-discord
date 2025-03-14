@@ -23,7 +23,9 @@ const command: Command = {
         )
 
       const client = message.client
-      const player = client.moon.players.get(message.guildId)
+      const player = client.moon.players.has(message.guildId)
+        ? client.moon.players.get(message.guildId)
+        : null
       const channel = message.channel
 
       if (!player)
@@ -47,7 +49,26 @@ const command: Command = {
         .setColor('Red')
       channel.send({ embeds: [embed] })
 
-      player.stop({ destroy: true })
+      player.stop()
+      player.disconnect()
+      player.destroy()
+
+      const deleteTimeout = client.timeouts.delete(`player-${player.guildId}`)
+      const deletePlayerAttemps = client.playerAttempts.delete(
+        `player-${player.guildId}`
+      )
+      const deleteMoonPlayer = client.moon.players.delete(player.guildId)
+
+      logger.trace(
+        `[Stop Command]: Delete client timeout ${player.guildId} : ${deleteTimeout}`
+      )
+      logger.trace(
+        `[Stop Command]: Delete player attempts ${player.guildId} : ${deletePlayerAttemps}`
+      )
+      logger.trace(
+        `[Stop Command]: Delete moon player ${player.guildId} : ${deleteMoonPlayer}`
+      )
+
       logger.trace('[Stop Command]: Player is stopped')
     } catch (e) {
       logger.error(`[Stop Command]: ❌ Failed to stop music : ${e.message}`)

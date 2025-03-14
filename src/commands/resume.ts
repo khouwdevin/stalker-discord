@@ -49,6 +49,11 @@ const command: Command = {
         channel.send({ embeds: [embed] })
 
         player.resume()
+
+        if (client.timeouts.has(`player-${player.guildId}`)) {
+          clearTimeout(client.timeouts.get(`player-${player.guildId}`))
+          client.timeouts.delete(`player-${player.guildId}`)
+        }
       }
     } catch (e) {
       logger.error(`[Resume Command]: ❌ Failed to resume music : ${e.message}`)

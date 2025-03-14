@@ -49,6 +49,51 @@ const command: Command = {
         channel.send({ embeds: [embed] })
 
         player.pause()
+
+        const timeout = setTimeout(async () => {
+          player.stop()
+          player.disconnect()
+          player.destroy()
+
+          const deleteTimeout = client.timeouts.delete(
+            `player-${player.guildId}`
+          )
+          const deletePlayerAttemps = client.playerAttempts.delete(
+            `player-${player.guildId}`
+          )
+          const deleteMoonPlayer = client.moon.players.delete(player.guildId)
+
+          logger.trace(
+            `[Detect User]: Delete client timeout ${player.guildId} : ${deleteTimeout}`
+          )
+          logger.trace(
+            `[[Detect User]: Delete player attempts ${player.guildId} : ${deletePlayerAttemps}`
+          )
+          logger.trace(
+            `[Detect User]: Delete moon player ${player.guildId} : ${deleteMoonPlayer}`
+          )
+
+          const channel = await client.channels
+            .fetch(player.textChannelId)
+            .catch(() => {
+              return logger.error(
+                '[Detect User]: ❌ Error fetch channel on queueEnd'
+              )
+            })
+
+          if (!channel || !channel.isTextBased()) return
+
+          const embed = new EmbedBuilder()
+            .setAuthor({
+              name: 'Users have left. The player is disconnected.',
+              iconURL: client.user?.avatarURL() || undefined,
+            })
+            .setColor('Grey')
+
+          channel.send({ embeds: [embed] })
+        }, 30000)
+
+        client.timeouts.set(`player-${player.guildId}`, timeout)
       }
     } catch (e) {
       logger.error(`[Pause Command]: ❌ Failed to pause music : ${e.message}`)

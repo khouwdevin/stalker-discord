@@ -27,11 +27,25 @@ const event: MoonEvent = {
 
     if (player.connected) {
       const timeout = setTimeout(async () => {
-        player.stop({ destroy: true })
+        player.stop()
         player.disconnect()
+        player.destroy()
 
-        client.timeouts.delete(`player-${player.guildId}`)
-        client.playerAttempts.delete(`player-${player.guildId}`)
+        const deleteTimeout = client.timeouts.delete(`player-${player.guildId}`)
+        const deletePlayerAttemps = client.playerAttempts.delete(
+          `player-${player.guildId}`
+        )
+        const deleteMoonPlayer = client.moon.players.delete(player.guildId)
+
+        logger.trace(
+          `[Event Moon]: Delete client timeout ${player.guildId} on queueEnd : ${deleteTimeout}`
+        )
+        logger.trace(
+          `[Event Moon]: Delete player attempts ${player.guildId} on queueEnd : ${deletePlayerAttemps}`
+        )
+        logger.trace(
+          `[Event Moon]: Delete moon player ${player.guildId} on queueEnd : ${deleteMoonPlayer}`
+        )
 
         const embed = new EmbedBuilder()
           .setAuthor({
