@@ -22,6 +22,8 @@ const command: Command = {
           5000
         )
 
+      const skippedNumber = args.length > 0 ? parseInt(args[1]) : undefined
+
       const client = message.client
       const player = client.moon.players.get(message.guildId)
       const channel = message.channel
@@ -52,7 +54,11 @@ const command: Command = {
         .setColor('Yellow')
       channel.send({ embeds: [embed] })
 
-      await player.skip()
+      const skipStatus = await player.skip(skippedNumber)
+
+      logger.trace(
+        `[Skip Command]: Skipp song is ${skipStatus} for ${skippedNumber} songs`
+      )
     } catch (e) {
       logger.error(`[Skip Command]: ❌ Failed to skip music : ${e.message}`)
     }
