@@ -167,6 +167,13 @@ const commandText: IHelp[] = [
                     `,
       },
       {
+        name: `${process.env.PREFIX_COMMAND}playfirst`,
+        value: `
+                    to play and search song that placed on front.\r
+                    example => **${process.env.PREFIX_COMMAND}playfirst drown** or **${process.env.PREFIX_COMMAND}pf drown**\r
+                    `,
+      },
+      {
         name: `${process.env.PREFIX_COMMAND}pause`,
         value: `
                     to pause song.\r
@@ -183,7 +190,7 @@ const commandText: IHelp[] = [
       {
         name: `${process.env.PREFIX_COMMAND}skip`,
         value: `
-                    to skip song.\r
+                    to skip song (add number after command to skip multiple songs).\r
                     example => **${process.env.PREFIX_COMMAND}skip** or **${process.env.PREFIX_COMMAND}s**\r
                     `,
       },

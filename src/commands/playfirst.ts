@@ -9,10 +9,10 @@ import { Command } from '../types'
 import { EmbedBuilder, TextChannel, resolveColor } from 'discord.js'
 
 const command: Command = {
-  name: 'play',
+  name: 'playfirst',
   execute: async (message, args) => {
     try {
-      logger.debug('[Play Command]: Run play command')
+      logger.debug('[Play First First Command]: Run Play First command')
 
       const title = args.slice(1, args.length).join(' ')
 
@@ -53,11 +53,11 @@ const command: Command = {
         })
 
         const playerData = `
-                    autoplay: **${player.autoPlay}**\r
-                    volume: **${player.volume}**\r
-                    loop: **${playerOptions.loop}**\r
-                    shufle: **${player.shuffle()}**
-                `
+                      autoplay: **${player.autoPlay}**\r
+                      volume: **${player.volume}**\r
+                      loop: **${playerOptions.loop}**\r
+                      shufle: **${player.shuffle()}**
+                  `
 
         const embed = new EmbedBuilder()
           .setAuthor({
@@ -97,60 +97,31 @@ const command: Command = {
             message.channel as TextChannel
           )
         case 'playlist':
-          let imageUrl = null
-          let color = resolveColor('Red')
-          if (title.includes('spotify')) {
-            const resThumbnail = await fetch(
-              `https://open.spotify.com/oembed?url=${title}`
-            )
-            const data = await resThumbnail.json()
-            imageUrl = data.thumbnail_url
-            color = resolveColor('Green')
-          }
           const embedPlaylist = new EmbedBuilder()
-            .setFields(
-              { name: `Added Playlist`, value: ' ' },
-              {
-                name: 'Playlist',
-                value: `${res.playlistInfo?.name || 'No title'}`,
-              },
-              {
-                name: 'Playlist duration',
-                value: `${formattedTime(res.playlistInfo?.duration ?? 0)}`,
-              }
-            )
-            .setColor(color)
-            .setImage(imageUrl)
+            .setAuthor({
+              name: '$playfirst does not support playlist, please use $play instead!',
+              iconURL: message.client.user.avatarURL() || undefined,
+            })
+            .setColor('Grey')
           message.channel.send({ embeds: [embedPlaylist] })
-
-          for (const track of res.tracks) {
-            player.queue.add(track)
-          }
 
           break
         default:
           const embedSong = new EmbedBuilder()
             .setAuthor({
-              name: `[${res.tracks[0].title}] is added to the waiting list!`,
+              name: `[${res.tracks[0].title}] is added to the front of waiting list!`,
               iconURL: message.client.user.avatarURL() || undefined,
             })
             .setColor('Yellow')
           message.channel.send({ embeds: [embedSong] })
 
-          if (player.loop === 'track') {
-            player.queue.clear()
-
-            const embedPlay = new EmbedBuilder()
-              .setAuthor({
-                name: `Now in loop playing [${res.tracks[0].title}]`,
-                iconURL: client.user?.avatarURL() || undefined,
-              })
-              .setColor('Green')
-
-            message.channel.send({ embeds: [embedPlay] })
-          }
-
+          const tracks = player.queue.tracks
+          player.queue.clear()
           player.queue.add(res.tracks[0])
+
+          for (const track of tracks) {
+            player.queue.add(track)
+          }
 
           break
       }
@@ -180,12 +151,14 @@ const command: Command = {
 
       if (!player.playing) await player.play()
     } catch (e) {
-      logger.error(`[Play Command]: ❌ Failed to play music : ${e.message}`)
+      logger.error(
+        `[Play First Command]: ❌ Failed to Play First music : ${e.message}`
+      )
     }
   },
   cooldown: 1,
   permissions: [],
-  aliases: ['p'],
+  aliases: ['pf'],
 }
 
 export default command
