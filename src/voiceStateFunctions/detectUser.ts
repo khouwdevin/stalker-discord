@@ -1,25 +1,25 @@
-import { EmbedBuilder, VoiceState } from "discord.js";
-import logger from "../logger";
+import { EmbedBuilder, VoiceState } from 'discord.js'
+import logger from '../logger'
 
 const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
   try {
-    const client = newState.client;
-    const player = client.moon.players.get(newState.guild.id);
+    const client = newState.client
+    const player = client.moon.players.get(newState.guild.id)
 
     if (newState.member && newState.member.user === client.user) {
-      if (!newState.channel) return;
+      if (!newState.channel) return
 
-      const members = newState.channel.members;
+      const members = newState.channel.members
 
       if (members.size > 1) {
-        if (!client.timeouts.has(`player-${player.guildId}`)) return;
+        if (!client.timeouts.has(`player-${player.guildId}`)) return
 
         if (client.timeouts.has(`player-${player.guildId}`)) {
-          clearTimeout(client.timeouts.get(`player-${player.guildId}`));
-          client.timeouts.delete(`player-${player.guildId}`);
+          clearTimeout(client.timeouts.get(`player-${player.guildId}`))
+          client.timeouts.delete(`player-${player.guildId}`)
         }
 
-        return;
+        return
       }
     }
 
@@ -28,34 +28,34 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
       newState.member?.user === client.user ||
       oldstate.member?.user === client.user
     )
-      return;
+      return
 
     if (newState.channelId === player.voiceChannelId) {
       if (player.playing && client.timeouts.has(`player-${player.guildId}`)) {
-        clearTimeout(client.timeouts.get(`player-${player.guildId}`));
-        client.timeouts.delete(`player-${player.guildId}`);
+        clearTimeout(client.timeouts.get(`player-${player.guildId}`))
+        client.timeouts.delete(`player-${player.guildId}`)
       }
 
       logger.trace(
-        `[Detect User]: ${newState.member?.user.tag} joined the same channel as the bot.`,
-      );
+        `[Detect User]: ${newState.member?.user.tag} joined the same channel as the bot.`
+      )
     } else if (
       oldstate.channelId === player.voiceChannelId &&
       newState.channelId !== player.voiceChannelId
     ) {
-      if (!oldstate.channel) return;
+      if (!oldstate.channel) return
 
-      const members = oldstate.channel.members;
+      const members = oldstate.channel.members
 
       if (members.size > 1) {
-        if (!client.timeouts.has(`player-${player.guildId}`)) return;
+        if (!client.timeouts.has(`player-${player.guildId}`)) return
 
         if (client.timeouts.has(`player-${player.guildId}`)) {
-          clearTimeout(client.timeouts.get(`player-${player.guildId}`));
-          client.timeouts.delete(`player-${player.guildId}`);
+          clearTimeout(client.timeouts.get(`player-${player.guildId}`))
+          client.timeouts.delete(`player-${player.guildId}`)
         }
 
-        return;
+        return
       }
 
       if (
@@ -63,58 +63,58 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
         !client.timeouts.has(`player-${player.guildId}`)
       ) {
         const timeout = setTimeout(async () => {
-          player.stop();
-          player.disconnect();
-          player.destroy();
+          player.stop()
+          player.disconnect()
+          player.destroy()
 
           const deleteTimeout = client.timeouts.delete(
-            `player-${player.guildId}`,
-          );
+            `player-${player.guildId}`
+          )
           const deletePlayerAttemps = client.playerAttempts.delete(
-            `player-${player.guildId}`,
-          );
-          const deleteMoonPlayer = client.moon.players.delete(player.guildId);
+            `player-${player.guildId}`
+          )
+          const deleteMoonPlayer = client.moon.players.delete(player.guildId)
 
           logger.trace(
-            `[Detect User]: Delete client timeout ${player.guildId} : ${deleteTimeout}`,
-          );
+            `[Detect User]: Delete client timeout ${player.guildId} : ${deleteTimeout}`
+          )
           logger.trace(
-            `[[Detect User]: Delete player attempts ${player.guildId} : ${deletePlayerAttemps}`,
-          );
+            `[[Detect User]: Delete player attempts ${player.guildId} : ${deletePlayerAttemps}`
+          )
           logger.trace(
-            `[Detect User]: Delete moon player ${player.guildId} : ${deleteMoonPlayer}`,
-          );
+            `[Detect User]: Delete moon player ${player.guildId} : ${deleteMoonPlayer}`
+          )
 
           const channel = await client.channels
             .fetch(player.textChannelId)
             .catch(() => {
               return logger.error(
-                "[Detect User]: ❌ Error fetch channel on queueEnd",
-              );
-            });
+                '[Detect User]: ❌ Error fetch channel on queueEnd'
+              )
+            })
 
-          if (!channel || !channel.isTextBased()) return;
+          if (!channel || !channel.isSendable()) return
 
           const embed = new EmbedBuilder()
             .setAuthor({
-              name: "Users have left. The player is disconnected.",
+              name: 'Users have left. The player is disconnected.',
               iconURL: client.user?.avatarURL() || undefined,
             })
-            .setColor("Grey");
+            .setColor('Grey')
 
-          channel.send({ embeds: [embed] });
-        }, 10000);
+          channel.send({ embeds: [embed] })
+        }, 10000)
 
-        client.timeouts.set(`player-${player.guildId}`, timeout);
+        client.timeouts.set(`player-${player.guildId}`, timeout)
       }
 
       logger.trace(
-        `[Detect User]: ${oldstate.member?.user.tag} left the bots channel.`,
-      );
+        `[Detect User]: ${oldstate.member?.user.tag} left the bots channel.`
+      )
     }
   } catch (e) {
-    logger.error(`[Detect User]: ❌ Failed to detect user : ${e.message}`);
+    logger.error(`[Detect User]: ❌ Failed to detect user : ${e.message}`)
   }
-};
+}
 
-export default DetectUser;
+export default DetectUser
