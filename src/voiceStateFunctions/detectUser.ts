@@ -6,6 +6,23 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
     const client = newState.client
     const player = client.moon.players.get(newState.guild.id)
 
+    if (newState.member && newState.member.user === client.user) {
+      if (!newState.channel) return
+
+      const members = newState.channel.members
+
+      if (members.size > 1) {
+        if (!client.timeouts.has(`player-${player.guildId}`)) return
+
+        if (client.timeouts.has(`player-${player.guildId}`)) {
+          clearTimeout(client.timeouts.get(`player-${player.guildId}`))
+          client.timeouts.delete(`player-${player.guildId}`)
+        }
+
+        return
+      }
+    }
+
     if (
       !player ||
       newState.member?.user === client.user ||
@@ -76,7 +93,7 @@ const DetectUser = (oldstate: VoiceState, newState: VoiceState) => {
               )
             })
 
-          if (!channel || !channel.isTextBased()) return
+          if (!channel || !channel.isSendable()) return
 
           const embed = new EmbedBuilder()
             .setAuthor({
