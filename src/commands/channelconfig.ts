@@ -12,6 +12,13 @@ const command: Command = {
 
       logger.debug('[Channel Config Command]: Run channel config command.')
 
+      if (!channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!message.guild)
         return sendTimedMessage(
           'Some error is occurred!',

@@ -1,17 +1,25 @@
-import { Command } from "../types";
+import logger from '../logger'
+import { Command } from '../types'
 
 const command: Command = {
-  name: "greet",
+  name: 'greet',
   execute: (message, args) => {
     try {
-      const toGreet = message.mentions.members?.first();
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
+      const toGreet = message.mentions.members?.first()
       message.channel.send(
-        `Hello there ${toGreet ? toGreet.user : message.member?.user}!`,
-      );
+        `Hello there ${toGreet ? toGreet.user : message.member?.user}!`
+      )
     } catch {}
   },
-  aliases: ["g"],
+  aliases: ['g'],
   permissions: [], // to test
-};
+}
 
-export default command;
+export default command

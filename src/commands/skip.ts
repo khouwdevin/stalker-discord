@@ -9,6 +9,13 @@ const command: Command = {
     try {
       logger.debug('[Skip Command]: Run skip command')
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!message.guildId || !message.member)
         return sendTimedMessage(
           'An error occurred!',

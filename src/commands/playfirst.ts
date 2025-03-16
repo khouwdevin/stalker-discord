@@ -16,6 +16,13 @@ const command: Command = {
 
       const title = args.slice(1, args.length).join(' ')
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!title)
         return sendTimedMessage(
           'Please provide a title!',

@@ -1,5 +1,4 @@
 import {
-  SlashCommandBuilder,
   CommandInteraction,
   Collection,
   PermissionResolvable,
@@ -10,13 +9,14 @@ import {
   ModalSubmitInteraction,
   APIEmbedField,
   EmbedFooterOptions,
+  SlashCommandOptionsOnlyBuilder,
 } from 'discord.js'
 import { Player, MoonlinkEvents, Manager, TPlayerLoop } from 'moonlink.js'
 import mongoose from 'mongoose'
 import { Logger } from 'pino'
 
 export interface SlashCommand {
-  command: SlashCommandBuilder
+  command: SlashCommandOptionsOnlyBuilder
   execute: (interaction: ChatInputCommandInteraction) => void
   modal?: (interaction: ModalSubmitInteraction) => void
   button?: (interaction: ButtonInteraction) => void

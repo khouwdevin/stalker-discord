@@ -11,6 +11,13 @@ const command: Command = {
 
       const autoplay = args[1]
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!autoplay || (autoplay !== 'true' && autoplay !== 'false'))
         return sendTimedMessage(
           'Autoplay configuration is not valid!',

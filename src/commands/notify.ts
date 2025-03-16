@@ -12,6 +12,13 @@ const command: Command = {
       const notify = args[1]
       const channel = message.channel
 
+      if (!message.channel.isSendable() || !channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!notify) return message.channel.send('No status is provided')
       if (notify !== 'true' && notify !== 'false')
         return message.channel.send('Please provide only true or false!')

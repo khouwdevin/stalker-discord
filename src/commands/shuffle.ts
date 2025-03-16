@@ -11,6 +11,13 @@ const command: Command = {
 
       const shuffle = args[1]
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!shuffle || (shuffle !== 'true' && shuffle !== 'false'))
         return sendTimedMessage(
           'Shuffle configuration is not valid!',

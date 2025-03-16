@@ -1,11 +1,16 @@
-import { Client, Routes, SlashCommandBuilder, REST } from 'discord.js'
+import {
+  Client,
+  Routes,
+  REST,
+  SlashCommandOptionsOnlyBuilder,
+} from 'discord.js'
 import { readdirSync } from 'fs'
 import { join } from 'path'
 import { Command, SlashCommand } from '../types'
 import logger from '../logger'
 
 module.exports = (client: Client) => {
-  const slashCommands: SlashCommandBuilder[] = []
+  const slashCommands: SlashCommandOptionsOnlyBuilder[] = []
   const commands: Command[] = []
 
   let slashCommandsDir = join(__dirname, '../slashCommands')
@@ -25,7 +30,7 @@ module.exports = (client: Client) => {
     client.commands.set(command.name, command)
   })
 
-  const rest = new REST({ version: '10' }).setToken(process.env.TOKEN)
+  const rest = new REST().setToken(process.env.TOKEN)
 
   rest
     .put(Routes.applicationCommands(process.env.CLIENT_ID), {

@@ -39,7 +39,7 @@ const command: SlashCommand = {
   },
   modal: async (interaction) => {
     try {
-      await interaction.deferReply({ ephemeral: true })
+      await interaction.deferReply({ flags: ['Ephemeral'] })
 
       const code = interaction.fields.getTextInputValue('codeInput')
       const result = getDecode(code)

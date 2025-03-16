@@ -28,6 +28,13 @@ const command: Command = {
         : null
       const channel = message.channel
 
+      if (!channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!player)
         return sendTimedMessage(
           `${message.member} Stalker music is not active!`,

@@ -13,6 +13,13 @@ const command: Command = {
     try {
       logger.debug('[Help Command]: Run help command')
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       const embed = new EmbedBuilder()
         .setTitle(commandText[0].title)
         .setColor('Orange')

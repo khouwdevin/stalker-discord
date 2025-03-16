@@ -9,6 +9,12 @@ const command: Command = {
     try {
       logger.debug('[Check Status Command]: Run check status command')
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
       if (!message.guild) return
 
       const guildoptions = await getAllGuildOption(message.guild)

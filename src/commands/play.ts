@@ -16,6 +16,13 @@ const command: Command = {
 
       const title = args.slice(1, args.length).join(' ')
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!title)
         return sendTimedMessage(
           'Please provide a title!',
@@ -68,7 +75,9 @@ const command: Command = {
           .setFooter({ text: 'STALKER MUSIC' })
           .setColor('Purple')
 
-        message.channel.send({ embeds: [embed] })
+        if (message.channel.isSendable())
+          message.channel.send({ embeds: [embed] })
+
         client.playerAttempts.set(`${player.guildId}`, 3)
       }
 
@@ -76,6 +85,7 @@ const command: Command = {
         name: 'Processing...',
         iconURL: client.user.avatarURL() || undefined,
       })
+
       const processMessage = await message.channel.send({
         embeds: [embedProcess],
       })

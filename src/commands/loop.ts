@@ -11,6 +11,13 @@ const command: Command = {
 
       const loop = args[1]
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (loop !== 'off' && loop !== 'track' && loop != 'queue')
         return sendTimedMessage(
           'Loop configuration is not valid!',

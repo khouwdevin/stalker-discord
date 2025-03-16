@@ -14,7 +14,7 @@ const event: MoonEvent = {
         )
       })
 
-    if (!channel || !channel.isTextBased()) return
+    if (!channel || !channel.isSendable()) return
     if (player.loop && player.loop === 'track') return
 
     const embed = new EmbedBuilder()

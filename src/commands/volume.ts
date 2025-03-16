@@ -34,6 +34,13 @@ const command: Command = {
       const channel = message.channel
       const player = client.moon.players.get(message.guildId)
 
+      if (!channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!player)
         return sendTimedMessage(
           `${message.member} Stalker music is not active!`,

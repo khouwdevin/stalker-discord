@@ -60,7 +60,7 @@ const command: SlashCommand = {
     try {
       logger.debug('[Poll Slash Command]: Run poll slash command')
 
-      await interaction.deferReply({ ephemeral: true })
+      await interaction.deferReply({ flags: ['Ephemeral'] })
 
       if (!interaction.channel) return
 
@@ -69,6 +69,8 @@ const command: SlashCommand = {
       const guildid = interaction.guildId
       const channel = interaction.channel
       const options = interaction.options.data
+
+      if (!channel.isSendable()) return
 
       const date = new Date()
       const minutes = date.getMinutes() + minutesTimeout
@@ -176,7 +178,7 @@ const command: SlashCommand = {
   },
   button: async (interaction) => {
     try {
-      await interaction.deferReply({ ephemeral: true })
+      await interaction.deferReply({ flags: ['Ephemeral'] })
 
       const [type, pollID, optionString] = interaction.customId.split('.')
       const targetPoll = await PollModel.findOne({ _id: pollID })

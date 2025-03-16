@@ -9,6 +9,13 @@ const command: Command = {
     try {
       logger.debug('[Pause Command]: Run pause command')
 
+      if (!message.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
       if (!message.guildId || !message.member)
         return sendTimedMessage(
           'An error occurred!',
@@ -81,7 +88,7 @@ const command: Command = {
               )
             })
 
-          if (!channel || !channel.isTextBased()) return
+          if (!channel || !channel.isSendable()) return
 
           const embed = new EmbedBuilder()
             .setAuthor({

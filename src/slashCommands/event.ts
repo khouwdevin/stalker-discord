@@ -65,7 +65,7 @@ const command: SlashCommand = {
     try {
       logger.debug('[Event Slash Command]: Run event slash command')
 
-      await interaction.deferReply({ ephemeral: true })
+      await interaction.deferReply({ flags: ['Ephemeral'] })
 
       if (!interaction.guild)
         return logger.error(

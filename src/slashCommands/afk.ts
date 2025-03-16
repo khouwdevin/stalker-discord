@@ -22,7 +22,15 @@ const command: SlashCommand = {
   execute: async (interaction) => {
     try {
       logger.debug('[AFK Slash Command]: Run afk slash command')
-      await interaction.deferReply({ ephemeral: true })
+
+      if (interaction.channel && !interaction.channel.isSendable()) {
+        logger.error(
+          '[Play Command]: Cannnot send message because channel is not sendable'
+        )
+        return
+      }
+
+      await interaction.deferReply({ flags: ['Ephemeral'] })
 
       if (!interaction.channel)
         return logger.error(

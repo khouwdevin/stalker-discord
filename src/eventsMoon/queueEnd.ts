@@ -15,7 +15,7 @@ const event: MoonEvent = {
       })
 
     if (!player.connected) return
-    if (!channel || !channel.isTextBased()) return
+    if (!channel || !channel.isSendable()) return
 
     const embed = new EmbedBuilder()
       .setAuthor({

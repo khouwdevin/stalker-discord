@@ -94,7 +94,7 @@ const command: SlashCommand = {
     try {
       logger.debug('[Embed Slash Command]: Run embed slash command')
 
-      await interaction.deferReply({ ephemeral: true })
+      await interaction.deferReply({ flags: ['Ephemeral'] })
       const options: { [key: string]: string | number | boolean } = {}
       if (!interaction.options)
         return interaction.editReply({ content: 'Something went wrong...' })
