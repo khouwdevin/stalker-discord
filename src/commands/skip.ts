@@ -29,7 +29,7 @@ const command: Command = {
           5000
         )
 
-      const skippedNumber = args.length > 0 ? parseInt(args[1]) : undefined
+      const skippedNumber = args.length > 1 ? parseInt(args[1]) : undefined
 
       const client = message.client
       const player = client.moon.players.get(message.guildId)

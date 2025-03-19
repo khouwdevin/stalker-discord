@@ -97,11 +97,13 @@ const command: Command = {
 
       switch (res.loadType) {
         case 'error':
+          await processMessage.delete()
           return sendMessage(
             `${message.member} failed to load song!`,
             message.channel as TextChannel
           )
         case 'empty':
+          await processMessage.delete()
           return sendMessage(
             `${message.member} no title matches!`,
             message.channel as TextChannel
