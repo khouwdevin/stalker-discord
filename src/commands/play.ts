@@ -98,12 +98,16 @@ const command: Command = {
       switch (res.loadType) {
         case 'error':
           await processMessage.delete()
+          logger.error('[Play Command]: ❌ Search song error')
+
           return sendMessage(
             `${message.member} failed to load song!`,
             message.channel as TextChannel
           )
         case 'empty':
           await processMessage.delete()
+          logger.debug('[Play Command]: Message is empty')
+
           return sendMessage(
             `${message.member} no title matches!`,
             message.channel as TextChannel
@@ -136,7 +140,10 @@ const command: Command = {
           message.channel.send({ embeds: [embedPlaylist] })
 
           for (const track of res.tracks) {
-            player.queue.add(track)
+            const addStatus = player.queue.add(track)
+            logger.trace(
+              `[Play Command]: Add ${track.title} from playlist ${res.playlistInfo.name} is ${addStatus}`
+            )
           }
 
           break
@@ -162,6 +169,9 @@ const command: Command = {
             message.channel.send({ embeds: [embedPlay] })
           }
 
+          logger.trace(
+            `[Play Command]: Add ${res.tracks[0].title} to the queue`
+          )
           player.queue.add(res.tracks[0])
 
           break
@@ -174,20 +184,29 @@ const command: Command = {
 
       await processMessage.delete()
 
-      if (!player.connected) {
-        player.connect({
-          setDeaf: true,
-          setMute: false,
-        })
-      }
-
-      if (player && player.voiceChannelId !== message.member.voice.channelId) {
+      if (
+        player.connected &&
+        player.voiceChannelId !== message.member.voice.channelId
+      ) {
         player.setVoiceChannelId(message.member.voice.channelId)
 
-        player.connect({
+        const connectStatus = player.connect({
           setDeaf: true,
           setMute: false,
         })
+
+        logger.trace(
+          `[Play Command]: Connecting is ${connectStatus} to ${message.member.voice.channelId}`
+        )
+      } else if (!player.connected) {
+        const connectStatus = player.connect({
+          setDeaf: true,
+          setMute: false,
+        })
+
+        logger.trace(
+          `[Play Command]: Connecting is ${connectStatus} to ${message.member.voice.channelId}`
+        )
       }
 
       if (!player.playing) await player.play()

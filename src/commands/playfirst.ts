@@ -122,12 +122,19 @@ const command: Command = {
             .setColor('Yellow')
           message.channel.send({ embeds: [embedSong] })
 
+          logger.trace(
+            `[Play First First Command]: Song is added to queue ${res.tracks[0].title}`
+          )
+
           const tracks = player.queue.tracks
           player.queue.clear()
           player.queue.add(res.tracks[0])
 
           for (const track of tracks) {
-            player.queue.add(track)
+            const addStatus = player.queue.add(track)
+            logger.trace(
+              `[Play First First Command]: Songs are readded to queue ${track.title} is ${addStatus}`
+            )
           }
 
           break
@@ -140,20 +147,29 @@ const command: Command = {
 
       await processMessage.delete()
 
-      if (!player.connected) {
-        player.connect({
-          setDeaf: true,
-          setMute: false,
-        })
-      }
-
-      if (player && player.voiceChannelId !== message.member.voice.channelId) {
+      if (
+        player.connected &&
+        player.voiceChannelId !== message.member.voice.channelId
+      ) {
         player.setVoiceChannelId(message.member.voice.channelId)
 
-        player.connect({
+        const connectStatus = player.connect({
           setDeaf: true,
           setMute: false,
         })
+
+        logger.trace(
+          `[Play Command]: Connect is ${connectStatus} to ${message.member.voice.channelId}`
+        )
+      } else if (!player.connected) {
+        const connectStatus = player.connect({
+          setDeaf: true,
+          setMute: false,
+        })
+
+        logger.trace(
+          `[Play Command]: Connect is ${connectStatus} to ${message.member.voice.channelId}`
+        )
       }
 
       if (!player.playing) await player.play()
