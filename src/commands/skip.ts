@@ -64,7 +64,9 @@ const command: Command = {
       const skipStatus = await player.skip(skippedNumber)
 
       logger.trace(
-        `[Skip Command]: Skipp song is ${skipStatus} for ${skippedNumber} songs`
+        `[Skip Command]: Skip song is ${skipStatus} for ${
+          skippedNumber === undefined ? 1 : skippedNumber
+        } songs`
       )
     } catch (e) {
       logger.error(`[Skip Command]: ❌ Failed to skip music : ${e.message}`)

@@ -56,7 +56,7 @@ const command: Command = {
         .setColor('Red')
       channel.send({ embeds: [embed] })
 
-      player.stop()
+      const stopStatus = player.stop()
       player.disconnect()
       player.destroy()
 
@@ -76,7 +76,9 @@ const command: Command = {
         `[Stop Command]: Delete moon player ${player.guildId} : ${deleteMoonPlayer}`
       )
 
-      logger.trace('[Stop Command]: Player is stopped')
+      logger.trace(
+        `[Stop Command]: Player stopped is ${stopStatus} on guild ${message.guildId}`
+      )
     } catch (e) {
       logger.error(`[Stop Command]: ❌ Failed to stop music : ${e.message}`)
     }

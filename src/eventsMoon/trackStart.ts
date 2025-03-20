@@ -28,6 +28,7 @@ const event: MoonEvent = {
 
     client.playerAttempts.set(`${player.guildId}`, 3)
 
+    logger.trace(`[Event Moon]: ${track.title} is starting on trackStart`)
     logger.debug('[Event Moon]: Track start on trackStart')
   },
 }

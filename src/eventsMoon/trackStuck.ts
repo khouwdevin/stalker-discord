@@ -45,6 +45,7 @@ const event: MoonEvent = {
 
         channel.send({ embeds: [embed] })
 
+        logger.trace(`[Event Moon]: ${track.title} is stuck on trackStuck`)
         logger.debug('[Event Moon]: Player is being stopped on trackStuck')
       } else {
         client.playerAttempts.set(player.guildId, attemp - 1)

@@ -55,7 +55,11 @@ const command: Command = {
           .setColor('Red')
         channel.send({ embeds: [embed] })
 
-        player.pause()
+        const pauseStatus = player.pause()
+
+        logger.trace(
+          `[Pause Command]: Pause is ${pauseStatus} on guild ${message.guildId}`
+        )
 
         const timeout = setTimeout(async () => {
           player.stop()

@@ -81,7 +81,9 @@ const command: Command = {
         .setColor('Purple')
       channel.send({ embeds: [embed] })
 
-      logger.trace(`[Shuffle Command]: Shuffle is changed to ${playerData}`)
+      logger.trace(
+        `[Shuffle Command]: Shuffle is changed to ${playerData} on guild ${message.guildId}`
+      )
     } catch (e) {
       logger.error(
         `[Shuffle Command]: ❌ Failed to configure shuffle : ${e.message}`

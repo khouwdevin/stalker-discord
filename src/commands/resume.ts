@@ -55,7 +55,11 @@ const command: Command = {
           .setColor('Green')
         channel.send({ embeds: [embed] })
 
-        player.resume()
+        const resumeStatus = player.resume()
+
+        logger.trace(
+          `[Resume Command]: Resume is ${resumeStatus} on guild ${message.guildId}`
+        )
 
         if (client.timeouts.has(`player-${player.guildId}`)) {
           clearTimeout(client.timeouts.get(`player-${player.guildId}`))

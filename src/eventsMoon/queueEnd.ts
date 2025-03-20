@@ -1,11 +1,11 @@
-import { Player } from 'moonlink.js'
+import { Player, Track } from 'moonlink.js'
 import { MoonEvent } from '../types'
 import { Client, EmbedBuilder } from 'discord.js'
 import logger from '../logger'
 
 const event: MoonEvent = {
   name: 'queueEnd',
-  execute: async (client: Client, player: Player, track: any) => {
+  execute: async (client: Client, player: Player, track: Track) => {
     logger.debug(`[Event Moon]: Queue end player-${player.guildId}`)
 
     const channel = await client.channels
@@ -38,6 +38,9 @@ const event: MoonEvent = {
         )
         const deleteMoonPlayer = client.moon.players.delete(player.guildId)
 
+        logger.trace(
+          `[Event Moon]: ${track.title} is the last in queue on queueEnd`
+        )
         logger.trace(
           `[Event Moon]: Delete client timeout ${player.guildId} on queueEnd : ${deleteTimeout}`
         )

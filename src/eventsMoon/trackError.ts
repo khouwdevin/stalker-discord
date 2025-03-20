@@ -47,6 +47,7 @@ const event: MoonEvent = {
 
         channel.send({ embeds: [embed] })
 
+        logger.trace(`[Event Moon]: ${track.title} is error on trackError`)
         logger.debug('[Event Moon]: Player is being stopped on trackError')
       } else {
         client.playerAttempts.set(player.guildId, attemp - 1)

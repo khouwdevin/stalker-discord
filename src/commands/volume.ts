@@ -80,7 +80,9 @@ const command: Command = {
         .setColor('Purple')
       channel.send({ embeds: [embed] })
 
-      logger.trace(`[Volume Command]: Volume is changed to ${playerData}`)
+      logger.trace(
+        `[Volume Command]: Volume is changed to ${playerData} on guild ${message.guildId}`
+      )
     } catch (e) {
       logger.error(
         `[Volume Command]: ❌ Failed to configure volume : ${e.message}`
