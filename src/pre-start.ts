@@ -7,6 +7,7 @@ import { Manager } from 'moonlink.js'
 const {
   Guilds,
   MessageContent,
+  DirectMessages,
   GuildMessages,
   GuildMessageReactions,
   GuildMessageTyping,
@@ -14,10 +15,12 @@ const {
   GuildVoiceStates,
   GuildScheduledEvents,
 } = GatewayIntentBits
+
 const client = new Client({
   intents: [
     Guilds,
     MessageContent,
+    DirectMessages,
     GuildMessages,
     GuildMessageReactions,
     GuildMessageTyping,

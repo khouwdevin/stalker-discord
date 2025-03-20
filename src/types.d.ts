@@ -101,6 +101,7 @@ declare global {
       SPOTIFY_CLIENTID: string
       SPOTIFY_CLIENT_SECRET: string
       TURN_ON_MUSIC: string
+      USER_ID: string
     }
   }
 }

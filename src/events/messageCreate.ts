@@ -2,18 +2,38 @@ import { ChannelType, Message } from 'discord.js'
 import { checkPermissions, sendTimedMessage } from '../functions'
 import { BotEvent } from '../types'
 import logger from '../logger'
+import loggerLevel from '../server/loggerLevel'
 
 const event: BotEvent = {
   name: 'messageCreate',
   execute: async (message: Message) => {
     logger.debug('[Event]: Message create')
 
-    if (!message.member || message.member.user.bot) return
-    if (!message.guild) return
+    if (message.author.bot)
+      return logger.debug('[Event]: Author is bot on messageCreate')
+
     const prefix = process.env.PREFIX_COMMAND
 
-    if (!message.content.startsWith(prefix)) return
-    if (message.channel.type !== ChannelType.GuildText) return
+    if (!message.content.startsWith(prefix))
+      return logger.debug(
+        '[Event]: Message is not starting with prefix on messageCreate'
+      )
+    if (message.channel.type === ChannelType.DM) {
+      if (!message.content.startsWith('$logger'))
+        return logger.debug('[Event]: DM message does not contain prefix')
+
+      const args = message.content.substring(prefix.length).split(' ')
+      loggerLevel(message, args)
+      return
+    }
+    if (message.channel.type !== ChannelType.GuildText)
+      return logger.debug(
+        '[Event]: Message type is not a guild text on messageCreate'
+      )
+    if (!message.guild || !message.member)
+      return logger.debug(
+        '[Event]: Message does not have a guild and not a member on messageCreate'
+      )
 
     const args = message.content.substring(prefix.length).split(' ')
     let command = message.client.commands.get(args[0])
