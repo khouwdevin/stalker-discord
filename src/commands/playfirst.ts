@@ -12,7 +12,7 @@ const command: Command = {
   name: 'playfirst',
   execute: async (message, args) => {
     try {
-      logger.debug('[Play First First Command]: Run Play First command')
+      logger.debug('[Play First Command]: Run Play First command')
 
       const title = args.slice(1, args.length).join(' ')
 
@@ -123,7 +123,7 @@ const command: Command = {
           message.channel.send({ embeds: [embedSong] })
 
           logger.trace(
-            `[Play First First Command]: Song is added to queue ${res.tracks[0].title}`
+            `[Play First Command]: Song is added to queue ${res.tracks[0].title}`
           )
 
           const tracks = player.queue.tracks
@@ -133,7 +133,7 @@ const command: Command = {
           for (const track of tracks) {
             const addStatus = player.queue.add(track)
             logger.trace(
-              `[Play First First Command]: Songs are readded to queue ${track.title} is ${addStatus}`
+              `[Play First Command]: Songs are readded to queue ${track.title} is ${addStatus}`
             )
           }
 
