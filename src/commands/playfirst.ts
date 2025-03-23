@@ -110,9 +110,7 @@ const command: Command = {
               iconURL: message.client.user.avatarURL() || undefined,
             })
             .setColor('Grey')
-          message.channel.send({ embeds: [embedPlaylist] })
-
-          break
+          return message.channel.send({ embeds: [embedPlaylist] })
         default:
           const embedSong = new EmbedBuilder()
             .setAuthor({
