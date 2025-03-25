@@ -110,9 +110,7 @@ const command: Command = {
               iconURL: message.client.user.avatarURL() || undefined,
             })
             .setColor('Grey')
-          message.channel.send({ embeds: [embedPlaylist] })
-
-          break
+          return message.channel.send({ embeds: [embedPlaylist] })
         default:
           const embedSong = new EmbedBuilder()
             .setAuthor({
@@ -158,8 +156,11 @@ const command: Command = {
           setMute: false,
         })
 
+        logger.debug(
+          `[Play Command]: Player is connected and move to ${message.member.voice.channelId}`
+        )
         logger.trace(
-          `[Play Command]: Connect is ${connectStatus} to ${message.member.voice.channelId}`
+          `[Play Command]: Connecting is ${connectStatus} to ${message.member.voice.channelId}`
         )
       } else if (!player.connected) {
         const connectStatus = player.connect({
@@ -167,8 +168,11 @@ const command: Command = {
           setMute: false,
         })
 
+        logger.debug(
+          `[Play Command]: Player is not connected and connect to ${message.member.voice.channelId}`
+        )
         logger.trace(
-          `[Play Command]: Connect is ${connectStatus} to ${message.member.voice.channelId}`
+          `[Play Command]: Connecting is ${connectStatus} to ${message.member.voice.channelId}`
         )
       }
 
