@@ -195,6 +195,9 @@ const command: Command = {
           setMute: false,
         })
 
+        logger.debug(
+          `[Play Command]: Player is connected and move to ${message.member.voice.channelId}`
+        )
         logger.trace(
           `[Play Command]: Connecting is ${connectStatus} to ${message.member.voice.channelId}`
         )
@@ -204,6 +207,9 @@ const command: Command = {
           setMute: false,
         })
 
+        logger.debug(
+          `[Play Command]: Player is not connected and connect to ${message.member.voice.channelId}`
+        )
         logger.trace(
           `[Play Command]: Connecting is ${connectStatus} to ${message.member.voice.channelId}`
         )
