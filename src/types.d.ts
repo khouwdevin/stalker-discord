@@ -98,7 +98,7 @@ declare global {
       LAVALINK_PORT: string
       LAVALINK_HOST: string
       LAVALINK_IDENTIFIER: string
-      SPOTIFY_CLIENTID: string
+      SPOTIFY_CLIENT_ID: string
       SPOTIFY_CLIENT_SECRET: string
       TURN_ON_MUSIC: string
       USER_ID: string

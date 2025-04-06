@@ -6,7 +6,7 @@ import logger from '../logger'
 const event: MoonEvent = {
   name: 'queueEnd',
   execute: async (client: Client, player: Player, track: Track) => {
-    logger.debug(`[Event Moon]: Queue end player-${player.guildId}`)
+    logger.debug(`[Event Moon]: Queue end player-${player.guildId} on queueEnd`)
 
     const channel = await client.channels
       .fetch(player.textChannelId)
