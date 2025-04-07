@@ -100,7 +100,7 @@ const command: Command = {
           await processMessage.delete()
           logger.error('[Play Command]: ❌ Search song error')
 
-          if (!player.playing) {
+          if (player && !player.playing) {
             player.stop()
             player.disconnect()
             player.destroy()
@@ -132,7 +132,7 @@ const command: Command = {
           await processMessage.delete()
           logger.debug('[Play Command]: Message is empty')
 
-          if (!player.playing) {
+          if (player && !player.playing) {
             player.stop()
             player.disconnect()
             player.destroy()
