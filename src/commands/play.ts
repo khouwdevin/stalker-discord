@@ -100,6 +100,30 @@ const command: Command = {
           await processMessage.delete()
           logger.error('[Play Command]: ❌ Search song error')
 
+          if (!player.playing) {
+            player.stop()
+            player.disconnect()
+            player.destroy()
+
+            const deleteTimeout = client.timeouts.delete(
+              `player-${player.guildId}`
+            )
+            const deletePlayerAttemps = client.playerAttempts.delete(
+              `player-${player.guildId}`
+            )
+            const deleteMoonPlayer = client.moon.players.delete(player.guildId)
+
+            logger.trace(
+              `[Play Command]: Delete client timeout ${player.guildId} : ${deleteTimeout}`
+            )
+            logger.trace(
+              `[Play Command]: Delete player attempts ${player.guildId} : ${deletePlayerAttemps}`
+            )
+            logger.trace(
+              `[Play Command]: Delete moon player ${player.guildId} : ${deleteMoonPlayer}`
+            )
+          }
+
           return sendMessage(
             `${message.member} failed to load song!`,
             message.channel as TextChannel
@@ -107,6 +131,30 @@ const command: Command = {
         case 'empty':
           await processMessage.delete()
           logger.debug('[Play Command]: Message is empty')
+
+          if (!player.playing) {
+            player.stop()
+            player.disconnect()
+            player.destroy()
+
+            const deleteTimeout = client.timeouts.delete(
+              `player-${player.guildId}`
+            )
+            const deletePlayerAttemps = client.playerAttempts.delete(
+              `player-${player.guildId}`
+            )
+            const deleteMoonPlayer = client.moon.players.delete(player.guildId)
+
+            logger.trace(
+              `[Play Command]: Delete client timeout ${player.guildId} : ${deleteTimeout}`
+            )
+            logger.trace(
+              `[Play Command]: Delete player attempts ${player.guildId} : ${deletePlayerAttemps}`
+            )
+            logger.trace(
+              `[Play Command]: Delete moon player ${player.guildId} : ${deleteMoonPlayer}`
+            )
+          }
 
           return sendMessage(
             `${message.member} no title matches!`,
