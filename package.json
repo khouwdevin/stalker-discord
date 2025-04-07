@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:production": "node build/index.js --env=production",
-    "start:dev": "cls && node build/index.js --env=development",
+    "start:dev": "clear && node build/index.js --env=development",
     "dev": "start tsc -w && start nodemon build/index.js",
     "watch": "tsc -w",
     "build": "tsc"
