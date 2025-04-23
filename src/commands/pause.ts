@@ -72,7 +72,7 @@ const command: Command = {
           const deletePlayerAttemps = client.playerAttempts.delete(
             `player-${player.guildId}`
           )
-          const deleteMoonPlayer = client.moon.players.delete(player.guildId)
+          await client.moon.players.delete(player.guildId)
 
           logger.trace(
             `[Detect User]: Delete client timeout ${player.guildId} : ${deleteTimeout}`
@@ -81,7 +81,7 @@ const command: Command = {
             `[[Detect User]: Delete player attempts ${player.guildId} : ${deletePlayerAttemps}`
           )
           logger.trace(
-            `[Detect User]: Delete moon player ${player.guildId} : ${deleteMoonPlayer}`
+            `[Detect User]: Delete moon player from guild ${player.guildId}`
           )
 
           const channel = await client.channels

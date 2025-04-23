@@ -36,7 +36,7 @@ const event: MoonEvent = {
         const deletePlayerAttemps = client.playerAttempts.delete(
           `player-${player.guildId}`
         )
-        const deleteMoonPlayer = client.moon.players.delete(player.guildId)
+        await client.moon.players.delete(player.guildId)
 
         logger.trace(
           `[Event Moon]: ${track.title} is the last in queue on queueEnd`
@@ -48,7 +48,7 @@ const event: MoonEvent = {
           `[Event Moon]: Delete player attempts ${player.guildId} on queueEnd : ${deletePlayerAttemps}`
         )
         logger.trace(
-          `[Event Moon]: Delete moon player ${player.guildId} on queueEnd : ${deleteMoonPlayer}`
+          `[Event Moon]: Delete moon player from guild ${player.guildId} on queueEnd`
         )
 
         const embed = new EmbedBuilder()
