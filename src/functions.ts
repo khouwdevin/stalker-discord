@@ -20,7 +20,7 @@ import logger from './logger'
 
 export const checkPermissions = (
   member: GuildMember,
-  permissions: Array<PermissionResolvable>
+  permissions: Array<PermissionResolvable>,
 ) => {
   let neededPermissions: PermissionResolvable[] = []
   permissions.forEach((permission) => {
@@ -40,7 +40,7 @@ export const checkPermissions = (
 export const sendTimedMessage = (
   message: string,
   channel: TextChannel,
-  duration: number
+  duration: number,
 ) => {
   channel
     .send(message)
@@ -51,11 +51,11 @@ export const sendTimedMessage = (
             .delete()
             .catch((e) =>
               logger.error(
-                `[Send Timed Message]: ❌ Failed to delete message : ${e.message}`
-              )
+                `[Send Timed Message]: ❌ Failed to delete message : ${e.message}`,
+              ),
             ),
-        duration
-      )
+        duration,
+      ),
     )
   return
 }
@@ -64,13 +64,15 @@ export const sendMessage = (message: string, channel: TextChannel) => {
   channel
     .send(message)
     .catch((e) =>
-      logger.error(`[Send Message]: ❌ Failed to delete message : ${e.message}`)
+      logger.error(
+        `[Send Message]: ❌ Failed to delete message : ${e.message}`,
+      ),
     )
 }
 
 export const sendMessageToExistingChannel = (
   channels: ChannelManager,
-  message: string
+  message: string,
 ) => {
   for (let i = 0; i < channels.cache.size; i++) {
     const channelGuild = channels.cache.at(i)
@@ -85,8 +87,8 @@ export const sendMessageToExistingChannel = (
       .send(message)
       .catch((e) =>
         logger.error(
-          `[Send Message to Existing Channel]: ❌ Failed to send message : ${e.message}`
-        )
+          `[Send Message to Existing Channel]: ❌ Failed to send message : ${e.message}`,
+        ),
       )
   }
 }
@@ -94,7 +96,7 @@ export const sendMessageToExistingChannel = (
 export const sendTimedMessageToExistingChannel = (
   channels: ChannelManager,
   message: string,
-  duration: number
+  duration: number,
 ) => {
   for (let i = 0; i < channels.cache.size; i++) {
     const channelGuild = channels.cache.at(i)
@@ -110,8 +112,8 @@ export const sendTimedMessageToExistingChannel = (
       .then((m) => setTimeout(() => m.delete(), duration))
       .catch((e) =>
         logger.error(
-          `[Send Timed Message to Existing Channel]: ❌ Failed to send message : ${e.message}`
-        )
+          `[Send Timed Message to Existing Channel]: ❌ Failed to send message : ${e.message}`,
+        ),
       )
   }
 }
@@ -132,7 +134,7 @@ export const sendNotifyStalkerOnline = async (client: Client) => {
         sendTimedMessageToExistingChannel(
           channels,
           "Please add or update default text channel to Stalker's config!",
-          10000
+          10000,
         )
 
         continue
@@ -151,7 +153,7 @@ export const sendNotifyStalkerOnline = async (client: Client) => {
         sendTimedMessageToExistingChannel(
           channels,
           "Please add or update default text channel to Stalker's config!",
-          10000
+          10000,
         )
 
         continue
@@ -187,7 +189,7 @@ export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
       return sendTimedMessageToExistingChannel(
         channels,
         "Please add or update default text channel to Stalker's config!",
-        10000
+        10000,
       )
 
     const channel = channelGuild.guild.systemChannel
@@ -196,8 +198,8 @@ export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
       .then((m) => setTimeout(() => m.delete(), 10000))
       .catch((e) =>
         logger.error(
-          `[Notify to Config Default Channel]: ❌ Failed to notify config default message : ${e.message}`
-        )
+          `[Notify to Config Default Channel]: ❌ Failed to notify config default message : ${e.message}`,
+        ),
       )
   }
 }
@@ -205,7 +207,7 @@ export const notifyToConfigDefaultTextChannel = (channels: ChannelManager) => {
 export const deleteTimedMessage = (
   message: Message,
   channel: TextChannel,
-  duration: number
+  duration: number,
 ) => {
   setTimeout(
     async () =>
@@ -213,16 +215,16 @@ export const deleteTimedMessage = (
         .delete()
         .catch((e) =>
           logger.error(
-            `[Delete Timed Message]: ❌ Failed to delete message : ${e.message}`
-          )
+            `[Delete Timed Message]: ❌ Failed to delete message : ${e.message}`,
+          ),
         ),
-    duration
+    duration,
   )
 }
 
 export const registerGuild = async (
   guild: Guild,
-  channelid: string
+  channelid: string,
 ): Promise<IGuild> => {
   const newGuild = new GuildModel({
     guildID: guild.id,
@@ -263,7 +265,7 @@ export const getAllGuildOption = async (guild: Guild) => {
 export const setGuildOption = async (
   guild: Guild,
   option: GuildOption,
-  value: any
+  value: any,
 ) => {
   if (mongoose.connection.readyState === 0)
     return logger.error('[Set Guild Option]: ❌ Database is not connected')
@@ -380,7 +382,7 @@ export const getPlayerDB = async (guildId: string): Promise<PlayerOptions> => {
 export const setPlayerDB = async (
   guildId: string,
   options: PlayerOption,
-  value: any
+  value: any,
 ) => {
   if (mongoose.connection.readyState === 0)
     return logger.error('[Set Player DB]: ❌ Database is not connected')
@@ -402,7 +404,7 @@ export const getPlayerData = (
   autoplay: boolean | null,
   volume: number,
   loop: TPlayerLoop | null,
-  shuffle: boolean | null
+  shuffle: boolean | null,
 ) => {
   return `
         autoplay: **${autoplay ? autoplay : false}**\r
@@ -424,6 +426,7 @@ function cleanup(ws: WebSocket, timeoutId: NodeJS.Timeout) {
 
 export const checkLavalinkConnection = async (): Promise<void> => {
   return new Promise((resolve, reject) => {
+    const protocol = process.env.LAVALINK_SSL === 'true' ? 'wss' : 'ws'
     const headers = {
       Authorization: process.env.LAVALINK_PASSWORD,
       'User-Id': '1',
@@ -431,8 +434,8 @@ export const checkLavalinkConnection = async (): Promise<void> => {
     }
 
     const ws = new WebSocket(
-      `ws://${process.env.LAVALINK_HOST}:${process.env.LAVALINK_PORT}/v4/websocket`,
-      { headers }
+      `${protocol}://${process.env.LAVALINK_HOST}:${process.env.LAVALINK_PORT}/v4/websocket`,
+      { headers },
     )
 
     let timeoutId: NodeJS.Timeout
@@ -464,7 +467,7 @@ export const forLavalinkServer = async () => {
       logger.error(
         `[For Lavalink Server]: ❌ Connection attempt ${retries + 1} failed: ${
           error.message
-        }`
+        }`,
       )
 
       retries++

@@ -43,6 +43,7 @@ LAVALINK_PASSWORD=(Lavalink password)
 LAVALINK_PORT=(Lavalink port) # default 443
 LAVALINK_HOST=(Lavalink host or domain that used by Lavalink server) # default lavalink
 LAVALINK_IDENTIFIER=(Fill it same as lavalink host) # default lavalink-local
+LAVALINK_SSL=(Fill with true if using ssl and false if not)
 SPOTIFY_CLIENTID=(Spotify client id) # if you don't want to use spotify then let it empty
 SPOTIFY_CLIENT_SECRET=(Spotify client secret) # if you don't want to use spotify then let it empty
 TURN_ON_MUSIC=(true or false)
