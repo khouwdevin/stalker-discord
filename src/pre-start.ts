@@ -41,7 +41,7 @@ client.moon = new Manager({
     {
       host: `${process.env.LAVALINK_HOST}`,
       port: parseInt(process.env.LAVALINK_PORT),
-      secure: false,
+      secure: process.env.LAVALINK_SSL === 'true',
       password: `${process.env.LAVALINK_PASSWORD}`,
       identifier: `${process.env.LAVALINK_IDENTIFIER}`,
       retryAmount: 10,
