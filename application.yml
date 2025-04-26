@@ -80,7 +80,7 @@ plugins:
       refresheToken: ${YOUTUBE_REFRESH_TOKEN}
 
 server:
-  port: 443
+  port: 2333
   address: 0.0.0.0
 lavalink:
   plugins:
