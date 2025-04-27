@@ -38,7 +38,7 @@ services:
       - ./application.yml:/opt/Lavalink/application.yml
       - ./plugins/:/opt/Lavalink/plugins/
     ports:
-      - "2333:2333"
+      - "${LAVALINK_PORT}:${LAVALINK_PORT}"
     networks:
       - stalker-bot
 
