@@ -1,12 +1,12 @@
 plugins:
   lavasrc:
     providers:
-      - "dzisrc:%ISRC%"
+      - 'dzisrc:%ISRC%'
       - 'ytsearch:"%ISRC%"'
-      - "dzsearch:%QUERY%"
-      - "ytmsearch:%QUERY%"
-      - "ytsearch:%QUERY%"
-      - "scsearch:%QUERY%"
+      - 'dzsearch:%QUERY%'
+      - 'ytmsearch:%QUERY%'
+      - 'ytsearch:%QUERY%'
+      - 'scsearch:%QUERY%'
     sources:
       spotify: true
       applemusic: false
@@ -25,17 +25,17 @@ plugins:
       clientId: ${SPOTIFY_CLIENT_ID}
       clientSecret: ${SPOTIFY_CLIENT_SECRET}
       # spDc: "your sp dc cookie" # the sp dc cookie used for accessing the spotify lyrics api
-      countryCode: "US"
+      countryCode: 'US'
       playlistLoadLimit: 6
       albumLoadLimit: 6
       resolveArtistsInSearch: true
       localFiles: false
     applemusic:
-      countryCode: "US"
-      mediaAPIToken: "your apple music api token"
+      countryCode: 'US'
+      mediaAPIToken: 'your apple music api token'
       # or specify an apple music key
-      keyID: "your key id"
-      teamID: "your team id"
+      keyID: 'your key id'
+      teamID: 'your team id'
       musicKitKey: |
         -----BEGIN PRIVATE KEY-----
         your key
@@ -43,24 +43,24 @@ plugins:
       playlistLoadLimit: 6
       albumLoadLimit: 6
     deezer:
-      masterDecryptionKey: "your master decryption key"
+      masterDecryptionKey: 'your master decryption key'
       # arl: "your deezer arl" # the arl cookie used for accessing the deezer api this is optional but required for formats above MP3_128
-      formats: ["FLAC", "MP3_320", "MP3_256", "MP3_128", "MP3_64", "AAC_64"]
+      formats: ['FLAC', 'MP3_320', 'MP3_256', 'MP3_128', 'MP3_64', 'AAC_64']
     yandexmusic:
-      accessToken: "your access token"
+      accessToken: 'your access token'
       playlistLoadLimit: 1
       albumLoadLimit: 1
       artistLoadLimit: 1
     flowerytts:
-      voice: "default voice"
+      voice: 'default voice'
       translate: false
       silence: 0
       speed: 1.0
-      audioFormat: "mp3"
+      audioFormat: 'mp3'
     youtube:
-      countryCode: "US"
+      countryCode: 'US'
     vkmusic:
-      userToken: "your user token"
+      userToken: 'your user token'
       playlistLoadLimit: 1
       artistLoadLimit: 1
       recommendationsLoadLimit: 10
@@ -77,16 +77,16 @@ plugins:
       - TV
     oauth:
       enabled: true
-      refresheToken: ${YOUTUBE_REFRESH_TOKEN}
+      refreshToken: ${YOUTUBE_REFRESH_TOKEN}
 
 server:
-  port: ${LAVALINK_PORT}
+  port: 2333
   address: 0.0.0.0
 lavalink:
   plugins:
-    - dependency: "dev.lavalink.youtube:youtube-plugin:1.13.0"
+    - dependency: 'dev.lavalink.youtube:youtube-plugin:1.13.0'
       snapshot: false
-    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.6.0"
+    - dependency: 'com.github.topi314.lavasrc:lavasrc-plugin:4.6.0'
       snapshot: false
   server:
     password: ${LAVALINK_PASSWORD}
@@ -129,8 +129,8 @@ metrics:
     endpoint: /metrics
 
 sentry:
-  dsn: ""
-  environment: ""
+  dsn: ''
+  environment: ''
 
 logging:
   file:
