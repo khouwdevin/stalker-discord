@@ -2,6 +2,7 @@ plugins:
   lavasrc:
     providers:
       - 'dzisrc:%ISRC%'
+      - 'ytmsearch:"%ISRC%"'
       - 'ytsearch:"%ISRC%"'
       - 'dzsearch:%QUERY%'
       - 'ytmsearch:%QUERY%'
@@ -72,12 +73,26 @@ plugins:
     clients:
       - MUSIC
       - ANDROID_VR
-      - WEB
-      - WEBEMBEDDED
       - TV
     oauth:
       enabled: true
       refreshToken: ${YOUTUBE_REFRESH_TOKEN}
+    clientOptions:
+      MUSIC:
+        searching: true
+        playlistLoading: true
+        playback: false
+        videoLoading: false
+      TV:
+        searching: false
+        playlistLoading: true
+        playback: true
+        videoLoading: true
+      ANDROID_VR:
+        searching: true
+        playlistLoading: true
+        playback: false
+        videoLoading: false
 
 server:
   port: ${LAVALINK_PORT}
