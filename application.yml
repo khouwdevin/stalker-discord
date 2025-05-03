@@ -2,12 +2,11 @@ plugins:
   lavasrc:
     providers:
       - 'dzisrc:%ISRC%'
-      - 'ytmsearch:"%ISRC%"'
-      - 'ytsearch:"%ISRC%"'
       - 'dzsearch:%QUERY%'
+      - 'ytmsearch:"%ISRC%"'
       - 'ytmsearch:%QUERY%'
+      - 'ytsearch:"%ISRC%"'
       - 'ytsearch:%QUERY%'
-      - 'scsearch:%QUERY%'
     sources:
       spotify: true
       applemusic: false
