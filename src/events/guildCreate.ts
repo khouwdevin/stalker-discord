@@ -5,12 +5,16 @@ import logger from '../logger'
 
 const event: BotEvent = {
   name: 'guildCreate',
-  execute: (guild: Guild) => {
-    const channelid = guild.systemChannel ? guild.systemChannel.id : 'default'
+  execute: async (guild: Guild) => {
+    try {
+      const channelid = guild.systemChannel ? guild.systemChannel.id : 'default'
 
-    registerGuild(guild, channelid)
+      await registerGuild(guild, channelid)
 
-    logger.info('[Event]: Guild is created')
+      logger.info('[Event]: Guild is created')
+    } catch (e) {
+      logger.error(`[Event]: Guild failed to create ${e.message}`)
+    }
   },
 }
 

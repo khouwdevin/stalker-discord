@@ -36,8 +36,9 @@ put the environment variables inside working directory and name the file to .env
 TOKEN=(Discord bot token)
 CLIENT_ID=(Discord client id)
 PREFIX_COMMAND=$ # default prefix is $
-MONGO_URI=(Mongo DB url) # default mongodb://mongo:stalker-bot
 MONGO_DATABASE_NAME=(Mongo Database name) # default mongo:27017
+MONGO_USERNAME=(Mongo username for connecting)
+MONGO_PASSWORD=(Mongo password for connectiong)
 STALKER_DATABASE=(DB name in Mongo DB) # default stalker
 LAVALINK_PASSWORD=(Lavalink password)
 LAVALINK_PORT=(Lavalink port) # default 443

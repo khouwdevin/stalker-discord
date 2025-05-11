@@ -7,11 +7,15 @@ module.exports = (client: Client) => {
 }
 
 const initalizeMongoDB = (client: Client) => {
-  if (!process.env.MONGO_URI)
-    return logger.error('[Handler] : 🍃 Mongo URI not found, skipping')
+  if (!process.env.MONGO_USERNAME || !process.env.MONGO_PASSWORD)
+    return logger.error(
+      '[Handler] : 🍃 Mongo username or mongo password is not found, skipping',
+    )
 
   mongoose
-    .connect(`${process.env.MONGO_URI}@${process.env.MONGO_DATABASE_NAME}`)
+    .connect(
+      `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_DATABASE_NAME}`,
+    )
     .then(() => {
       logger.info('[Handler] : 🍃 MongoDB connection has been established')
     })

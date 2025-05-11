@@ -57,16 +57,16 @@ export const sendTimedMessage = (
         duration,
       ),
     )
-  return
+    .catch((e) =>
+      logger.error(`[Send Message]: ❌ Failed to send message : ${e.message}`),
+    )
 }
 
 export const sendMessage = (message: string, channel: TextChannel) => {
   channel
     .send(message)
     .catch((e) =>
-      logger.error(
-        `[Send Message]: ❌ Failed to delete message : ${e.message}`,
-      ),
+      logger.error(`[Send Message]: ❌ Failed to send message : ${e.message}`),
     )
 }
 
@@ -228,6 +228,7 @@ export const registerGuild = async (
 ): Promise<IGuild> => {
   const newGuild = new GuildModel({
     guildID: guild.id,
+    guildName: guild.name,
     options: {
       detectpresence: false,
       notify: false,
@@ -243,18 +244,19 @@ export const registerGuild = async (
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
   if (mongoose.connection.readyState === 0)
     return logger.error('[Get Guild Option]: ❌ Database is not connected')
-  let foundGuild = await GuildDB.findOne({ guildID: guild.id })
+  const foundGuild = await GuildDB.findOne({ guildID: guild.id })
   if (!foundGuild) {
     const newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
     return newGuild.options[option]
   }
+
   return foundGuild.options[option]
 }
 
 export const getAllGuildOption = async (guild: Guild) => {
   if (mongoose.connection.readyState === 0)
     return logger.error('[Get All Guild Option]: ❌ Database is not connected')
-  let foundGuild = await GuildDB.findOne({ guildID: guild.id })
+  const foundGuild = await GuildDB.findOne({ guildID: guild.id })
   if (!foundGuild) {
     const newGuild = await registerGuild(guild, guild.systemChannelId ?? '')
     return newGuild.options

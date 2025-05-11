@@ -48,6 +48,7 @@ interface PlayerOptions {
 
 export interface IGuild extends mongoose.Document {
   guildID: string
+  guildName: string
   options: GuildOptions
   joinedAt: Date
 }
@@ -91,8 +92,9 @@ declare global {
       CLIENT_ID: string
       MY_ID: string
       PREFIX_COMMAND: string
-      MONGO_URI: string
       MONGO_DATABASE_NAME: string
+      MONGO_USERNAME: string
+      MONGO_PASSWORD: string
       STALKER_DATABASE: string
       LAVALINK_PASSWORD: string
       LAVALINK_PORT: string

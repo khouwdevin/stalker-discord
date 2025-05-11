@@ -9,7 +9,7 @@ services:
       - lavalink
     env_file:
       - .env
-    restart: unless-stopped
+    restart: always
     networks:
       - stalker-bot
 
@@ -17,14 +17,14 @@ services:
     image: mongo:latest
     container_name: mongo
     ports:
-      - "27017:27017"
+      - '${MONGO_PORT}:${MONGO_PORT}'
     volumes:
       - mongo_data:/data/db
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: stalker-bot
-      MONGO_INITDB_DATABASE: stalker
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${STALKER_DATABASE}
     networks:
       - stalker-bot
 
@@ -38,7 +38,7 @@ services:
       - ./application.yml:/opt/Lavalink/application.yml
       - ./plugins/:/opt/Lavalink/plugins/
     ports:
-      - "${LAVALINK_PORT}:${LAVALINK_PORT}"
+      - '${LAVALINK_PORT}:${LAVALINK_PORT}'
     networks:
       - stalker-bot
 
