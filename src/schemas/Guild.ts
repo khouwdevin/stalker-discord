@@ -11,7 +11,7 @@ const GuildSchema = new Schema<IGuild>({
   },
 })
 
-const db = mongoose.connection.useDb(process.env.STALKER_DATABASE)
+const db = mongoose.connection.useDb(process.env.MONGO_DATABASE_NAME)
 const GuildModel = db.model('guild', GuildSchema, 'guilds')
 
 export default GuildModel

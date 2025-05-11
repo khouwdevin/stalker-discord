@@ -95,7 +95,7 @@ declare global {
       MONGO_DATABASE_NAME: string
       MONGO_USERNAME: string
       MONGO_PASSWORD: string
-      STALKER_DATABASE: string
+      MONGO_PORT: string
       LAVALINK_PASSWORD: string
       LAVALINK_PORT: string
       LAVALINK_HOST: string

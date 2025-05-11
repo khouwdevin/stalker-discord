@@ -36,17 +36,17 @@ put the environment variables inside working directory and name the file to .env
 TOKEN=(Discord bot token)
 CLIENT_ID=(Discord client id)
 PREFIX_COMMAND=$ # default prefix is $
-MONGO_DATABASE_NAME=(Mongo Database name) # default mongo:27017
+MONGO_DATABASE_NAME=stalker
 MONGO_USERNAME=(Mongo username for connecting)
-MONGO_PASSWORD=(Mongo password for connectiong)
-STALKER_DATABASE=(DB name in Mongo DB) # default stalker
+MONGO_PASSWORD=(Mongo password for connecting)
+MONGO_PORT=27017
 LAVALINK_PASSWORD=(Lavalink password)
-LAVALINK_PORT=(Lavalink port) # default 443
+LAVALINK_PORT=(Lavalink port) # default 2333
 LAVALINK_HOST=(Lavalink host or domain that used by Lavalink server) # default lavalink
 LAVALINK_IDENTIFIER=(Fill it same as lavalink host) # default lavalink-local
 LAVALINK_SSL=(Fill with true if using ssl and false if not)
-SPOTIFY_CLIENTID=(Spotify client id) # if you don't want to use spotify then let it empty
-SPOTIFY_CLIENT_SECRET=(Spotify client secret) # if you don't want to use spotify then let it empty
+SPOTIFY_CLIENTID=(Spotify client id) # if you don't want to use spotify remove this line
+SPOTIFY_CLIENT_SECRET=(Spotify client secret) # if you don't want to use remove this line
 TURN_ON_MUSIC=(true or false)
 YOUTUBE_REFRESH_TOKEN=(Youtube refresh token) # get the token from lavalink, further explaination below
 ```

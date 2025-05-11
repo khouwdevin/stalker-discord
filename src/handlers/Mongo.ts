@@ -14,7 +14,7 @@ const initalizeMongoDB = (client: Client) => {
 
   mongoose
     .connect(
-      `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_DATABASE_NAME}`,
+      `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@mongo:${process.env.MONGO_PORT}`,
     )
     .then(() => {
       logger.info('[Handler] : 🍃 MongoDB connection has been established')

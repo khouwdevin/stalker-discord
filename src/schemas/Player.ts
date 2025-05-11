@@ -11,7 +11,7 @@ const PlayerSchema = new Schema<IPlayer>({
   },
 })
 
-const db = mongoose.connection.useDb(process.env.STALKER_DATABASE)
+const db = mongoose.connection.useDb(process.env.MONGO_DATABASE_NAME)
 const PlayerModel = db.model('player', PlayerSchema, 'players')
 
 export default PlayerModel
