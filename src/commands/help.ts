@@ -15,7 +15,7 @@ const command: Command = {
 
       if (!message.channel.isSendable()) {
         logger.error(
-          '[Play Command]: Cannnot send message because channel is not sendable'
+          '[Play Command]: Cannnot send message because channel is not sendable',
         )
         return
       }
@@ -40,7 +40,7 @@ const command: Command = {
 
       const buttonsRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         backButton,
-        nextButton
+        nextButton,
       )
 
       await currentMessage.edit({ embeds: [embed], components: [buttonsRow] })
@@ -50,8 +50,8 @@ const command: Command = {
           .delete()
           .catch((e) =>
             logger.error(
-              `[Help Command]: ❌ Failed to delete message : ${e.message}`
-            )
+              `[Help Command]: ❌ Failed to delete message : ${e.message}`,
+            ),
           )
       }, 20000)
 
@@ -68,13 +68,8 @@ const command: Command = {
 
       const [type, messageId, command] = interaction.customId.split('.')
       const client = interaction.client
-      const currentMessage = await interaction.channel.messages
-        .fetch(messageId)
-        .catch((e) =>
-          logger.error(
-            `[Help Command Button]: ❌ Failed to fetch message : ${e.message}`
-          )
-        )
+
+      const currentMessage = interaction.message
 
       if (!currentMessage) return
       if (!currentMessage.embeds[0].footer) return
@@ -101,8 +96,8 @@ const command: Command = {
           .delete()
           .catch((e) =>
             logger.error(
-              `[Help Command Button]: ❌ Failed to delete message : ${e.message}`
-            )
+              `[Help Command Button]: ❌ Failed to delete message : ${e.message}`,
+            ),
           )
       }, 20000)
 
@@ -112,7 +107,7 @@ const command: Command = {
     } catch (e) {
       const client = interaction.client
       logger.error(
-        `[Help Command Button]: ❌ Failed to process interact button help : ${e.message}`
+        `[Help Command Button]: ❌ Failed to process interact button help : ${e.message}`,
       )
     }
   },

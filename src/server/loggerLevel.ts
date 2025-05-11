@@ -1,18 +1,12 @@
 import logger from '../logger'
 import { EmbedBuilder, Message } from 'discord.js'
 
-const loggerLevel = (message: Message, args: string[]) => {
+const loggerLevel = (message: Message, args: string) => {
   try {
     logger.debug('[Logger Command]: Run logger command.')
 
-    const loggerLevel = args[1]
-    const userId = message.author.id
+    const loggerLevel = args
 
-    if (userId !== process.env.USER_ID) {
-      logger.trace('[Logger Command]: User is not authorized')
-
-      return
-    }
     if (
       loggerLevel !== 'info' &&
       loggerLevel !== 'trace' &&
@@ -37,13 +31,13 @@ const loggerLevel = (message: Message, args: string[]) => {
         name: ' ',
         value: `Logger level is changed to ${loggerLevel}`,
       })
-      .setFooter({ text: 'STALKER MUSIC' })
+      .setFooter({ text: 'STALKER LOGGER' })
       .setColor('Purple')
 
     author.send({ embeds: [embed] })
   } catch (e) {
     logger.error(
-      `[Logger Command]: ❌ Failed to configure logger: ${e.message}`
+      `[Logger Command]: ❌ Failed to configure logger: ${e.message}`,
     )
   }
 }
