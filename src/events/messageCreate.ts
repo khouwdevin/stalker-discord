@@ -35,8 +35,10 @@ const event: BotEvent = {
       } else if (command === 'guildlist') {
         getGuildList(message.author)
       } else if (command === 'leaveguild') {
-        leaveGuild(message, args[1])
+        const guilds = args.slice(1)
+        leaveGuild(message, guilds)
       }
+
       return
     }
     if (message.channel.type !== ChannelType.GuildText)
