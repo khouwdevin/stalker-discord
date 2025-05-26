@@ -4,6 +4,7 @@ import { BotEvent } from '../types'
 import logger from '../logger'
 import loggerLevel from '../server/loggerLevel'
 import { getGuildList } from '../server/guildManagement'
+import { leaveGuild } from '../server/leaveGuild'
 
 const event: BotEvent = {
   name: 'messageCreate',
@@ -33,6 +34,8 @@ const event: BotEvent = {
         loggerLevel(message, args[1])
       } else if (command === 'guildlist') {
         getGuildList(message.author)
+      } else if (command === 'leaveguild') {
+        leaveGuild(message, args[1])
       }
       return
     }
