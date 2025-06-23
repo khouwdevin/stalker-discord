@@ -17,7 +17,7 @@ services:
     image: mongo:latest
     container_name: mongo
     ports:
-      - '${MONGO_PORT}:${MONGO_PORT}'
+      - '127.0.0.1:${MONGO_PORT}:${MONGO_PORT}'
     volumes:
       - mongo_data:/data/db
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
       - ./application.yml:/opt/Lavalink/application.yml
       - ./plugins/:/opt/Lavalink/plugins/
     ports:
-      - '${LAVALINK_PORT}:${LAVALINK_PORT}'
+      - '127.0.0.1:${LAVALINK_PORT}:${LAVALINK_PORT}'
     networks:
       - stalker-bot
 
