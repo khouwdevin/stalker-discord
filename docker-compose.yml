@@ -17,14 +17,14 @@ services:
     image: mongo:latest
     container_name: mongo
     ports:
-      - '127.0.0.1:${MONGO_PORT}:${MONGO_PORT}'
+      - "127.0.0.1:${MONGO_PORT}:${MONGO_PORT}"
     volumes:
       - mongo_data:/data/db
     restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-      MONGO_INITDB_DATABASE: '${MONGO_DATABASE_NAME}:${MONGO_PORT}'
+      MONGO_INITDB_DATABASE: "${MONGO_DATABASE_NAME}:${MONGO_PORT}"
     networks:
       - stalker-bot
 
@@ -38,7 +38,20 @@ services:
       - ./application.yml:/opt/Lavalink/application.yml
       - ./plugins/:/opt/Lavalink/plugins/
     ports:
-      - '127.0.0.1:${LAVALINK_PORT}:${LAVALINK_PORT}'
+      - "127.0.0.1:${LAVALINK_PORT}:${LAVALINK_PORT}"
+    networks:
+      - stalker-bot
+
+  yt-cipher:
+    image: ghcr.io/kikkia/yt-cipher:master
+    container_name: yt-cipher
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:8001:8001"
+    environment:
+      - API_TOKEN=${YT_CIPHER_API_TOKEN}
     networks:
       - stalker-bot
 

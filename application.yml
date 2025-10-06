@@ -69,6 +69,9 @@ plugins:
     allowSearch: true
     allowDirectVideoIds: true
     allowDirectPlaylistIds: true
+    remoteCipher:
+      url: 'http://yt-cipher:8001'
+      password: ${YT_CIPHER_API_TOKEN}
     clients:
       - MUSIC
       - ANDROID_VR
@@ -100,7 +103,7 @@ lavalink:
   plugins:
     - dependency: 'dev.lavalink.youtube:youtube-plugin:1.14.0'
       snapshot: false
-    - dependency: 'com.github.topi314.lavasrc:lavasrc-plugin:4.8.0'
+    - dependency: 'com.github.topi314.lavasrc:lavasrc-plugin:4.8.1'
       snapshot: false
   server:
     password: ${LAVALINK_PASSWORD}
